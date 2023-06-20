@@ -17,7 +17,11 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  ignorePatterns: ['commitlint.config.cjs'],
+  ignorePatterns: [
+    'commitlint.config.cjs',
+    'tailwind.config.js',
+    'postfix.config.js',
+  ],
   plugins: ['@typescript-eslint', 'react'],
   rules: {
     'react/react-in-jsx-scope': 'off',
