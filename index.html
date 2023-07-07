@@ -5,6 +5,23 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      var storageKey = 'wave-theme';
+      var darkValue = 'dark';
+
+      if (localStorage[storageKey] === darkValue) {
+        document.documentElement.classList.add(darkValue);
+      } else if (
+        !(storageKey in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+      ) {
+        window.localStorage.setItem(storageKey, darkValue);
+        document.documentElement.classList.add(darkValue);
+      } else {
+        document.documentElement.classList.remove(darkValue);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

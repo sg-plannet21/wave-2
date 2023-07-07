@@ -10,6 +10,7 @@ module.exports = {
     'prettier',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:storybook/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -25,5 +26,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react'],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
 };

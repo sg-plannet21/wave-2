@@ -1,8 +1,10 @@
+import MainLayout from './components/layout/MainLayout';
+
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline text-purple-700">
-      Hello world!
-    </h1>
+    <MainLayout>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    </MainLayout>
   );
 }
 
