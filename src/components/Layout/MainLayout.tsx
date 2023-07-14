@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { ReactComponent as DarkModeLogo } from '../../assets/dark_mode.svg';
 import { ReactComponent as LightModeLogo } from '../../assets/light_mode.svg';
@@ -12,6 +13,10 @@ interface Props {
 
 function NavBar() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const buttonClasses =
+    'group text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5';
+  const iconClasses = 'w-8 h-8 fill-gray-900 dark:fill-slate-100';
 
   function handleThemeToggle() {
     if (isDarkTheme) {
@@ -45,19 +50,26 @@ function NavBar() {
         <button
           onClick={handleThemeToggle}
           type="button"
-          className="px-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
+          className={classNames(buttonClasses)}
         >
           {isDarkTheme ? (
-            <LightModeLogo className="w-8 h-8 fill-gray-900 dark:fill-slate-100 hover:dark:fill-yellow-400 duration-500" />
+            <LightModeLogo
+              className={classNames(
+                iconClasses,
+                'group-hover:dark:fill-yellow-400 duration-500'
+              )}
+            />
           ) : (
-            <DarkModeLogo className="w-8 h-8 fill-gray-900 dark:fill-slate-100 hover:fill-cyan-300 duration-500" />
+            <DarkModeLogo
+              className={classNames(
+                iconClasses,
+                'group-hover:fill-cyan-300 duration-500'
+              )}
+            />
           )}
         </button>
-        <button
-          type="button"
-          className="px-2 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
-        >
-          <PersonLogo className="w-8 h-8 fill-gray-900 dark:fill-slate-100" />
+        <button type="button" className={classNames(buttonClasses)}>
+          <PersonLogo className={classNames(iconClasses)} />
         </button>
       </div>
     </div>
