@@ -1,11 +1,11 @@
+import { ReactComponent as DarkModeLogo } from '@/assets/dark_mode.svg';
+import { ReactComponent as LightModeLogo } from '@/assets/light_mode.svg';
+import { ReactComponent as MenuLogo } from '@/assets/menu.svg';
+import { ReactComponent as PersonLogo } from '@/assets/person.svg';
+import { ReactComponent as WaveLogo } from '@/assets/wave.svg';
+import storage from '@/utils/storage';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { ReactComponent as DarkModeLogo } from '../../assets/dark_mode.svg';
-import { ReactComponent as LightModeLogo } from '../../assets/light_mode.svg';
-import { ReactComponent as MenuLogo } from '../../assets/menu.svg';
-import { ReactComponent as PersonLogo } from '../../assets/person.svg';
-import { ReactComponent as WaveLogo } from '../../assets/wave.svg';
-import storage from '../../utils/storage';
 
 interface Props {
   children: React.ReactNode;
@@ -20,18 +20,18 @@ function NavBar() {
 
   function handleThemeToggle() {
     if (isDarkTheme) {
-      storage.removeDarkTheme();
+      storage.theme.removeDarkTheme();
       window.document.documentElement.classList.remove('dark');
       setIsDarkTheme(false);
     } else {
-      storage.setDarkTheme();
+      storage.theme.setDarkTheme();
       window.document.documentElement.classList.add('dark');
       setIsDarkTheme(true);
     }
   }
 
   useEffect(() => {
-    setIsDarkTheme(storage.getTheme() === 'dark');
+    setIsDarkTheme(storage.theme.getTheme() === 'dark');
   }, []);
 
   return (

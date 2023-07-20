@@ -1,11 +1,10 @@
-import LoginForm from '../components/LoginForm';
+import AuthLayout from '@/components/Layout/AuthLayout';
 
 function Login() {
   return (
-    <div>
+    <AuthLayout>
       <h1 className="text-2xl font-semibold">Login</h1>
-      <LoginForm />
-    </div>
+    </AuthLayout>
   );
 }
 
