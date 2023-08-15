@@ -8,8 +8,8 @@ const sizes = {
 };
 
 const variants = {
-  primary: 'text-blue-600 dark:text-emerald-400',
-  secondary: 'text-gray-200 dark:text-gray-600',
+  primary: 'text-blue-600 dark:text-emerald-600',
+  light: 'text-gray-200 dark:text-gray-600',
 };
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
   className?: string;
 }
 
-function Spinner({ size = 'md', variant = 'primary', className }: Props) {
+function Spinner({ size = 'md', variant = 'primary', className = '' }: Props) {
   return (
     <>
       <svg

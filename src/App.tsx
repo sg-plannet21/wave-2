@@ -1,10 +1,14 @@
-import MainLayout from '@/components/Layout/MainLayout';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './routes';
+import AuthProvider from './state/AuthProvider';
 
 function App() {
   return (
-    <MainLayout>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </MainLayout>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
