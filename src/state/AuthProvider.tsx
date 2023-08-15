@@ -14,7 +14,7 @@ function AuthProvider({ children }: Props) {
 
   const logout = useCallback(() => setUser(null), []);
 
-  const isSuperuser = useCallback(() => user && user.isSuperuser, [user]);
+  const isSuperuser = useCallback(() => !!user?.isSuperuser, [user]);
 
   const hasWriteAccess = useCallback(
     (roles: EntityRoles | EntityRoles[]) => {
