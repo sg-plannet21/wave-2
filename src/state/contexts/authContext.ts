@@ -5,16 +5,18 @@ interface AuthContextType {
   user: User | null;
   login: (user: User) => void;
   logout: () => void;
-  isSuperuser: () => boolean;
+  isSuperuser: boolean;
   hasWriteAccess: (roles: EntityRoles | EntityRoles[]) => boolean;
+  isLoggedIn: boolean;
 }
 
 const initialState: AuthContextType = {
   user: null,
   login: () => undefined,
   logout: () => undefined,
-  isSuperuser: () => false,
+  isSuperuser: false,
   hasWriteAccess: () => false,
+  isLoggedIn: false,
 };
 
 const AuthContext = createContext<AuthContextType>(initialState);

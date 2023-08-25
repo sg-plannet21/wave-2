@@ -11,7 +11,7 @@ function AppRoutes() {
 
   const login: RouteObject[] = [{ path: '/auth/login', element: <Login /> }];
 
-  const routes = isAuth ? getProtectedRoutes(isSuperuser()) : login;
+  const routes = isAuth ? getProtectedRoutes(isSuperuser) : login;
 
   const element = useRoutes(
     routes.concat([{ path: '/', element: <Navigate replace to="/app" /> }])

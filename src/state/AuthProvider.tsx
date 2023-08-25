@@ -12,9 +12,13 @@ function AuthProvider({ children }: Props) {
 
   const login = useCallback((authUser: User) => setUser(authUser), []);
 
-  const logout = useCallback(() => setUser(null), []);
+  const logout = useCallback(() => {
+    setUser(null);
+  }, []);
 
-  const isSuperuser = useCallback(() => !!user?.isSuperuser, [user]);
+  const isSuperuser = useMemo(() => !!user?.isSuperuser, [user]);
+
+  const isLoggedIn = useMemo(() => !!user, [user]);
 
   const hasWriteAccess = useCallback(
     (roles: EntityRoles | EntityRoles[]) => {
@@ -39,8 +43,8 @@ function AuthProvider({ children }: Props) {
   );
 
   const memoedValues = useMemo(
-    () => ({ user, login, logout, isSuperuser, hasWriteAccess }),
-    [user, login, logout, isSuperuser, hasWriteAccess]
+    () => ({ user, login, logout, isSuperuser, hasWriteAccess, isLoggedIn }),
+    [user, login, logout, isSuperuser, hasWriteAccess, isLoggedIn]
   );
 
   return (
