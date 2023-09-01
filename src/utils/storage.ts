@@ -1,7 +1,7 @@
 const storagePrefix = 'wave';
 
 enum StorageKeys {
-  ColourTheme = 'colour_theme',
+  ColourTheme = 'dark_theme',
   AccessToken = 'access_token',
   RefreshToken = 'refresh_token',
   BusinessUnit = 'business_unit',
@@ -13,7 +13,7 @@ function getItem(key: StorageKeys) {
   );
 }
 
-function setItem(key: StorageKeys, value: string | number) {
+function setItem(key: StorageKeys, value: string | number | boolean) {
   window.localStorage.setItem(`${storagePrefix}-${key}`, JSON.stringify(value));
 }
 
@@ -23,9 +23,9 @@ function removeItem(key: StorageKeys) {
 
 const storage = {
   theme: {
-    getTheme: () => getItem(StorageKeys.ColourTheme),
-    setDarkTheme: () => setItem(StorageKeys.ColourTheme, 'dark'),
-    removeDarkTheme: () => removeItem(StorageKeys.ColourTheme),
+    isDarkMode: () => getItem(StorageKeys.ColourTheme),
+    setDarkTheme: () => setItem(StorageKeys.ColourTheme, true),
+    setLightTheme: () => setItem(StorageKeys.ColourTheme, false),
   },
   accessToken: {
     getAccessToken: () => getItem(StorageKeys.AccessToken),
