@@ -6,9 +6,31 @@ import AuthContext from './contexts/authContext';
 interface Props {
   children: React.ReactNode;
 }
-
+const testUser = {
+  isSuperuser: true,
+  businessUnitRoles: [
+    {
+      business_unit: 'a',
+      business_unit_name: 'BU A',
+      default_region: 5,
+      roles: [],
+    },
+    {
+      business_unit: 'b',
+      business_unit_name: 'BU B',
+      default_region: 5,
+      roles: [],
+    },
+    {
+      business_unit: 'c',
+      business_unit_name: 'BU C',
+      default_region: 5,
+      roles: [],
+    },
+  ],
+};
 function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(testUser);
 
   const login = useCallback((authUser: User) => setUser(authUser), []);
 
@@ -19,6 +41,15 @@ function AuthProvider({ children }: Props) {
   const isSuperuser = useMemo(() => !!user?.isSuperuser, [user]);
 
   const isLoggedIn = useMemo(() => !!user, [user]);
+
+  const businessUnits = useMemo(() => {
+    if (!user) return [];
+
+    return user.businessUnitRoles.map((businessUnit) => ({
+      id: businessUnit.business_unit,
+      label: businessUnit.business_unit_name,
+    }));
+  }, [user]);
 
   const hasWriteAccess = useCallback(
     (roles: EntityRoles | EntityRoles[]) => {
@@ -43,8 +74,24 @@ function AuthProvider({ children }: Props) {
   );
 
   const memoedValues = useMemo(
-    () => ({ user, login, logout, isSuperuser, hasWriteAccess, isLoggedIn }),
-    [user, login, logout, isSuperuser, hasWriteAccess, isLoggedIn]
+    () => ({
+      user,
+      login,
+      logout,
+      isSuperuser,
+      hasWriteAccess,
+      isLoggedIn,
+      businessUnits,
+    }),
+    [
+      user,
+      login,
+      logout,
+      isSuperuser,
+      hasWriteAccess,
+      isLoggedIn,
+      businessUnits,
+    ]
   );
 
   return (

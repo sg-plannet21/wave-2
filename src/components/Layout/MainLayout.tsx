@@ -27,9 +27,9 @@ interface Props {
 }
 
 interface SidebarItem {
+  path: string;
   label: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  path: string;
 }
 
 const buttonClasses =
@@ -132,7 +132,6 @@ function SideNavigation() {
 
   const navigation: SidebarItem[] = [];
   if (isSuperuser) navigation.push(...superuserSidebarItems);
-  navigation.push(...superuserSidebarItems);
   navigation.push(...commonSidebarItems);
 
   return (
@@ -147,10 +146,10 @@ function SideNavigation() {
             classNames(
               'group flex items-center p-2 text-base font-medium rounded-md',
               {
-                'text-gray-700 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-white':
+                'text-gray-700 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-emerald-200':
                   !isActive,
               },
-              { 'text-indigo-700 dark:text-emerald-300': isActive }
+              { 'text-indigo-600 dark:text-emerald-400': isActive }
             )
           }
         >
@@ -310,8 +309,8 @@ function Sidebar() {
         <div className="flex items-center h-16 px-4 flex-shrink-0 bg-gray-200 dark:bg-slate-900">
           <Logo />
         </div>
-        <div className="flex-1 flex flex-col overflow-y-auto border-r border-r-gray-400">
-          <nav className="flex-1 px-2 py-2 space-y-1 bg-gray-50 dark:bg-gray-800">
+        <div className="flex-1 flex flex-col overflow-y-auto border-r border-r-gray-200 dark:border-r-gray-700">
+          <nav className="flex-1 px-2 py-2 space-y-1 bg-gray-50/50 dark:bg-slate-800/50">
             <SideNavigation />
           </nav>
         </div>

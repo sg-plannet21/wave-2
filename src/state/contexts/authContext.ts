@@ -8,6 +8,7 @@ interface AuthContextType {
   isSuperuser: boolean;
   hasWriteAccess: (roles: EntityRoles | EntityRoles[]) => boolean;
   isLoggedIn: boolean;
+  businessUnits: { id: string; label: string }[];
 }
 
 const initialState: AuthContextType = {
@@ -17,6 +18,7 @@ const initialState: AuthContextType = {
   isSuperuser: false,
   hasWriteAccess: () => false,
   isLoggedIn: false,
+  businessUnits: [],
 };
 
 const AuthContext = createContext<AuthContextType>(initialState);

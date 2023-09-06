@@ -1,7 +1,42 @@
+import { ReactComponent as BusinessUnitIcon } from '@/assets/business-unit.svg';
+import Select, { SelectOption } from '@/components/Elements/Select/Select';
 import Spinner from '@/components/Elements/Spinner/Spinner';
 import MainLayout from '@/components/Layout/MainLayout';
-import { Suspense } from 'react';
-import { Outlet, RouteObject } from 'react-router-dom';
+import useAuth from '@/state/hooks/useAuth';
+import { Suspense, useState } from 'react';
+import { Outlet, RouteObject, useParams } from 'react-router-dom';
+
+const selectOptions: SelectOption[] = [
+  {
+    label: 'Label A',
+    value: 'a',
+  },
+  {
+    label: 'Label B',
+    value: 'b',
+  },
+  {
+    label: 'Label C',
+    value: 'c',
+  },
+];
+function Home() {
+  const [selectedOption, setSelectOption] = useState(selectOptions[0]);
+
+  return (
+    <>
+      <h1 className="text-2xl font-semibold leading-3">Home</h1>
+      <div className="max-w-xs mx-auto">
+        <Select
+          icon={<BusinessUnitIcon className="fill-current" />}
+          options={selectOptions}
+          selectedOption={selectedOption}
+          onChange={(option) => setSelectOption(option)}
+        />
+      </div>
+    </>
+  );
+}
 
 function AuthApp() {
   // TODO: check if user is authenticated / route to login
@@ -23,8 +58,20 @@ function AuthApp() {
   );
 }
 
+function BusinessUnit() {
+  const { businessUnitId } = useParams();
+  const { businessUnits } = useAuth();
+
+  if (businessUnits.length === 0) return <>No Business Units</>;
+  if (!businessUnits.some((businessUnit) => businessUnit.id !== businessUnitId))
+    return <>Unauthorised</>;
+
+  return <Outlet />;
+}
+
 function getProtectedRoutes(isSuperuser: boolean): RouteObject[] {
   const childRoutes: RouteObject[] = [
+    { index: true, element: <Home /> },
     { path: 'entry-points/*', element: <>Entry Points</> },
     { path: 'queues/*', element: <>Queues</> },
     { path: 'menus/*', element: <>Menus</> },
@@ -48,9 +95,9 @@ function getProtectedRoutes(isSuperuser: boolean): RouteObject[] {
 
   return [
     {
-      path: '/app',
-      element: <AuthApp />,
-      children: childRoutes,
+      path: '/app/:businessUnitId',
+      element: <BusinessUnit />,
+      children: [{ element: <AuthApp />, children: childRoutes }],
     },
   ];
 }
