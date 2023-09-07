@@ -1,5 +1,5 @@
 import { ReactComponent as BusinessUnitIcon } from '@/assets/business-unit.svg';
-import { ReactComponent as CloseIcon } from '@/assets/close.svg';
+import { ReactComponent as CloseIcon } from '@/assets/cross.svg';
 import { ReactComponent as DarkModeIcon } from '@/assets/dark-mode.svg';
 import { ReactComponent as EntryPointIcon } from '@/assets/entry-point.svg';
 import { ReactComponent as LightModeIcon } from '@/assets/light-mode.svg';

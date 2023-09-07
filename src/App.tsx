@@ -1,14 +1,19 @@
+import Notifications from '@/components/Notifications/Notifications';
+import AppRoutes from '@/routes';
+import AuthProvider from '@/state/AuthProvider';
+import NotificationProvider from '@/state/NotificationProvider';
 import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './routes';
-import AuthProvider from './state/AuthProvider';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AuthProvider>
+    <NotificationProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Notifications />
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
+    </NotificationProvider>
   );
 }
 

@@ -1,7 +1,7 @@
 import { EntityRoles, User } from '@/entities/auth';
 import storage from '@/utils/storage';
 import { useCallback, useMemo, useState } from 'react';
-import AuthContext from './contexts/authContext';
+import AuthContext from './contexts/AuthContext';
 
 interface Props {
   children: React.ReactNode;
