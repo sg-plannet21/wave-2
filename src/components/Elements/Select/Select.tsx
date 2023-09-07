@@ -22,7 +22,7 @@ function Select({
   selectedOption,
   onChange,
   icon,
-  className = 'bg-indigo-600 dark:bg-orange-600',
+  className = 'bg-indigo-600 dark:bg-orange-600 text-gray-100 dark:text-gray-300',
 }: SelectProps) {
   if (!options.length) return null;
 
@@ -32,7 +32,6 @@ function Select({
         <Listbox.Button
           className={classNames(
             'group relative w-full flex items-center cursor-default rounded-lg p-2 pr-10 text-base font-medium shadow-md focus:outline-none focus-visible:border-gray-300 dark:focus-visible:border-gray-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-300 dark:focus-visible:ring-offset-gray-500 sm:text-sm',
-            'text-gray-100 dark:text-gray-300',
             className
           )}
         >

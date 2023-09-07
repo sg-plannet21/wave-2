@@ -21,6 +21,7 @@ import { Dialog, Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import BusinessUnitSelect from '../Elements/BusinessUnitSelect/BusinessUnitSelect';
 
 interface Props {
   children: React.ReactNode;
@@ -42,7 +43,7 @@ const commonSidebarItems: SidebarItem[] = [
     icon: EntryPointIcon,
     path: 'entry-points',
   },
-  { label: 'Menus', icon: MenuIcon, path: 'menu' },
+  { label: 'Menus', icon: MenuIcon, path: 'menus' },
   { label: 'Queues', icon: QueueIcon, path: 'queues' },
   { label: 'Messages', icon: MessageIcon, path: 'messages' },
   { label: 'Sections', icon: SectionIcon, path: 'sections' },
@@ -136,7 +137,7 @@ function SideNavigation() {
 
   return (
     <>
-      Business Unit Select
+      <BusinessUnitSelect />
       {navigation.map((item, index) => (
         <NavLink
           key={item.label}
