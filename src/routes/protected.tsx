@@ -1,5 +1,6 @@
 import Spinner from '@/components/Elements/Spinner/Spinner';
 import MainLayout from '@/components/Layout/MainLayout';
+import Home from '@/features/home/Home';
 import useAuth from '@/state/hooks/useAuth';
 import { Suspense } from 'react';
 import { Outlet, RouteObject, useParams } from 'react-router-dom';
@@ -39,7 +40,7 @@ function getProtectedRoutes(isSuperuser: boolean): RouteObject[] {
   const childRoutes: RouteObject[] = [
     {
       index: true,
-      element: <h1 className="m-3 text-2xl font-semibold leading-3">Home</h1>,
+      element: <Home />,
     },
     { path: 'entry-points/*', element: <>Entry Points</> },
     { path: 'queues/*', element: <>Queues</> },
