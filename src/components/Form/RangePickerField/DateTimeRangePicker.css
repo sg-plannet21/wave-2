@@ -121,7 +121,7 @@ html.dark
 html.dark
   .react-datetimerange-picker__button:enabled:focus
   .react-datetimerange-picker__button__icon {
-  stroke: #b3c75c;
+  stroke: white;
 }
 
 .react-datetimerange-picker__button:disabled

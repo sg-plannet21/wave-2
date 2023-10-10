@@ -1,0 +1,31 @@
+html.dark .rhap_container {
+  background-color: transparent !important;
+  color: rgb(52, 55, 253) !important;
+  box-shadow: none !important;
+  /* @apply bg-violet-600 !important; */
+}
+
+html.dark .rhap_container svg,
+.rhap_time {
+  color: #d1d5db !important;
+}
+
+html.dark .rhap_progress-filled {
+  background-color: #94a3b8 !important;
+}
+
+html.dark .rhap_progress-bar-show-download {
+  background-color: #9ca3af !important;
+}
+html.dark .rhap_progress-indicator,
+html.dark .rhap_volume-indicator {
+  background-color: #9ca3af !important;
+}
+
+html.dark .rhap_volume-bar {
+  background-color: #d1d5db !important;
+}
+
+html.dark .rhap_play-status--paused .rhap_progress-filled {
+  background-color: #fdba74 !important;
+}

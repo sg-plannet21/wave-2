@@ -174,7 +174,7 @@ html.dark button.react-calendar__tile--hasActive {
 
 html.dark .react-calendar__tile--hasActive:enabled:hover,
 html.dark .react-calendar__tile--hasActive:enabled:focus {
-  background: #d8b0c5;
+  background: #4b3e04;
 }
 
 button.react-calendar__tile--active {
@@ -194,7 +194,7 @@ html.dark button.react-calendar__tile--active {
 
 html.dark .react-calendar__tile--active:enabled:hover,
 html.dark .react-calendar__tile--active:enabled:focus {
-  background: rgb(63, 234, 69);
+  background: rgb(141, 141, 141);
 }
 
 .react-calendar--selectRange .react-calendar__tile--hover {

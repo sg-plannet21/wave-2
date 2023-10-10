@@ -44,6 +44,15 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         'jsx-a11y/label-has-associated-control': 'off',
         'no-plusplus': 'off',
+        'no-restricted-exports': 'off',
+        'react/no-array-index-key': 'off',
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: ['**/*.stories.*', '**/.storybook/**/*.*'],
+            peerDependencies: true,
+          },
+        ],
       },
     },
   ],
