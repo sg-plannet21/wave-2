@@ -58,7 +58,7 @@ function AuthProvider({ children }: Props) {
       if (user.isSuperuser) return true;
 
       const currentBusinessUnitRoles = user.businessUnitRoles.find(
-        (bu) => bu.business_unit === storage.businessUnit.getBusinessUnit()
+        (bu) => bu.business_unit === storage.businessUnit.getBusinessUnit().id
       );
       if (!currentBusinessUnitRoles) return false;
 

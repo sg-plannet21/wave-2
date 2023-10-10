@@ -13,16 +13,15 @@ function authInterceptor(config: InternalAxiosRequestConfig) {
 function businessUnitInterceptor(config: InternalAxiosRequestConfig) {
   const businessUnit = storage.businessUnit.getBusinessUnit();
 
-  if (businessUnit) {
-    config.headers.set('businessunit', businessUnit);
-    // set the business unit as a POST & PUT property
-    if (
-      (config.method === 'POST' || config.method === 'PUT') &&
-      !config.data.businessunit
-    ) {
-      if (!config.data) config.data = {};
-      config.data.businessunit = businessUnit;
-    }
+  config.headers.businessunit = businessUnit;
+
+  // set the business unit as a POST & PUT property
+  if (
+    (config.method === 'POST' || config.method === 'PUT') &&
+    !config.data.businessunit
+  ) {
+    if (!config.data) config.data = {};
+    config.data.businessunit = businessUnit;
   }
   return config;
 }
@@ -31,6 +30,7 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Accept: 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
   },
 });
 

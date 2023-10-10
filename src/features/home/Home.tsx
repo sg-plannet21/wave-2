@@ -1,7 +1,5 @@
 import Form from '@/components/Form/Form';
 import InputField from '@/components/Form/InputField';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import DateTimeRangePickerField from '@/components/Form/RangePickerField/DateTimeRangePickerField';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
 import Button from '@/components/Inputs/Button';
 import useNotifications from '@/state/hooks/useNotifications';

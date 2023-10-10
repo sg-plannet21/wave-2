@@ -7,7 +7,7 @@ enum StorageKeys {
   BusinessUnit = 'business_unit',
 }
 
-interface BusinessUnitItem {
+export interface BusinessUnitItem {
   id: string;
   label: string;
 }
