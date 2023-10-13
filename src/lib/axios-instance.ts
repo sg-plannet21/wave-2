@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import refreshAccessToken from '@/features/auth/api/refreshToken';
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import storage from '../utils/storage';
 
 function authInterceptor(config: InternalAxiosRequestConfig) {
@@ -11,7 +12,7 @@ function authInterceptor(config: InternalAxiosRequestConfig) {
 }
 
 function businessUnitInterceptor(config: InternalAxiosRequestConfig) {
-  const businessUnit = storage.businessUnit.getBusinessUnit();
+  const businessUnit = storage.businessUnit.getBusinessUnit().id;
 
   config.headers.businessunit = businessUnit;
 
@@ -36,3 +37,27 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(authInterceptor);
 axiosInstance.interceptors.request.use(businessUnitInterceptor);
+axiosInstance.interceptors.response.use(
+  (response) => response.data,
+  async (error): Promise<void | AxiosResponse> => {
+    const originalRequest = error.config;
+    if (error.response.status === 403 && !originalRequest.retry) {
+      // eslint-disable-next-line no-console
+      console.log('Token has expired, refreshing....');
+      originalRequest.retry = true;
+      try {
+        const { access } = await refreshAccessToken(
+          storage.refreshToken.getRefreshToken()
+        );
+        storage.accessToken.setAccessToken(access);
+        return await axiosInstance(originalRequest);
+      } catch {
+        // eslint-disable-next-line no-alert
+        alert('token has expired');
+        window.location.assign('/logout');
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);

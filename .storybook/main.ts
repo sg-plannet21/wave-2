@@ -5,11 +5,6 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-styling',
-    {
-      name: '@storybook/addon-styling',
-      options: {},
-    },
     'storybook-addon-react-router-v6',
   ],
   framework: {

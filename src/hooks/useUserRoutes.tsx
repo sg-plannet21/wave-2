@@ -77,7 +77,11 @@ function useUserRoutes(): RouteObject[] {
   const { user, businessUnits } = useAuth();
 
   const routes = useMemo(() => {
-    if (!user) return [{ path: '/auth/login', element: <Login /> }];
+    if (!user)
+      return [
+        { path: '/auth/login', element: <Login /> },
+        { path: '/', element: <Navigate replace to="/auth/login" /> },
+      ];
 
     const redirects: RouteObject[] = [
       { path: '/', element: <Navigate replace to="/app" /> },

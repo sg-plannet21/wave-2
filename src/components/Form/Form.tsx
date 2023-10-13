@@ -1,46 +1,78 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import classNames from 'classnames';
+import { ComponentProps } from 'react';
 import {
+  UseFormReturn,
   FieldValues,
   SubmitHandler,
   UseFormProps,
-  UseFormReturn,
   useForm,
+  useFormContext,
+  FormProvider,
 } from 'react-hook-form';
-import { ZodType, ZodTypeDef } from 'zod';
+import { TypeOf, ZodSchema } from 'zod';
 
-type FormProps<TFormValues extends FieldValues, Schema> = {
-  className?: string;
-  onSubmit: SubmitHandler<TFormValues>;
-  children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
-  options?: UseFormProps<TFormValues>;
-  schema?: Schema;
-};
-function Form<
-  TFormValues extends FieldValues = Record<string, unknown>,
-  Schema extends ZodType<unknown, ZodTypeDef, unknown> = ZodType<
-    unknown,
-    ZodTypeDef,
-    unknown
-  >
->({
-  className,
+type ZodFormSchema = ZodSchema<Record<string, unknown>>;
+
+interface UseZodFormProps<T extends ZodFormSchema>
+  extends UseFormProps<TypeOf<T>> {
+  schema: T;
+}
+
+export function useZodForm<T extends ZodFormSchema>({
+  schema,
+  ...rest
+}: UseZodFormProps<T>): UseFormReturn<TypeOf<T>> {
+  return useForm({
+    resolver: zodResolver(schema),
+    ...rest,
+  });
+}
+
+interface FieldErrorProps {
+  name?: string;
+}
+
+export function FieldError({ name }: FieldErrorProps) {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  if (!name) return null;
+
+  const error = errors[name];
+
+  if (!error) return null;
+
+  return (
+    <div className="mt-1 text-sm font-semibold text-red-600 dark:text-red-500">
+      {error.message?.toString()}
+    </div>
+  );
+}
+
+interface Props<T extends FieldValues>
+  extends Omit<ComponentProps<'form'>, 'onSubmit'> {
+  form: UseFormReturn<T>;
+  onSubmit: SubmitHandler<T>;
+}
+
+function Form<T extends FieldValues>({
+  form,
   onSubmit,
   children,
-  options,
-  schema,
-}: FormProps<TFormValues, Schema>) {
-  const methods = useForm<TFormValues>({
-    ...options,
-    resolver: schema && zodResolver(schema),
-  });
+  ...rest
+}: Props<T>) {
   return (
-    <form
-      onSubmit={methods.handleSubmit(onSubmit)}
-      className={classNames('space-y-6', className)}
-    >
-      {children(methods)}
-    </form>
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} {...rest}>
+        <fieldset
+          className="flex flex-col space-y-4"
+          disabled={form.formState.isSubmitting}
+        >
+          {children}
+        </fieldset>
+      </form>
+    </FormProvider>
   );
 }
 

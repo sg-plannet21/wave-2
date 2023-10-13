@@ -1,15 +1,37 @@
 import { Meta, StoryObj } from '@storybook/react';
-
-import { Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Form from './Form';
 import InputField from './InputField';
-import TextAreaField from './TextAreaField';
+import Button from '../Inputs/Button';
 import SelectField from './SelectField';
 import TimeRangePickerField from './RangePickerField/TimeRangePickerField';
-import Button from '../Inputs/Button';
+import DateTimeRangePickerField from './RangePickerField/DateTimeRangePickerField';
+
+function MyForm() {
+  const form = useForm<FormValues>();
+  return (
+    // eslint-disable-next-line no-alert
+    <Form form={form} onSubmit={(data) => alert(JSON.stringify(data))}>
+      <InputField label="Title" {...form.register('title')} />
+      <SelectField
+        label="Team"
+        {...form.register('type')}
+        options={['A', 'B', 'C'].map((type) => ({
+          label: type,
+          value: type,
+        }))}
+      />
+      <TimeRangePickerField name="timeRange" label="Time Range" />
+      <DateTimeRangePickerField name="dateRange" label="Date Range" />
+      <Button type="submit" className="w-full">
+        Submit
+      </Button>
+    </Form>
+  );
+}
 
 const meta = {
-  component: Form,
+  component: MyForm,
   title: 'Form',
   tags: ['autodocs'],
 } satisfies Meta<typeof Form>;
@@ -22,63 +44,9 @@ type FormValues = {
   description: string;
   type: string;
   timeRange: string[];
+  dateRange: Date[];
 };
 
-function MyForm() {
-  return (
-    <Form<FormValues>
-      // eslint-disable-next-line no-alert
-      onSubmit={async (values) => alert(JSON.stringify(values))}
-    >
-      {({ register, formState, control }) => (
-        <>
-          <InputField
-            label="Title"
-            registration={register('title')}
-            error={formState.errors.title}
-          />
-          <TextAreaField
-            label="Description"
-            registration={register('description')}
-            error={formState.errors.description}
-          />
-          <SelectField
-            label="Team"
-            error={formState.errors.type}
-            registration={register('description')}
-            options={[
-              { label: 'Team A', value: 'a' },
-              { label: 'Team B', value: 'b' },
-              { label: 'Team C', value: 'c' },
-            ]}
-          />
-          <Controller
-            name="timeRange"
-            control={control}
-            render={({ field }) => (
-              <TimeRangePickerField
-                onChange={field.onChange}
-                value={field.value as [string, string]}
-                error={
-                  formState.errors.timeRange &&
-                  Array.isArray(formState.errors.timeRange)
-                    ? formState.errors.timeRange[0]
-                    : formState.errors.timeRange
-                }
-              />
-            )}
-          />
-          <div>
-            <Button type="submit" className="w-full">
-              Submit
-            </Button>
-          </div>
-        </>
-      )}
-    </Form>
-  );
-}
 export const Basic = {
-  args: { children: () => <>Form</> },
   render: () => <MyForm />,
 } satisfies Story;

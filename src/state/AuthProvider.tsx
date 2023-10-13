@@ -30,7 +30,7 @@ const testUser = {
   ],
 };
 function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<User | null>(testUser);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = useCallback((authUser: User) => setUser(authUser), []);
 

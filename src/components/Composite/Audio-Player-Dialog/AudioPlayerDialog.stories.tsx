@@ -3,7 +3,7 @@ import AudioPlayerDialog from './AudioPlayerDialog';
 
 const meta = {
   component: AudioPlayerDialog,
-  title: 'Composite/AudioPlayerDialog',
+  title: 'Feedback/AudioPlayerDialog',
   tags: ['autodocs'],
 } satisfies Meta<typeof AudioPlayerDialog>;
 export default meta;
