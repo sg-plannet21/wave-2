@@ -1,51 +1,41 @@
-import { EntityRoles, User } from '@/entities/auth';
+import { EntityRoles, AuthUser } from '@/entities/auth';
 import storage from '@/utils/storage';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import jwtDecode from 'jwt-decode';
 import AuthContext from './contexts/AuthContext';
 
 interface Props {
   children: React.ReactNode;
 }
-const testUser = {
-  isSuperuser: true,
-  businessUnitRoles: [
-    {
-      business_unit: 'a',
-      business_unit_name: 'BU A',
-      default_region: 5,
-      roles: [],
-    },
-    {
-      business_unit: 'b',
-      business_unit_name: 'BU B',
-      default_region: 5,
-      roles: [],
-    },
-    {
-      business_unit: 'c',
-      business_unit_name: 'BU C',
-      default_region: 5,
-      roles: [],
-    },
-  ],
-};
-function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<User | null>(null);
 
-  const login = useCallback((authUser: User) => setUser(authUser), []);
+function AuthProvider({ children }: Props) {
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    const token = storage.accessToken.getAccessToken();
+    if (token) {
+      const decoded = jwtDecode(token) as AuthUser;
+      setUser(decoded);
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  const login = useCallback((authUser: AuthUser) => setUser(authUser), []);
 
   const logout = useCallback(() => {
+    storage.accessToken.removeAccessToken();
     setUser(null);
   }, []);
 
-  const isSuperuser = useMemo(() => !!user?.isSuperuser, [user]);
+  const isSuperuser = useMemo(() => !!user?.is_wave_superuser, [user]);
 
   const isLoggedIn = useMemo(() => !!user, [user]);
 
   const businessUnits = useMemo(() => {
     if (!user) return [];
 
-    return user.businessUnitRoles.map((businessUnit) => ({
+    return user.business_unit_roles.map((businessUnit) => ({
       id: businessUnit.business_unit,
       label: businessUnit.business_unit_name,
     }));
@@ -55,9 +45,9 @@ function AuthProvider({ children }: Props) {
     (roles: EntityRoles | EntityRoles[]) => {
       if (!user) return false;
 
-      if (user.isSuperuser) return true;
+      if (user.is_wave_superuser) return true;
 
-      const currentBusinessUnitRoles = user.businessUnitRoles.find(
+      const currentBusinessUnitRoles = user.business_unit_roles.find(
         (bu) => bu.business_unit === storage.businessUnit.getBusinessUnit().id
       );
       if (!currentBusinessUnitRoles) return false;

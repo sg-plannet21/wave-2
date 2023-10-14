@@ -3,7 +3,7 @@ import { ReactComponent as XIcon } from '@/assets/cross.svg';
 import { ReactComponent as ErrorCircleIcon } from '@/assets/error-circle.svg';
 import { ReactComponent as InfoCircleIcon } from '@/assets/info-circle.svg';
 import { ReactComponent as WarningIcon } from '@/assets/warning.svg';
-import { INotification } from '@/state/contexts/NotificationContext';
+import { Notification as NotificationType } from '@/state/notifications';
 import { Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -35,7 +35,7 @@ const icons = {
 };
 
 interface Props {
-  notification: Omit<INotification, 'type'> & { type: keyof typeof icons };
+  notification: Omit<NotificationType, 'type'> & { type: keyof typeof icons };
   onDismiss: (notificationId: number) => void;
 }
 

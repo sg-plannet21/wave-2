@@ -1,8 +1,8 @@
-import useNotifications from '@/state/hooks/useNotifications';
+import { useNotificationStore } from '@/state/notifications';
 import Notification from './Notification';
 
 function Notifications() {
-  const { notifications, dismissNotification } = useNotifications();
+  const { notifications, dismissNotification } = useNotificationStore();
 
   return (
     <div

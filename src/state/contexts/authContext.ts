@@ -1,9 +1,9 @@
-import { EntityRoles, User } from '@/entities/auth';
+import { EntityRoles, AuthUser } from '@/entities/auth';
 import { createContext } from 'react';
 
 interface AuthContextType {
-  user: User | null;
-  login: (user: User) => void;
+  user: AuthUser | null;
+  login: (user: AuthUser) => void;
   logout: () => void;
   isSuperuser: boolean;
   hasWriteAccess: (roles: EntityRoles | EntityRoles[]) => boolean;

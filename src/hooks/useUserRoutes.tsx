@@ -1,6 +1,7 @@
 import Spinner from '@/components/Feedback/Spinner/Spinner';
 import AuthLayout from '@/components/Layouts/AuthLayout';
 import MainLayout from '@/components/Layouts/MainLayout';
+import AuthRoutes from '@/features/auth/routes';
 import Login from '@/features/auth/routes/Login';
 import Home from '@/features/home/Home';
 import BusinessUnitRoutes from '@/features/pages/business-units/routes';
@@ -80,31 +81,34 @@ function useUserRoutes(): RouteObject[] {
     if (!user)
       return [
         { path: '/auth/login', element: <Login /> },
-        { path: '/', element: <Navigate replace to="/auth/login" /> },
+        { path: '*', element: <Navigate replace to="/auth/login" /> },
       ];
+
+    let redirectTo = businessUnits[0].label;
+
+    const storedBusinessUnit = storage.businessUnit.getBusinessUnit();
+    if (storedBusinessUnit) {
+      const validatedBusinessUnit = user.business_unit_roles.find(
+        (bu) => bu.business_unit === storedBusinessUnit.id
+      );
+      if (validatedBusinessUnit)
+        redirectTo = validatedBusinessUnit.business_unit_name;
+    }
 
     const redirects: RouteObject[] = [
       { path: '/', element: <Navigate replace to="/app" /> },
       {
         path: '/app',
-        element: (
-          <Navigate
-            replace
-            to={encodeURIComponent(
-              (storage.businessUnit.getBusinessUnit() &&
-                storage.businessUnit.getBusinessUnit().label) ||
-                businessUnits[0].label
-            )}
-          />
-        ),
+        element: <Navigate replace to={encodeURIComponent(redirectTo)} />,
       },
     ];
 
     const authRoutes = commonAuthRoutes;
-    if (user.isSuperuser) authRoutes.push(...superUserRoutes);
+    if (user.is_wave_superuser) authRoutes.push(...superUserRoutes);
 
     return [
       ...redirects,
+      { path: '/auth/*', element: <AuthRoutes /> },
       {
         path: '/app/:businessUnitSlug',
         element: <BusinessUnit />,

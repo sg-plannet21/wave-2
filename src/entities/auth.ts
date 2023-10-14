@@ -35,7 +35,3 @@ export interface AuthUser {
   business_unit_roles: BusinessUnitRole[];
 }
 
-export interface User {
-  isSuperuser: boolean;
-  businessUnitRoles: BusinessUnitRole[];
-}

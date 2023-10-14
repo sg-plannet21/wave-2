@@ -40,6 +40,8 @@ axiosInstance.interceptors.request.use(businessUnitInterceptor);
 axiosInstance.interceptors.response.use(
   (response) => response.data,
   async (error): Promise<void | AxiosResponse> => {
+    // eslint-disable-next-line no-console
+    console.log(error);
     const originalRequest = error.config;
     if (error.response.status === 403 && !originalRequest.retry) {
       // eslint-disable-next-line no-console
@@ -61,3 +63,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default axiosInstance;

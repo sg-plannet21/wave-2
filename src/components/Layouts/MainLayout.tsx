@@ -79,9 +79,7 @@ function Logo() {
   );
 }
 function UserNavigation() {
-  const { logout } = useAuth();
-
-  const userNavigation = [{ label: 'Logout', to: '/login', onClick: logout }];
+  const userNavigation = [{ label: 'Logout', to: '/auth/logout' }];
   return (
     <Menu as="div" className="ml-3 relative">
       {({ open }) => (
@@ -108,7 +106,6 @@ function UserNavigation() {
                 <Menu.Item key={item.label}>
                   {({ active }) => (
                     <Link
-                      onClick={item.onClick}
                       to={item.to}
                       className={classNames(
                         'block px-4 py-2 text-sm text-gray-700 dark:text-white',
