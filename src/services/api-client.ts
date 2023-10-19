@@ -1,23 +1,16 @@
-// TODO: update to axiosInstance
-import axios from 'axios';
-
-const baseUrl = import.meta.env.VITE_API_URL;
+import axiosInstance from '@/lib/axios-instance';
+import continousFetcher from '@/lib/continous-fetcher';
 
 class ApiClient<T> {
   endpoint: string;
 
-  /**
-   *
-   */
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
 
-  get = (id: string) =>
-    axios.get<T>(`${baseUrl}${this.endpoint}/${id}`).then((res) => res.data);
+  get = (id: string) => axiosInstance.get<T>(`${this.endpoint}/${id}/`);
 
-  getAll = () =>
-    axios.get<T[]>(`${baseUrl}${this.endpoint}/`).then((res) => res.data);
+  getAll = () => continousFetcher<T>(this.endpoint).then((res) => res.data);
 }
 
 export default ApiClient;

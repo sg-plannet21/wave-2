@@ -2,7 +2,7 @@ import ApiClient from '@/services/api-client';
 import { useQuery } from 'react-query';
 import { BusinessUnit } from '../types';
 
-const businessUnitsFetcher = new ApiClient<BusinessUnit>('/business-units');
+const businessUnitsFetcher = new ApiClient<BusinessUnit>('/businessunits');
 
 function useBusinessUnits() {
   const query = useQuery({

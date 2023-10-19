@@ -1,8 +1,10 @@
-import Form, { useZodForm } from '@/components/Form/Form';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
 import { z } from 'zod';
 import useAuth from '@/state/hooks/useAuth';
+import Form, { useZodForm } from '@/components/Form/Form';
+import axios from 'axios';
+import { useNotificationStore } from '@/state/notifications';
 import login from '../api/login';
 
 const schema = z.object({
@@ -23,9 +25,30 @@ function LoginForm({ onSuccess }: Props) {
     <Form<LoginValues>
       form={form}
       onSubmit={async (data) => {
-        const user = await login(data);
-        loadUser(user);
-        onSuccess();
+        try {
+          const user = await login(data);
+          loadUser(user);
+          onSuccess();
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            if (error.response?.data.errors) {
+              error.response.data.errors.forEach(
+                (err: { title: string; detail: string; status: number }) =>
+                  useNotificationStore.getState().addNotification({
+                    title: 'Login Error',
+                    message: err.detail,
+                    type: 'error',
+                  })
+              );
+            }
+          } else {
+            useNotificationStore.getState().addNotification({
+              title: 'Login Error',
+              message: 'An error was encountered while logging in',
+              type: 'error',
+            });
+          }
+        }
       }}
     >
       <InputField label="Username" {...form.register('username')} />

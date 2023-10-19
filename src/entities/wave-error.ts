@@ -4,7 +4,7 @@ interface Error {
     pointer: string;
   };
   title: string;
-  detail: { [key: string]: string[] };
+  detail: string;
 }
 
 export interface WaveError {

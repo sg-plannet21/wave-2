@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import refreshAccessToken from '@/features/auth/api/refreshToken';
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { WaveError } from '@/entities/wave-error';
+import { useNotificationStore } from '@/state/notifications';
 import storage from '../utils/storage';
 
 function authInterceptor(config: InternalAxiosRequestConfig) {
@@ -40,23 +42,54 @@ axiosInstance.interceptors.request.use(businessUnitInterceptor);
 axiosInstance.interceptors.response.use(
   (response) => response.data,
   async (error): Promise<void | AxiosResponse> => {
-    // eslint-disable-next-line no-console
-    console.log(error);
-    const originalRequest = error.config;
-    if (error.response.status === 403 && !originalRequest.retry) {
-      // eslint-disable-next-line no-console
-      console.log('Token has expired, refreshing....');
-      originalRequest.retry = true;
-      try {
-        const { access } = await refreshAccessToken(
-          storage.refreshToken.getRefreshToken()
-        );
-        storage.accessToken.setAccessToken(access);
-        return await axiosInstance(originalRequest);
-      } catch {
-        // eslint-disable-next-line no-alert
-        alert('token has expired');
-        window.location.assign('/logout');
+    if (axios.isAxiosError(error)) {
+      const errors = error.response?.data.errors as
+        | WaveError['errors']
+        | undefined;
+
+      const originalRequest = error.config as InternalAxiosRequestConfig & {
+        waveRetry?: boolean;
+      };
+      const isExpiredToken =
+        error.response?.status === 403 &&
+        !originalRequest.waveRetry &&
+        errors &&
+        errors.some((err) => err.detail.indexOf('token not valid') !== -1);
+
+      if (isExpiredToken) {
+        originalRequest.waveRetry = true;
+
+        useNotificationStore.getState().addNotification({
+          title: 'Token Expired',
+          message: 'Refreshng Token',
+          type: 'info',
+          duration: 5000,
+        });
+
+        try {
+          const { access } = await refreshAccessToken(
+            storage.refreshToken.getRefreshToken()
+          );
+          storage.accessToken.setAccessToken(access);
+          return await axiosInstance(originalRequest);
+        } catch {
+          useNotificationStore.getState().addNotification({
+            title: 'Token Expired',
+            message: 'Login Required',
+            type: 'warning',
+            duration: 10000,
+          });
+          window.location.assign('/logout');
+        }
+      }
+      if (errors) {
+        errors.forEach((err) => {
+          useNotificationStore.getState().addNotification({
+            title: 'Error',
+            message: err.detail || error.message,
+            type: 'error',
+          });
+        });
       }
     }
 

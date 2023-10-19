@@ -7,7 +7,7 @@ interface Props {
 
 function AuthLayout({ children, title }: Props) {
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 bg-gray-50 text:gray-900 dark:bg-slate-900 dark:text-white sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <WaveLogo className="h-24 w-auto fill-indigo-700 dark:fill-white" />

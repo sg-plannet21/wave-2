@@ -1,6 +1,6 @@
 import { EntityRoles, AuthUser } from '@/entities/auth';
 import storage from '@/utils/storage';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 import AuthContext from './contexts/AuthContext';
 
@@ -8,18 +8,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+function getPersistedUser(): AuthUser | null {
+  const token = storage.accessToken.getAccessToken();
+  if (token) return jwtDecode(token) as AuthUser;
+  return null;
+}
 
-  useEffect(() => {
-    const token = storage.accessToken.getAccessToken();
-    if (token) {
-      const decoded = jwtDecode(token) as AuthUser;
-      setUser(decoded);
-    } else {
-      setUser(null);
-    }
-  }, []);
+function AuthProvider({ children }: Props) {
+  const [user, setUser] = useState<AuthUser | null>(getPersistedUser());
 
   const login = useCallback((authUser: AuthUser) => setUser(authUser), []);
 
