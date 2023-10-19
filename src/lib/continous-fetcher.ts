@@ -18,7 +18,7 @@ async function continousFetcher<T>(url: string) {
       nextUrl = null;
     }
   }
-  return { data: { results } };
+  return { data: [...results] };
 }
 
 export default continousFetcher;
