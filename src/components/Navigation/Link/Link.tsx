@@ -5,7 +5,7 @@ function Link({ className, children, ...rest }: LinkProps) {
   return (
     <RouterLink
       className={classNames(
-        'text-gray-900 dark:text-gray-100 underline font-medium focus:outline-none hover:text-opacity-80 focus:ring-2 focus:ring-gray-500',
+        'text-blue-700 dark:text-blue-500 underline font-medium focus:outline-none hover:text-opacity-80 focus:ring-2 focus:ring-blue-500',
         className
       )}
       {...rest}

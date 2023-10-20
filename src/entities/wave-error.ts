@@ -4,7 +4,10 @@ interface Error {
     pointer: string;
   };
   title: string;
-  detail: string;
+  detail: {
+    detail: string;
+    code: string;
+  };
 }
 
 export interface WaveError {

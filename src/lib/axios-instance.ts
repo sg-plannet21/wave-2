@@ -50,11 +50,14 @@ axiosInstance.interceptors.response.use(
       const originalRequest = error.config as InternalAxiosRequestConfig & {
         waveRetry?: boolean;
       };
+
       const isExpiredToken =
         error.response?.status === 403 &&
         !originalRequest.waveRetry &&
         errors &&
-        errors.some((err) => err.detail.indexOf('token not valid') !== -1);
+        errors.some(
+          (err) => err.detail.detail.indexOf('token not valid') !== -1
+        );
 
       if (isExpiredToken) {
         originalRequest.waveRetry = true;
@@ -79,14 +82,14 @@ axiosInstance.interceptors.response.use(
             type: 'warning',
             duration: 10000,
           });
-          window.location.assign('/logout');
+          window.location.assign('/auth/logout');
         }
       }
       if (errors) {
         errors.forEach((err) => {
           useNotificationStore.getState().addNotification({
             title: 'Error',
-            message: err.detail || error.message,
+            message: err.detail.detail || error.message,
             type: 'error',
           });
         });

@@ -4,13 +4,13 @@ import {
   reactRouterParameters,
 } from 'storybook-addon-react-router-v6';
 
-import Link from '.';
+import NewEntityLink from './NewEntityLink';
 
 const meta = {
-  component: Link,
-  title: 'Navigation/Link',
+  component: NewEntityLink,
+  title: 'Navigation/NewEntityLink',
   tags: ['autodocs'],
-  args: { children: 'Wave Link' },
+  args: { children: 'New Entity Link' },
   decorators: [withRouter],
   parameters: {
     reactRouter: reactRouterParameters({
@@ -20,7 +20,7 @@ const meta = {
       routing: { path: '/users/:userId' },
     }),
   },
-} satisfies Meta<typeof Link>;
+} satisfies Meta<typeof NewEntityLink>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;

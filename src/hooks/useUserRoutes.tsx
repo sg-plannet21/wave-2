@@ -1,6 +1,7 @@
 import Spinner from '@/components/Feedback/Spinner/Spinner';
 import AuthLayout from '@/components/Layouts/AuthLayout';
 import MainLayout from '@/components/Layouts/MainLayout';
+import Link from '@/components/Navigation/Link';
 import AuthRoutes from '@/features/auth/routes';
 import Login from '@/features/auth/routes/Login';
 import Home from '@/features/home/Home';
@@ -41,11 +42,9 @@ function BusinessUnit() {
   if (!businessUnits.length) {
     return (
       <AuthLayout title="Business Units Required">
-        <p>
-          Business Units need to be assigned to your user in order to login to
-          Wave.
-        </p>
-        <p>Please contact an administrator</p>
+        <p>Business Units Roles are required in order to login to Wave.</p>
+        <p className="my-3">Please contact an administrator to proceed.</p>
+        <Link to="/auth/login">Login</Link>
       </AuthLayout>
     );
   }
