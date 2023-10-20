@@ -45,6 +45,7 @@ module.exports = {
         'jsx-a11y/label-has-associated-control': 'off',
         'no-plusplus': 'off',
         'no-restricted-exports': 'off',
+        'react/prop-types': 'off',
         'react/no-array-index-key': 'off',
         'import/no-extraneous-dependencies': [
           'error',

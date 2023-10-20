@@ -12,7 +12,7 @@ export type SortColumn<Entry> = {
 export type TableColumn<Entry> = {
   field: keyof Entry;
   label: string;
-  Cell?: ({ entry }: { entry: Entry }) => JSX.Element;
+  Cell?({ entry }: { entry: Entry }): React.ReactElement;
   ignoreFiltering?: boolean;
 };
 

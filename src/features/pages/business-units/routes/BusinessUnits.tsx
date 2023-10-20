@@ -1,16 +1,12 @@
 import ContentLayout from '@/components/Layouts/ContentLayout';
-import { ReactComponent as PlusIcon } from '@/assets/plus.svg';
-import Link from '@/components/Navigation/Link';
+import NewEntityLink from '@/components/Navigation/New-Entity-Link';
 import BusinessUnitsTable from '../components/BusinessUnitsTable';
 
 function BusinessUnits() {
   return (
     <ContentLayout title="Business Units">
       <div className="flex justify-end">
-        <Link to="new" className="flex items-center">
-          <PlusIcon className="w-6 h-6 fill-current" />
-          <span>New Business Unit</span>{' '}
-        </Link>
+        <NewEntityLink to="new">New Business Unit</NewEntityLink>
       </div>
       <div className="mt-4">
         <BusinessUnitsTable />
