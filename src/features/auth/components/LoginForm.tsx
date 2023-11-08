@@ -40,13 +40,13 @@ function LoginForm({ onSuccess }: Props) {
                     type: 'error',
                   })
               );
+            } else {
+              useNotificationStore.getState().addNotification({
+                title: 'Login Error',
+                message: 'An error was encountered while logging in',
+                type: 'error',
+              });
             }
-          } else {
-            useNotificationStore.getState().addNotification({
-              title: 'Login Error',
-              message: 'An error was encountered while logging in',
-              type: 'error',
-            });
           }
         }
       }}

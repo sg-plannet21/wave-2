@@ -9,13 +9,14 @@ export type BusinessUnitTableRecord = {
 function useBusinessUnitsTableData() {
   const { data: businessUnits, isLoading, error } = useBusinessUnits();
 
-  const data = useMemo(() => {
+  const data: BusinessUnitTableRecord[] = useMemo(() => {
     if (!businessUnits) return [];
 
     return businessUnits.map((bu) => ({
       id: bu.business_unit_id,
       name: bu.business_unit,
     }));
+
   }, [businessUnits]);
 
   return { data, isLoading, error };

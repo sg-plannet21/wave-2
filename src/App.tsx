@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from 'react-query/devtools';
 import AppRoutes from '@/routes';
 import AuthProvider from '@/state/AuthProvider';
 import { BrowserRouter } from 'react-router-dom';
@@ -44,6 +45,7 @@ function App() {
               <AppRoutes />
             </BrowserRouter>
           </AuthProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </ErrorBoundary>
     </React.Suspense>

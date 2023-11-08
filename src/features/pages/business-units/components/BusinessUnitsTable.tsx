@@ -1,24 +1,28 @@
-import Badge from '@/components/Data-Display/Badge';
-import Table, { TableColumn } from '@/components/Data-Display/Table';
+import { TableColumn } from '@/components/Data-Display/Table';
 import react from 'react';
 import Link from '@/components/Navigation/Link';
+import WaveTable from '@/components/Composite/Wave-Table';
+import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import useBusinessUnitsTableData, {
   BusinessUnitTableRecord,
 } from '../hooks/useBusinessUnitsTableData';
+import DeleteBusinessUnit from './DeleteBusinessUnit';
 
 function BusinessUnitsTable() {
-  const { data } = useBusinessUnitsTableData();
-
-  const Test = react.useCallback(
-    (bu: { entry: BusinessUnitTableRecord }) => (
-      <Badge variant="success" label={bu.entry.id} />
-    ),
-    []
-  );
+  const { data, isLoading } = useBusinessUnitsTableData();
 
   const EntityLink = react.useCallback(
     (businessUnit: { entry: BusinessUnitTableRecord }) => (
       <Link to={businessUnit.entry.id}>{businessUnit.entry.name}</Link>
+    ),
+    []
+  );
+
+  const Delete = react.useCallback(
+    (bu: { entry: BusinessUnitTableRecord }) => (
+      <div className="text-right">
+        <DeleteBusinessUnit id={bu.entry.id} name={bu.entry.name} />
+      </div>
     ),
     []
   );
@@ -33,11 +37,13 @@ function BusinessUnitsTable() {
       field: 'id',
       label: '',
       ignoreFiltering: true,
-      Cell: Test,
+      Cell: Delete,
     },
   ];
 
-  return <Table<BusinessUnitTableRecord> data={data} columns={columns} />;
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
+
+  return <WaveTable<BusinessUnitTableRecord> data={data} columns={columns} />;
 }
 
 export default BusinessUnitsTable;

@@ -12,10 +12,12 @@ type OptionType =
   | { options: Option[]; groupedOptions?: never }
   | { options?: never; groupedOptions: GroupOption[] };
 
-type Props = Omit<React.ComponentProps<'select'>, 'options'> &
-  OptionType & {
-    label: string;
-  };
+export type PassthroughProps = Omit<
+  React.ComponentProps<'select'>,
+  'options'
+> & { label: string };
+
+type Props = PassthroughProps & OptionType;
 
 function renderOption({ label, value }: Option) {
   return (

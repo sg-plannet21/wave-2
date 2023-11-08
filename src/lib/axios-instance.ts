@@ -40,7 +40,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(authInterceptor);
 axiosInstance.interceptors.request.use(businessUnitInterceptor);
 axiosInstance.interceptors.response.use(
-  (response) => response.data,
+  (response) => response,
   async (error): Promise<void | AxiosResponse> => {
     if (axios.isAxiosError(error)) {
       const errors = error.response?.data.errors as
@@ -64,18 +64,17 @@ axiosInstance.interceptors.response.use(
 
         useNotificationStore.getState().addNotification({
           title: 'Token Expired',
-          message: 'Refreshng Token',
+          message: 'Refreshing Token',
           type: 'info',
           duration: 5000,
         });
 
         try {
-          const { access } = await refreshAccessToken(
-            storage.refreshToken.getRefreshToken()
-          );
-          storage.accessToken.setAccessToken(access);
+          await refreshAccessToken();
           return await axiosInstance(originalRequest);
-        } catch {
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log('token refresh err ->', err);
           useNotificationStore.getState().addNotification({
             title: 'Token Expired',
             message: 'Login Required',
