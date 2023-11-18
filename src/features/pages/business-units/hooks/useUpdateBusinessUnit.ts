@@ -13,6 +13,11 @@ function useUpdateBusinessUnit(id: string) {
   return useMutation({
     mutationFn: (data: FormValues) => updateBusinessUnit(id, data),
     onSuccess(newBusinessUnit) {
+      queryClient.setQueryData<BusinessUnit>(
+        ['business-units', id],
+        () => newBusinessUnit
+      );
+
       queryClient.setQueryData<BusinessUnit[]>(
         ['business-units'],
         (businessUnits = []) =>

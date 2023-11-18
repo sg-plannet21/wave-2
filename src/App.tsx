@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import Button from './components/Inputs/Button';
-import Spinner from './components/Feedback/Spinner';
+import LoadingComponent from './components/Feedback/LoadingComponent';
 
 const queryClient = new QueryClient();
 
@@ -30,13 +30,7 @@ function ErrorFallback() {
 
 function App() {
   return (
-    <React.Suspense
-      fallback={
-        <div className="flex items-center justify-center w-screen h-screen">
-          <Spinner size="xl" />
-        </div>
-      }
-    >
+    <React.Suspense fallback={<LoadingComponent />}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
