@@ -8,6 +8,14 @@ class ApiClient<T> {
     this.endpoint = endpoint;
   }
 
+  create = (data: unknown): Promise<T> =>
+    axiosInstance.post<T>(`${this.endpoint}/`, data).then((res) => res.data);
+
+  update = (id: string, data: unknown): Promise<T> =>
+    axiosInstance
+      .patch<T>(`${this.endpoint}/${id}/`, data)
+      .then((res) => res.data);
+
   get = (id: string): Promise<T> =>
     axiosInstance.get<T>(`${this.endpoint}/${id}/`).then((res) => res.data);
 

@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import ApiClient from '@/services/api-client';
 import SelectField, { PassthroughProps } from '@/components/Form/SelectField';
 import React from 'react';
+import FormInputSkeleton from '@/components/Skeletons/Form-Input/FormInput';
 import { Region } from '../types';
 
 const regionFetcher = new ApiClient<Region>('/regions');
@@ -11,7 +12,7 @@ const RegionSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
     const { data } = useQuery({
       queryKey: 'regions',
       queryFn: regionFetcher.getAll,
-      staleTime: 1000 * 60 * 30,
+      staleTime: 5 * 60 * 1000, // 5m,
     });
 
     if (data)
@@ -26,7 +27,7 @@ const RegionSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
         />
       );
 
-    return null;
+    return <FormInputSkeleton />;
   }
 );
 

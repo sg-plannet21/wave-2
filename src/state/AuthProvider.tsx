@@ -2,6 +2,7 @@ import { EntityRoles, AuthUser } from '@/entities/auth';
 import storage from '@/utils/storage';
 import { useCallback, useMemo, useState } from 'react';
 import jwtDecode from 'jwt-decode';
+import refreshAccessToken from '@/features/auth/api/refreshToken';
 import AuthContext from './contexts/AuthContext';
 
 interface Props {
@@ -18,6 +19,11 @@ function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<AuthUser | null>(getPersistedUser());
 
   const login = useCallback((authUser: AuthUser) => setUser(authUser), []);
+
+  const refreshUser = useCallback(async () => {
+    const refreshedUser = await refreshAccessToken();
+    setUser(refreshedUser);
+  }, []);
 
   const logout = useCallback(() => {
     storage.accessToken.removeAccessToken();
@@ -64,6 +70,7 @@ function AuthProvider({ children }: Props) {
       user,
       login,
       logout,
+      refreshUser,
       isSuperuser,
       hasWriteAccess,
       isLoggedIn,
@@ -73,6 +80,7 @@ function AuthProvider({ children }: Props) {
       user,
       login,
       logout,
+      refreshUser,
       isSuperuser,
       hasWriteAccess,
       isLoggedIn,

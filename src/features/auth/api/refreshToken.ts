@@ -1,10 +1,11 @@
-import { RefreshTokenResponse } from '@/entities/auth';
+import { AuthUser } from '@/entities/auth';
 import storage from '@/utils/storage';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
-async function refreshAccessToken(): Promise<RefreshTokenResponse> {
+async function refreshAccessToken(): Promise<AuthUser> {
   return axios
     .post(`${baseURL}/token/refresh/`, {
       refresh: storage.refreshToken.getRefreshToken(),
@@ -12,7 +13,7 @@ async function refreshAccessToken(): Promise<RefreshTokenResponse> {
     .then((res) => res.data)
     .then((res) => {
       storage.accessToken.setAccessToken(res.access);
-      return res;
+      return jwtDecode(res.access) as AuthUser;
     });
 }
 

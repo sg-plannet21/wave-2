@@ -66,7 +66,7 @@ function Form<T extends FieldValues>({
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} {...rest}>
         <fieldset
-          className="flex flex-col space-y-4"
+          className="flex flex-col space-y-4 py-2"
           disabled={form.formState.isSubmitting}
         >
           {children}
