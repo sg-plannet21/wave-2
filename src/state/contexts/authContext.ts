@@ -5,7 +5,7 @@ interface AuthContextType {
   user: AuthUser | null;
   login: (user: AuthUser) => void;
   logout: () => void;
-  refreshUser: () => void;
+  refreshUser: (callback?:()=>void) => void;
   isSuperuser: boolean;
   hasWriteAccess: (roles: EntityRoles | EntityRoles[]) => boolean;
   isLoggedIn: boolean;

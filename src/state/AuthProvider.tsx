@@ -20,9 +20,10 @@ function AuthProvider({ children }: Props) {
 
   const login = useCallback((authUser: AuthUser) => setUser(authUser), []);
 
-  const refreshUser = useCallback(async () => {
+  const refreshUser = useCallback(async (callback?: () => void) => {
     const refreshedUser = await refreshAccessToken();
     setUser(refreshedUser);
+    if (callback) callback();
   }, []);
 
   const logout = useCallback(() => {

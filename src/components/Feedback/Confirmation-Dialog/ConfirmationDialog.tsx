@@ -43,9 +43,9 @@ function ConfirmationDialog({
       <Dialog isOpen={isOpen} onClose={close} initialFocus={cancelButtonRef}>
         <div className="sm:flex sm:items-start">
           {icon === 'danger' && (
-            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-700 sm:mx-0 sm:h-10 sm:w-10">
+            <div className="mx-auto flex-shrink-0 p-2 h-12 w-12 rounded-full bg-red-100 dark:bg-red-700 sm:mx-0 sm:h-10 sm:w-10">
               <WarningIcon
-                className="h-6 w-6 fill-red-600 dark:fill-white"
+                className="w-full h-full fill-red-600 dark:fill-white"
                 aria-hidden="true"
               />
             </div>

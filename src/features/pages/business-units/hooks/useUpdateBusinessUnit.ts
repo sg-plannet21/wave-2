@@ -1,21 +1,32 @@
 import ApiClient from '@/services/api-client';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNotificationStore } from '@/state/notifications';
+import useAuth from '@/state/hooks/useAuth';
+import storage from '@/utils/storage';
+import { useNavigate } from 'react-router-dom';
+import { WaveError } from '@/entities/wave-error';
 import { BusinessUnit } from '../types';
 import { FormValues } from '../types/schema';
 
 const updateBusinessUnit = new ApiClient<BusinessUnit>('/businessunits').update;
 
-function useUpdateBusinessUnit(id: string) {
+interface UpdateVariables {
+  id: string;
+  data: FormValues;
+}
+
+function useUpdateBusinessUnit() {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
+  const { refreshUser } = useAuth();
+  const navigate = useNavigate();
 
-  return useMutation({
-    mutationFn: (data: FormValues) => updateBusinessUnit(id, data),
+  return useMutation<BusinessUnit, WaveError, UpdateVariables>({
+    mutationFn: ({ id, data }) => updateBusinessUnit(id, data),
     onSuccess(newBusinessUnit) {
       queryClient.setQueryData<BusinessUnit>(
-        ['business-units', id],
-        () => newBusinessUnit
+        ['business-unit', newBusinessUnit.business_unit_id],
+        newBusinessUnit
       );
 
       queryClient.setQueryData<BusinessUnit[]>(
@@ -33,6 +44,23 @@ function useUpdateBusinessUnit(id: string) {
         message: `${newBusinessUnit.business_unit} has been updated.`,
         duration: 5000,
       });
+
+      const isCurrentBusinessUnit =
+        storage.businessUnit.getBusinessUnit().id ===
+        newBusinessUnit.business_unit_id;
+
+      const navigateCallback = isCurrentBusinessUnit
+        ? () =>
+            navigate(
+              `/app/${encodeURIComponent(
+                newBusinessUnit.business_unit
+              )}/business-units`,
+              { replace: true }
+            )
+        : undefined;
+
+      // Update user to retrieve new Business Unit list
+      refreshUser(navigateCallback);
     },
   });
 }

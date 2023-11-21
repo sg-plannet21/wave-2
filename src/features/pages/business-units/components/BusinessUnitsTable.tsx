@@ -19,9 +19,12 @@ function BusinessUnitsTable() {
   );
 
   const Delete = react.useCallback(
-    (bu: { entry: BusinessUnitTableRecord }) => (
+    (businessUnit: { entry: BusinessUnitTableRecord }) => (
       <div className="text-right">
-        <DeleteBusinessUnit id={bu.entry.id} name={bu.entry.name} />
+        <DeleteBusinessUnit
+          id={businessUnit.entry.id}
+          name={businessUnit.entry.name}
+        />
       </div>
     ),
     []

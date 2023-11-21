@@ -1,6 +1,7 @@
 import { ReactComponent as DeleteIcon } from '@/assets/delete.svg';
 import ConfirmationDialog from '@/components/Feedback/Confirmation-Dialog';
 import Button from '@/components/Inputs/Button';
+import useDeleteBusinessUnit from '../hooks/useDeleteBusinessUnit';
 
 interface Props {
   id: string;
@@ -8,9 +9,12 @@ interface Props {
 }
 
 function DeleteBusinessUnit({ id, name }: Props) {
+  const mutation = useDeleteBusinessUnit();
+
   return (
     <ConfirmationDialog
-      title={`Delete ${name}`}
+      title="Delete Business Unit"
+      body={`Delete ${name}?`}
       icon="danger"
       triggerButton={
         <button
@@ -20,7 +24,18 @@ function DeleteBusinessUnit({ id, name }: Props) {
           <DeleteIcon className="w-6 h-6 fill-current" />
         </button>
       }
-      confirmButton={<Button variant="danger">Delete {id}</Button>}
+      confirmButton={
+        <Button
+          isLoading={mutation.isLoading}
+          disabled={mutation.isLoading}
+          onClick={async () => {
+            await mutation.mutateAsync(id);
+          }}
+          variant="danger"
+        >
+          Delete {name}
+        </Button>
+      }
     />
   );
 }

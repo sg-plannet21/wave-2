@@ -16,7 +16,7 @@ function useCreateBusinessUnit() {
     mutationFn: (data: FormValues) => createBusinessUnit(data),
     onSuccess(newBusinessUnit) {
       queryClient.setQueryData<BusinessUnit[]>(
-        ['business-units'],
+        ['business-unit', newBusinessUnit.business_unit_id],
         (businessUnits = []) => [newBusinessUnit, ...businessUnits]
       );
       addNotification({
@@ -25,6 +25,7 @@ function useCreateBusinessUnit() {
         message: `${newBusinessUnit.business_unit} has been created.`,
         duration: 5000,
       });
+
       // Update user to retrieve new Business Unit list
       refreshUser();
     },

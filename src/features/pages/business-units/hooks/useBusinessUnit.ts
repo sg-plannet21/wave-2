@@ -4,7 +4,7 @@ import { BusinessUnit } from '../types';
 
 function useBusinessUnit(id: string) {
   return useQuery({
-    queryKey: ['business-units', id],
+    queryKey: ['business-unit', id],
     queryFn: () => new ApiClient<BusinessUnit>('/businessunits').get(id),
   });
 }
