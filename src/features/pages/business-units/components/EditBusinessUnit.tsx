@@ -9,7 +9,7 @@ function EditBusinessUnit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const businessUnitQuery = useBusinessUnit(id as string);
-  const updateBusinessUnit = useUpdateBusinessUnit(id as string);
+  const updateBusinessUnit = useUpdateBusinessUnit();
 
   if (businessUnitQuery.isLoading) return <LoadingComponent />;
 
@@ -18,8 +18,8 @@ function EditBusinessUnit() {
       {businessUnitQuery.data && (
         <BusinessUnitForm
           isSubmitting={updateBusinessUnit.isLoading}
-          onSubmit={async (values) => {
-            await updateBusinessUnit.mutateAsync(values);
+          onSubmit={async (data) => {
+            await updateBusinessUnit.mutateAsync({ id: id as string, data });
             navigate('..');
           }}
           defaultValues={businessUnitQuery.data}
