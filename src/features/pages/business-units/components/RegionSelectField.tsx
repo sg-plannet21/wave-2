@@ -12,7 +12,8 @@ const RegionSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
     const { data } = useQuery({
       queryKey: 'regions',
       queryFn: regionFetcher.getAll,
-      staleTime: 5 * 60 * 1000, // 5m,
+      staleTime: 15 * 60 * 1000,
+      cacheTime: 30 * 60 * 1000,
     });
 
     if (data)

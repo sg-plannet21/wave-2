@@ -10,6 +10,7 @@ import useAuth from '@/state/hooks/useAuth';
 import storage from '@/utils/storage';
 import { Suspense, useMemo } from 'react';
 import { Navigate, Outlet, RouteObject, useParams } from 'react-router-dom';
+import RouteRoutes from '@/features/pages/routes/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -32,7 +33,7 @@ const superUserRoutes: RouteObject[] = [
   },
   { path: 'business-units/*', element: <BusinessUnitRoutes /> },
   { path: 'users/*', element: <>Users</> },
-  { path: 'routes/*', element: <>Routes</> },
+  { path: 'routes/*', element: <RouteRoutes /> },
 ];
 
 function BusinessUnit() {

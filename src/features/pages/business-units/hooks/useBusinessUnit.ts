@@ -6,6 +6,7 @@ function useBusinessUnit(id: string) {
   return useQuery({
     queryKey: ['business-unit', id],
     queryFn: () => new ApiClient<BusinessUnit>('/businessunits').get(id),
+    enabled: !!id,
   });
 }
 

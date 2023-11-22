@@ -8,7 +8,7 @@ export function businessUnitQueryKey(
   return [storage.businessUnit.getBusinessUnit().label, ...rest];
 }
 
-type EntityKey = 'users' | 'routes' | 'messages';
+type EntityKey = 'users' | 'routes' | 'route-destination' | 'messages';
 export function getEntityKey(entity: EntityKey): string[] {
   return [storage.businessUnit.getBusinessUnit().label, entity];
 }
