@@ -9,7 +9,7 @@ const destinationTypesClient = new ApiClient<RouteDestinationType>(
 
 function useRouteDestinations() {
   return useQuery({
-    queryKey: getEntityKey('route-destination'),
+    queryKey: getEntityKey('route-destinations'),
     queryFn: destinationTypesClient.getAll,
     staleTime: 15 * 60 * 1000,
     cacheTime: 30 * 60 * 1000,

@@ -18,6 +18,20 @@ function RoutesTable() {
     []
   );
 
+  /*
+  const RouteType = react.useCallback((record: { entry: RouteTableRecord }) => {
+    const {
+      entry: { isSystemRoute },
+    } = record;
+    return (
+      <Badge
+        variant={isSystemRoute ? 'secondary' : 'primary'}
+        label={isSystemRoute ? 'System' : 'Custom'}
+      />
+    );
+  }, []);
+    */
+
   const Delete = react.useCallback(
     (record: { entry: RouteTableRecord }) => (
       <div className="text-right">
@@ -34,6 +48,11 @@ function RoutesTable() {
       Cell: EntityLink,
     },
     {
+      field: 'destination',
+      label: 'Destination',
+    },
+    { field: 'destinationType', label: 'Type' },
+    {
       field: 'id',
       label: '',
       ignoreFiltering: true,
@@ -41,7 +60,7 @@ function RoutesTable() {
     },
   ];
 
-  if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={3} />;
 
   return <WaveTable<RouteTableRecord> data={data} columns={columns} />;
 }

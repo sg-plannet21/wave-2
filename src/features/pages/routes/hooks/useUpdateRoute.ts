@@ -9,7 +9,7 @@ const updateRoute = new ApiClient<Route>('/routes').update;
 
 interface UpdateVariables {
   id: string;
-  data: FormValues;
+  data: FormValues & Pick<Route, 'route_id'>;
 }
 
 function useUpdateRoute() {
@@ -26,11 +26,11 @@ function useUpdateRoute() {
           route.route_id === newRoute.route_id ? newRoute : route
         )
       );
-            
+
       addNotification({
         type: 'success',
-        title: 'Business Unit Updated',
-        message: `${newRoute.business_unit} has been updated.`,
+        title: 'Route Updated',
+        message: `${newRoute.route_name} has been updated.`,
         duration: 5000,
       });
     },

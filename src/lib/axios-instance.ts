@@ -20,11 +20,12 @@ function businessUnitInterceptor(config: InternalAxiosRequestConfig) {
 
   // set the business unit as a POST & PUT property
   if (
-    (config.method === 'POST' || config.method === 'PUT') &&
-    !config.data.businessunit
+    config.method === 'patch' ||
+    config.method === 'put'||
+    config.method === 'post' 
   ) {
     if (!config.data) config.data = {};
-    config.data.businessunit = businessUnit;
+    config.data.business_unit = businessUnit;
   }
   return config;
 }

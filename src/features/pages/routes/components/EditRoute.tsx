@@ -23,9 +23,13 @@ function EditRoute() {
           schema={routeSchema(externalDestinationId)}
           isSubmitting={updateRoute.isLoading}
           onSubmit={async (data) => {
-            await updateRoute.mutateAsync({ id: id as string, data });
+            await updateRoute.mutateAsync({
+              id: id as string,
+              data: { route_id: id as string, ...data },
+            });
             navigate('..');
           }}
+          defaultValues={routeQuery.data}
         />
       )}
     </ContentLayout>

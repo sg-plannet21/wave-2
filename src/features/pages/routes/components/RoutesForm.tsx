@@ -11,12 +11,13 @@ interface Props {
   schema: ZodSchema<FormValues>;
   onSubmit: SubmitHandler<FormValues>;
   isSubmitting: boolean;
+  defaultValues?: FormValues;
 }
 
 // TODO: default values
 
-function RouteForm({ schema, onSubmit, isSubmitting }: Props) {
-  const form = useZodForm<typeof schema>({ schema });
+function RouteForm({ schema, onSubmit, isSubmitting, defaultValues }: Props) {
+  const form = useZodForm<typeof schema>({ schema, defaultValues });
 
   return (
     <Form<FormValues> form={form} onSubmit={onSubmit}>
