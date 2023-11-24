@@ -11,6 +11,7 @@ import storage from '@/utils/storage';
 import { Suspense, useMemo } from 'react';
 import { Navigate, Outlet, RouteObject, useParams } from 'react-router-dom';
 import RouteRoutes from '@/features/pages/routes/routes';
+import UserRoutes from '@/features/pages/users/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -32,7 +33,7 @@ const superUserRoutes: RouteObject[] = [
     element: <>Unassigned Entities</>,
   },
   { path: 'business-units/*', element: <BusinessUnitRoutes /> },
-  { path: 'users/*', element: <>Users</> },
+  { path: 'users/*', element: <UserRoutes /> },
   { path: 'routes/*', element: <RouteRoutes /> },
 ];
 

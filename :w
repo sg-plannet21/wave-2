@@ -1,0 +1,61 @@
+import { ReactComponent as SupervisorIcon } from '@/assets/supervisor.svg';
+import { ReactComponent as AdminIcon } from '@/assets/administrator.svg';
+import { ReactComponent as MenuIcon } from '@/assets/menu.svg';
+import { ReactComponent as MessageIcon } from '@/assets/message.svg';
+import { ReactComponent as QueueIcon } from '@/assets/queue.svg';
+import { ReactComponent as ScheduleExceptionIcon } from '@/assets/schedule-exception.svg';
+import { ReactComponent as ScheduleIcon } from '@/assets/schedule.svg';
+import { ReactComponent as EntryPointIcon } from '@/assets/entry-point.svg';
+import { TableColumn } from '@/components/Data-Display/Table';
+import WaveTable from '@/components/Composite/Wave-Table';
+import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
+import classNames from 'classnames';
+import { EntityRoles } from '@/entities/auth';
+import useUsersTableData, { UserTableRecord } from '../hooks/useUsersTableData';
+
+const iconClasses = 'w-6 h-6 fill-current';
+const activeClasses = 'text-green-600 dark:text-green-400';
+const inactiveClasses = 'text-gray-600 dark:text-gray-400';
+
+function renderRoleIcon(user: UserTableRecord, role: EntityRoles) {
+  if (user.isSuperUser)
+    return <AdminIcon className={`${iconClasses} ${activeClasses}`} />;
+
+  if (user.roles.includes(EntityRoles.Administrator))
+    return <SupervisorIcon className={`${iconClasses} ${activeClasses}`} />;
+
+  switch (role) {
+    case EntityRoles.Prompts: {
+      const hasPromptsRole = user.roles.includes(EntityRoles.Prompts);
+      return (
+        <MessageIcon
+          className={classNames(iconClasses, {
+            activeClasses: hasPromptsRole,
+            inactiveClasses: !hasPromptsRole,
+          })}
+        />
+      );
+    }
+    default:
+      return <>x</>;
+  }
+}
+
+function UsersTable() {
+  const { data, isLoading } = useUsersTableData();
+
+  const columns: TableColumn<UserTableRecord>[] = [
+    { field: 'username', label: 'Username' },
+    {
+      field: 'id',
+      label: 'Prompts',
+      Cell: ({ entry }) => renderRoleIcon(entry, EntityRoles.Prompts),
+    },
+  ];
+
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={8} />;
+
+  return <WaveTable<UserTableRecord> data={data} columns={columns} />;
+}
+
+export default UsersTable;

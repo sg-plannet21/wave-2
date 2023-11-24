@@ -2,6 +2,7 @@ import ApiClient from '@/services/api-client';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNotificationStore } from '@/state/notifications';
 import { WaveError } from '@/entities/wave-error';
+import { getEntityKey } from '@/lib/entity-keys';
 import { FormValues } from '../types/schema';
 import { Route } from '../types';
 
@@ -21,7 +22,7 @@ function useUpdateRoute() {
     onSuccess(newRoute) {
       queryClient.setQueryData<Route>(['route', newRoute.route_id], newRoute);
 
-      queryClient.setQueryData<Route[]>(['routes'], (routes = []) =>
+      queryClient.setQueryData<Route[]>(getEntityKey('routes'), (routes = []) =>
         routes.map((route) =>
           route.route_id === newRoute.route_id ? newRoute : route
         )

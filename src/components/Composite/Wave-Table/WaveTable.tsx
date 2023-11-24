@@ -16,7 +16,7 @@ function WaveTable<Entry extends { [P in keyof Entry]: Entry[P] }>({
   data,
   children,
   sortColumn = { field: columns[0]?.field, order: 'asc' },
-  pageSize = 5,
+  pageSize = 20,
 }: WaveTableProps<Entry>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');

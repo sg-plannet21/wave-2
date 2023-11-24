@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import ApiClient from '@/services/api-client';
 import { useNotificationStore } from '@/state/notifications';
+import { getEntityKey } from '@/lib/entity-keys';
 import { FormValues } from '../types/schema';
 import { Route } from '../types';
 
@@ -14,7 +15,7 @@ function useCreateRoute() {
     mutationFn: (data: FormValues) => createRoute(data),
     onSuccess(newRoute) {
       queryClient.setQueryData<Route[]>(
-        ['route', newRoute.route_id],
+        getEntityKey('routes'),
         (routes = []) => [newRoute, ...routes]
       );
       addNotification({
