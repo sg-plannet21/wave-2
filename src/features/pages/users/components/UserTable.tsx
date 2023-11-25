@@ -11,14 +11,51 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import classNames from 'classnames';
 import { EntityRoles } from '@/entities/auth';
 import { useCallback } from 'react';
+import { xor } from 'lodash';
 import useUsersTableData, { UserTableRecord } from '../hooks/useUsersTableData';
+import useUpdateUser from '../hooks/useUpdateUser';
 
 const iconClasses = 'w-6 h-6 fill-current';
 const activeClasses = 'fill-green-600 dark:fill-green-400';
 const inactiveClasses = 'fill-gray-600 dark:fill-gray-600';
+const clickableClasses =
+  'cursor-pointer hover:scale-125 transition-transform duration-300';
 
 function UsersTable() {
-  const { data, isLoading } = useUsersTableData();
+  const { data, isLoading, roles } = useUsersTableData();
+  const mutation = useUpdateUser();
+
+  const updateBusinessRoleList = useCallback(
+    (record: UserTableRecord, role: EntityRoles): number[] => {
+      if (!roles) return [];
+
+      // xor complete BU list vs current roles + new role
+      if (
+        role === EntityRoles.Administrator ||
+        record.roles.includes(EntityRoles.Administrator)
+      ) {
+        return xor(
+          record.businessUnitRoles,
+          [...record.roles, role].map((buRole) => roles[buRole])
+        );
+      }
+
+      // xor the complete BU list vs the new role only
+      return xor(record.businessUnitRoles, [roles[role]]);
+    },
+    [roles]
+  );
+
+  const handleRoleToggle = useCallback(
+    async (user: UserTableRecord, role: EntityRoles) => {
+      const payload = {
+        id: user.id,
+        roles: updateBusinessRoleList(user, role),
+      };
+      await mutation.mutateAsync(payload);
+    },
+    [updateBusinessRoleList, mutation]
+  );
 
   const renderRoleIcon = useCallback(
     (user: UserTableRecord, role: EntityRoles) => {
@@ -26,7 +63,12 @@ function UsersTable() {
         return <AdminIcon className={`${iconClasses} ${activeClasses}`} />;
 
       if (user.roles.includes(EntityRoles.Administrator))
-        return <SupervisorIcon className={`${iconClasses} ${activeClasses}`} />;
+        return (
+          <SupervisorIcon
+            onClick={() => handleRoleToggle(user, role)}
+            className={classNames(iconClasses, activeClasses, clickableClasses)}
+          />
+        );
 
       let IconComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
@@ -62,18 +104,15 @@ function UsersTable() {
       const hasRole = user.roles.includes(role);
       return (
         <IconComponent
-          className={classNames(
-            iconClasses,
-            'cursor-pointer hover:scale-125 transition-transform duration-300',
-            {
-              [activeClasses]: hasRole,
-              [inactiveClasses]: !hasRole,
-            }
-          )}
+          onClick={() => handleRoleToggle(user, role)}
+          className={classNames(iconClasses, [clickableClasses], {
+            [activeClasses]: hasRole,
+            [inactiveClasses]: !hasRole,
+          })}
         />
       );
     },
-    []
+    [handleRoleToggle]
   );
 
   const columns: TableColumn<UserTableRecord>[] = [

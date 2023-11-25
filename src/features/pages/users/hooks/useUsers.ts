@@ -1,14 +1,15 @@
 import ApiClient from '@/services/api-client';
 import { useQuery } from 'react-query';
-import { getEntityKey } from '@/lib/entity-keys';
 import { User } from '../types';
 
 const getUsers = new ApiClient<User>('/users').getAll;
 
 function useUsers() {
   return useQuery({
-    queryKey: getEntityKey('users'),
+    queryKey: 'users',
     queryFn: getUsers,
+    staleTime: 15 * 60 * 1000,
+    cacheTime: 30 * 60 * 1000,
   });
 }
 

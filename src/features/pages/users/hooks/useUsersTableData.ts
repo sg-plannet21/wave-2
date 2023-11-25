@@ -10,7 +10,7 @@ export interface UserTableRecord {
   lastName: string;
   isSuperUser: boolean;
   roles: Array<EntityRoles>;
-  currentBuRoles: Array<string>;
+  businessUnitRoles: Array<number>;
 }
 
 function useUsersTableData() {
@@ -37,20 +37,21 @@ function useUsersTableData() {
   const users: Array<UserTableRecord> = useMemo(() => {
     if (!data || !roles) return [];
 
-    //        .filter((user) => !user.is_cc_user)
-    return data.map((user) => ({
-      id: user.id,
-      username: user.username,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      isSuperUser: user.is_wave_superuser,
-      roles: user.business_unit_roles
-        .filter((role) => role >= roles.Prompts && role <= roles.Administrator)
-        .map((roleId) => roles[roleId]) as EntityRoles[],
-      currentBuRoles: user.current_business_unit_roles.map(
-        (role) => roles[role]
-      ),
-    }));
+    return data
+      .filter((user) => !user.is_cc_user && !user.is_wave_superuser)
+      .map((user) => ({
+        id: user.id,
+        username: user.username,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        isSuperUser: user.is_wave_superuser,
+        roles: user.business_unit_roles
+          .filter(
+            (role) => role >= roles.Prompts && role <= roles.Administrator
+          )
+          .map((roleId) => roles[roleId]) as EntityRoles[],
+        businessUnitRoles: user.business_unit_roles,
+      }));
   }, [data, roles]);
 
   return { data: users, isLoading, roles };

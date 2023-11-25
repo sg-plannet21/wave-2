@@ -19,19 +19,22 @@ function useUpdateRoute() {
 
   return useMutation<Route, WaveError, UpdateVariables>({
     mutationFn: ({ id, data }) => updateRoute(id, data),
-    onSuccess(newRoute) {
-      queryClient.setQueryData<Route>(['route', newRoute.route_id], newRoute);
+    onSuccess(updatedRoute) {
+      queryClient.setQueryData<Route>(
+        ['route', updatedRoute.route_id],
+        updatedRoute
+      );
 
       queryClient.setQueryData<Route[]>(getEntityKey('routes'), (routes = []) =>
         routes.map((route) =>
-          route.route_id === newRoute.route_id ? newRoute : route
+          route.route_id === updatedRoute.route_id ? updatedRoute : route
         )
       );
 
       addNotification({
         type: 'success',
         title: 'Route Updated',
-        message: `${newRoute.route_name} has been updated.`,
+        message: `${updatedRoute.route_name} has been updated.`,
         duration: 5000,
       });
     },
