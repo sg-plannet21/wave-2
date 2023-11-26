@@ -16,7 +16,6 @@ function useBusinessUnitsTableData() {
       id: bu.business_unit_id,
       name: bu.business_unit,
     }));
-
   }, [businessUnits]);
 
   return { data, isLoading, error };

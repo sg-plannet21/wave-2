@@ -12,13 +12,15 @@ import { Suspense, useMemo } from 'react';
 import { Navigate, Outlet, RouteObject, useParams } from 'react-router-dom';
 import RouteRoutes from '@/features/pages/routes/routes';
 import UserRoutes from '@/features/pages/users/routes';
+import EntryPointRoutes from '@/features/pages/entry-points/routes';
+import UnassignedEntitiesRoutes from '@/features/pages/unassigned-entities/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
     index: true,
     element: <Home />,
   },
-  { path: 'entry-points/*', element: <>Entry Points</> },
+  { path: 'entry-points/*', element: <EntryPointRoutes /> },
   { path: 'queues/*', element: <>Queues</> },
   { path: 'menus/*', element: <>Menus</> },
   { path: 'messages/*', element: <>Messages</> },
@@ -30,7 +32,7 @@ const commonAuthRoutes: RouteObject[] = [
 const superUserRoutes: RouteObject[] = [
   {
     path: 'unassigned-entities/*',
-    element: <>Unassigned Entities</>,
+    element: <UnassignedEntitiesRoutes />,
   },
   { path: 'business-units/*', element: <BusinessUnitRoutes /> },
   { path: 'users/*', element: <UserRoutes /> },

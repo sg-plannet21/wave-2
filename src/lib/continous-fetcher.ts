@@ -2,9 +2,13 @@ import { AxiosResponse } from 'axios';
 import { ApiCollectionResponse } from '@/entities/api-collection-response';
 import axiosInstance from './axios-instance';
 
+function replaceHttps(url: string): string {
+  return url.replace(/^https:\/\//i, 'http://');
+}
+
 async function continousFetcher<T>(url: string): Promise<{ data: T[] }> {
   const results: T[] = [];
-  let page = 1;
+  const page = 1;
   let nextUrl: string | null = `${url}?page=${page}`;
 
   while (nextUrl) {
@@ -16,7 +20,7 @@ async function continousFetcher<T>(url: string): Promise<{ data: T[] }> {
     results.push(...data.results);
 
     if (data.next) {
-      nextUrl = import.meta.env.DEV ? `${url}?page=${++page}` : data.next;
+      nextUrl = import.meta.env.DEV ? replaceHttps(data.next) : data.next;
     } else {
       nextUrl = null;
     }

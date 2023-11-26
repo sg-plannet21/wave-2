@@ -1,20 +1,11 @@
-import { useQuery } from 'react-query';
-import ApiClient from '@/services/api-client';
 import SelectField, { PassthroughProps } from '@/components/Form/SelectField';
 import React from 'react';
 import FormInputSkeleton from '@/components/Skeletons/Form-Input/FormInput';
-import { Region } from '../types';
-
-const regionFetcher = new ApiClient<Region>('/regions');
+import useRegions from '../hooks/useRegions';
 
 const RegionSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
   (props, ref) => {
-    const { data } = useQuery({
-      queryKey: 'regions',
-      queryFn: regionFetcher.getAll,
-      staleTime: 15 * 60 * 1000,
-      cacheTime: 30 * 60 * 1000,
-    });
+    const { data } = useRegions();
 
     if (data)
       return (

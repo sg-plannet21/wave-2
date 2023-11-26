@@ -135,10 +135,9 @@ function SideNavigation() {
   return (
     <>
       <BusinessUnitMenu />
-      {navigation.map((item, index) => (
+      {navigation.map((item ) => (
         <NavLink
           key={item.label}
-          end={index === 0}
           to={item.path}
           className={({ isActive }) =>
             classNames(

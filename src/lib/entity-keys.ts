@@ -9,10 +9,11 @@ export function businessUnitQueryKey(
 }
 
 type EntityKey =
-  | 'users'
+  | 'entry-points'
   | 'routes'
   | 'route-destinations'
   | 'messages'
+  | 'sections'
   | 'business-unit-roles';
 
 export function getEntityKey(entity: EntityKey): string[] {
