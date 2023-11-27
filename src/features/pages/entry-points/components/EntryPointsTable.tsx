@@ -7,6 +7,8 @@ import useEntryPointTableData, {
   EntryPointTableRecord,
 } from '../hooks/useEntryPointTableData';
 import DeleteEntryPoint from './DeleteEntryPoint';
+import HistoricalCallflow from './HistoricalCallflow';
+import CurrentCallflow from './CurrentCallflow';
 
 function EntryPointsTable() {
   const { data, isLoading } = useEntryPointTableData();
@@ -27,6 +29,20 @@ function EntryPointsTable() {
     []
   );
 
+  const History = react.useCallback(
+    (record: { entry: EntryPointTableRecord }) => (
+      <HistoricalCallflow name={record.entry.name} />
+    ),
+    []
+  );
+
+  const Current = react.useCallback(
+    (record: { entry: EntryPointTableRecord }) => (
+      <CurrentCallflow id={record.entry.id} name={record.entry.name} />
+    ),
+    []
+  );
+
   const columns: TableColumn<EntryPointTableRecord>[] = [
     {
       field: 'name',
@@ -38,6 +54,18 @@ function EntryPointsTable() {
       label: 'Region',
     },
     { field: 'section', label: 'Section' },
+    {
+      field: 'id',
+      label: 'Historical Callfow',
+      Cell: History,
+      ignoreFiltering: true,
+    },
+    {
+      field: 'id',
+      label: 'Current Callflow',
+      Cell: Current,
+      ignoreFiltering: true,
+    },
     { field: 'id', label: '', Cell: Delete, ignoreFiltering: true },
   ];
 

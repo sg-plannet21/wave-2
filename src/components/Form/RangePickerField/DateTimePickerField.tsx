@@ -1,36 +1,38 @@
-import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
+import DateTimePicker from 'react-datetime-picker';
+import './Calendar.css';
 import './Clock.css';
-import './TimeRangePicker.css';
+import './DateTimePicker.css';
 import { useController, useFormContext } from 'react-hook-form';
 import { FieldError } from '../Form';
 
-interface Props extends React.ComponentProps<typeof TimeRangePicker> {
+interface Props extends React.ComponentProps<typeof DateTimePicker> {
   name: string;
   label: string;
 }
 
-type ValuePiece = Date | string | null;
+type ValuePiece = Date | null;
+
+const defaultDate = new Date();
 
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-function TimeRangePickerField({ label, name, ...rest }: Props) {
+function DateTimePickerField({ label, name, ...rest }: Props) {
   const { control } = useFormContext();
   const { field } = useController({
     name,
     control,
-    defaultValue: ['9:00', '17:00'],
+    defaultValue: defaultDate,
   });
   return (
-    <label htmlFor="range-picker">
+    <label htmlFor="date-picker">
       <div className="font-medium text-gray-800 dark:text-gray-200 mb-1">
         {label}
       </div>
-      <TimeRangePicker
-        id="range-picker"
-        format="HH:mm"
+      <DateTimePicker
+        id="date-picker"
+        format="dd/MM/y HH:mm"
         disableClock
         clearIcon={null}
-        rangeDivider=" to "
         value={field.value}
         onChange={field.onChange}
         onBlur={field.onBlur}
@@ -42,4 +44,4 @@ function TimeRangePickerField({ label, name, ...rest }: Props) {
     </label>
   );
 }
-export default TimeRangePickerField;
+export default DateTimePickerField;
