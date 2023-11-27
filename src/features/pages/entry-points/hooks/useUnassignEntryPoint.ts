@@ -21,7 +21,7 @@ function useUnassignEntryPoint() {
 
       addNotification({
         type: 'success',
-        title: 'EntryPoint Unassignd',
+        title: 'Entry Point Deleted',
         duration: 5000,
       });
     },

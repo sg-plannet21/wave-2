@@ -14,8 +14,8 @@ interface UpdateVariables {
 const apiClient = new ApiClient<EntryPoint>('/entrypoints');
 
 function useAssignEntryPoint() {
-  const businessUnitId = storage.businessUnit.getBusinessUnit().id;
-  const { data: currentBusinessUnit } = useBusinessUnit(businessUnitId);
+  const currentBusinessUnit = storage.businessUnit.getBusinessUnit();
+  const { data: businessUnit } = useBusinessUnit(currentBusinessUnit.id);
   const { addNotification } = useNotificationStore();
   const queryClient = useQueryClient();
 
@@ -24,8 +24,8 @@ function useAssignEntryPoint() {
       apiClient.update(`${data.id}/?unassigned=true`, {
         entry_point_id: data.id,
         entry_point: data.entry_point,
-        businesss_unit: businessUnitId,
-        region: currentBusinessUnit?.default_region,
+        businesss_unit: currentBusinessUnit.id,
+        region: businessUnit?.default_region,
       }),
     onSuccess(data) {
       queryClient.setQueryData<EntryPoint[]>(
@@ -39,7 +39,7 @@ function useAssignEntryPoint() {
       addNotification({
         type: 'success',
         title: 'Entry Point Updated',
-        message: `${data.entry_point} has been assigned.`,
+        message: `${data.entry_point} has been assigned to ${currentBusinessUnit.label} business unit.`,
         duration: 5000,
       });
     },

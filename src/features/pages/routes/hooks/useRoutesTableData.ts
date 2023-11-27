@@ -12,7 +12,7 @@ export type RouteTableRecord = {
 };
 
 function useRoutesTableData() {
-  const { data: routes, isLoading } = useRoutes();
+  const { data: routes } = useRoutes();
   const destinationsLookup = useRouteDestinationsLookup();
 
   const data: RouteTableRecord[] = useMemo(() => {
@@ -32,7 +32,7 @@ function useRoutesTableData() {
       }));
   }, [routes, destinationsLookup]);
 
-  return { data, isLoading };
+  return { data, isLoading: !routes || !destinationsLookup };
 }
 
 export default useRoutesTableData;

@@ -1,19 +1,19 @@
 import { ReactComponent as DeleteIcon } from '@/assets/delete.svg';
 import ConfirmationDialog from '@/components/Feedback/Confirmation-Dialog';
 import Button from '@/components/Inputs/Button';
-import useDeleteRoute from '../hooks/useDeleteRoute';
+import useUnassignEntryPoint from '../hooks/useUnassignEntryPoint';
 
 interface Props {
   id: string;
   name: string;
 }
 
-function DeleteRoute({ id, name }: Props) {
-  const mutation = useDeleteRoute();
+function DeleteEntryPoint({ id, name }: Props) {
+  const mutation = useUnassignEntryPoint();
 
   return (
     <ConfirmationDialog
-      title="Delete Route"
+      title="Delete Entry Point"
       body={`Delete ${name}?`}
       icon="danger"
       isDone={mutation.isSuccess}
@@ -41,4 +41,4 @@ function DeleteRoute({ id, name }: Props) {
   );
 }
 
-export default DeleteRoute;
+export default DeleteEntryPoint;

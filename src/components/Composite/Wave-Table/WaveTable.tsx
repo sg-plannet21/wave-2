@@ -33,7 +33,8 @@ function WaveTable<Entry extends { [P in keyof Entry]: Entry[P] }>({
 
   const filteredData: Entry[] = useMemo(() => {
     if (!searchTerm.trim().length) return data;
-
+    
+    // TODO: fix invalid regex exception (ex. "english (ire")
     const regEx = new RegExp(searchTerm.trim(), 'i');
     const filtered = data.filter((entry) => {
       for (let i = 0; i < filterableFields.length; i++) {

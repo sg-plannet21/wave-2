@@ -10,6 +10,7 @@ const sizes = {
 const variants = {
   primary: 'text-blue-600 dark:text-emerald-600',
   light: 'text-gray-200 dark:text-gray-600',
+  white: 'text-white',
 };
 
 interface Props {

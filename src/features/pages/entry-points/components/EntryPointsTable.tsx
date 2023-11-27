@@ -6,6 +6,7 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import useEntryPointTableData, {
   EntryPointTableRecord,
 } from '../hooks/useEntryPointTableData';
+import DeleteEntryPoint from './DeleteEntryPoint';
 
 function EntryPointsTable() {
   const { data, isLoading } = useEntryPointTableData();
@@ -13,6 +14,15 @@ function EntryPointsTable() {
   const EntryPointLink = react.useCallback(
     (record: { entry: EntryPointTableRecord }) => (
       <Link to={record.entry.id}>{record.entry.name}</Link>
+    ),
+    []
+  );
+
+  const Delete = react.useCallback(
+    (record: { entry: EntryPointTableRecord }) => (
+      <div className="text-right">
+        <DeleteEntryPoint id={record.entry.id} name={record.entry.name} />
+      </div>
     ),
     []
   );
@@ -28,6 +38,7 @@ function EntryPointsTable() {
       label: 'Region',
     },
     { field: 'section', label: 'Section' },
+    { field: 'id', label: '', Cell: Delete, ignoreFiltering: true },
   ];
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={3} />;

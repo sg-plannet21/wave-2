@@ -12,7 +12,7 @@ export type EntryPointTableRecord = {
 };
 
 function useEntryPointTableData() {
-  const { data: entryPoints, isLoading } = useEntryPoints();
+  const { data: entryPoints } = useEntryPoints();
   const regionsLookup = useRegionsLookup();
   const sectionsLookup = useSectionsLookup();
 
@@ -27,7 +27,7 @@ function useEntryPointTableData() {
     }));
   }, [entryPoints, regionsLookup, sectionsLookup]);
 
-  return { data, isLoading };
+  return { data, isLoading: !entryPoints || !regionsLookup || !sectionsLookup };
 }
 
 export default useEntryPointTableData;
