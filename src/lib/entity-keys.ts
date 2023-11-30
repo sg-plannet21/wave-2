@@ -14,6 +14,7 @@ type EntityKey =
   | 'route-destinations'
   | 'messages'
   | 'sections'
+  | 'menus'
   | 'business-unit-roles';
 
 export function getEntityKey(entity: EntityKey): string[] {
