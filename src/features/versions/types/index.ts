@@ -1,4 +1,3 @@
-// Entity Versioning
 interface Fields {
   revision: number;
   object_id: string;
@@ -17,8 +16,8 @@ export interface Version {
   change_user: string;
 }
 
-export interface SerializedData<Entity extends { versions: Version[] }> {
+export interface DeserializedData<Entity> {
   model: string;
   pk: string;
-  fields: Omit<Entity, 'versions'>;
+  fields: Entity;
 }

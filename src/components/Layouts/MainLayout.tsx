@@ -135,7 +135,7 @@ function SideNavigation() {
   return (
     <>
       <BusinessUnitMenu />
-      {navigation.map((item ) => (
+      {navigation.map((item) => (
         <NavLink
           key={item.label}
           to={item.path}
@@ -189,11 +189,11 @@ function MobileSideBar({
           <Transition.Child
             as={Fragment}
             enter="transition ease-in-out duration-300 transform"
-            enterFrom="-trangray-x-full"
-            enterTo="trangray-x-0"
+            enterFrom="-translate-x-full"
+            enterTo="translate-x-0"
             leave="transition ease-in-out duration-300 transform"
-            leaveFrom="trangray-x-0"
-            leaveTo="-trangray-x-full"
+            leaveFrom="translate-x-0"
+            leaveTo="-translate-x-full"
           >
             <Dialog.Panel className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-50 dark:bg-gray-800">
               <Transition.Child
