@@ -8,7 +8,7 @@ function VersionTest() {
   return (
     <Versions
       versions={versions}
-      name={name}
+      name={name ?? 'Versions'}
       isLoading={isLoading}
       rows={rows}
     />
