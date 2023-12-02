@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ReactComponent as ArchiveIcon } from '@/assets/archive.svg';
 import classNames from 'classnames';
 import Select, { SelectOption } from '@/components/Inputs/Select';
+import VersionsSkeleton from './VersionsSkeleton';
 
 export interface VersionTableRow<T> {
   field: keyof T;
@@ -12,9 +13,10 @@ interface Props<T> {
   versions: Array<T>;
   name: string;
   rows: Array<VersionTableRow<T>>;
+  isLoading: boolean;
 }
 
-function Versions<T>({ name, rows, versions }: Props<T>) {
+function Versions<T>({ name, rows, versions, isLoading }: Props<T>) {
   const [version, setVersion] = useState<SelectOption | undefined>(undefined);
 
   useEffect(() => {
@@ -23,6 +25,8 @@ function Versions<T>({ name, rows, versions }: Props<T>) {
       value: 1,
     });
   }, [versions.length]);
+
+  if (isLoading || !version) return <VersionsSkeleton />;
 
   if (versions.length <= 1) {
     return (
@@ -33,25 +37,25 @@ function Versions<T>({ name, rows, versions }: Props<T>) {
     );
   }
 
-  if (!version) return null;
-
   return (
     <div className="overflow-x-auto">
       <div className="flex flex-col">
-        <Select
-          options={Array.from(Array(versions.length - 1).keys())
-            .map((key) => key + 1)
-            .map((key) => ({
-              value: key,
-              label: `Version ${versions.length - key}`,
-            }))}
-          selectedOption={version}
-          onChange={setVersion}
-        />
+        <div className="flex justify-between items-end gap-2 px-2 py-3">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            {name}
+          </h2>
+          <Select
+            options={Array.from(Array(versions.length - 1).keys())
+              .map((key) => key + 1)
+              .map((key) => ({
+                value: key,
+                label: `Version ${versions.length - key}`,
+              }))}
+            selectedOption={version}
+            onChange={setVersion}
+          />
+        </div>
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <caption className="text-2xl font-semibold text-emerald-500">
-            {name} - Versions
-          </caption>
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <td />

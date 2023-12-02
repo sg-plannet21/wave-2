@@ -1,5 +1,3 @@
-// useEntryPoint();
-
 import ApiClient from '@/services/api-client';
 import { useQuery } from 'react-query';
 import { Version } from '@/features/versions/types';
@@ -7,7 +5,7 @@ import { useMemo } from 'react';
 import deserialiseEntityFields from '@/features/versions/utils/deserialise-entity-fields';
 import { VersionTableRow } from '@/features/versions/components/Versions';
 import { get } from 'lodash';
-import dayjs from 'dayjs';
+import formatVersionDate from '@/features/versions/utils/format-version-date';
 import { EntryPoint } from '../types';
 import useSectionsLookup from '../../sections/hooks/useSectionsLookup';
 import useRegionsLookup from '../../business-units/hooks/useRegionsLookup';
@@ -34,7 +32,7 @@ const rows: Array<VersionTableRow<VersionTableRecord>> = [
 const entryPointClient = new ApiClient<EntryPointWithVersions>('/entrypoints');
 
 function useEntryPointVersionsTableData(id: string) {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['entry-point', id],
     queryFn: () => entryPointClient.get(`${id}?versions=true`),
     enabled: !!id,
@@ -49,8 +47,8 @@ function useEntryPointVersionsTableData(id: string) {
       const deserialised = deserialiseEntityFields<EntryPoint>(version);
 
       return {
-        change_date: dayjs( version.change_date).format('ddd D MMM, h:mm:ss a'),
-        change_user: dayjs( version.change_user).format('ddd D MMM, h:mm:ss a'),
+        change_date: formatVersionDate(version.change_date),
+        change_user: version.change_user,
         entry_point: deserialised.entry_point,
         section: get(sectionsLookup[deserialised.section], 'section'),
         region: get(regionsLookup[deserialised.region], 'language_name'),
@@ -58,7 +56,12 @@ function useEntryPointVersionsTableData(id: string) {
     });
   }, [data, sectionsLookup, regionsLookup]);
 
-  return { rows, versions, isLoading };
+  return {
+    rows,
+    name: data?.entry_point,
+    versions,
+    isLoading: !data || !sectionsLookup || !regionsLookup,
+  };
 }
 
 export default useEntryPointVersionsTableData;
