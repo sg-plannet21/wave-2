@@ -7,7 +7,7 @@ import Button from '@/components/Inputs/Button';
 import Dialog from '@/components/Feedback/Dialog';
 import { DialogTitle } from '@/components/Feedback/Dialog/Dialog';
 import 'react-h5-audio-player/lib/styles.css';
-import './AudioPlayerDialog.css'
+import './AudioPlayerDialog.css';
 
 type Track = {
   src: string;
@@ -53,7 +53,7 @@ function AudioPlayerDialog({
         type="button"
         onClick={open}
         className={classNames(
-          'rounded-md border-none outline-2 outline-gray-400 hover:scale-110 duration-200 transition-all',
+          'shrink-0 rounded-md border-none outline-2 outline-gray-400 hover:scale-110 duration-200 transition-all',
           {
             'fill-green-500 dark:fill-green-400': isOpen,
             'fill-indigo-500 dark:fill-indigo-400': !isOpen,

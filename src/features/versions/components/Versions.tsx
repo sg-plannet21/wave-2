@@ -1,22 +1,30 @@
 import { useEffect, useState } from 'react';
 import { ReactComponent as ArchiveIcon } from '@/assets/archive.svg';
+import { ReactComponent as VersionIcon } from '@/assets/history.svg';
 import classNames from 'classnames';
 import Select, { SelectOption } from '@/components/Inputs/Select';
 import VersionsSkeleton from './VersionsSkeleton';
 
-export interface VersionTableRow<T> {
-  field: keyof T;
+export interface VersionTableRow<
+  Entry extends { [P in keyof Entry]: Entry[P] },
+> {
+  field: keyof Entry;
   label: string;
 }
 
-interface Props<T> {
-  versions: Array<T>;
-  name: string;
-  rows: Array<VersionTableRow<T>>;
+interface Props<Entry extends { [P in keyof Entry]: Entry[P] }> {
+  versions: Array<Entry>;
+  name?: string;
+  rows: Array<VersionTableRow<Entry>>;
   isLoading: boolean;
 }
 
-function Versions<T>({ name, rows, versions, isLoading }: Props<T>) {
+function Versions<Entry extends { [P in keyof Entry]: Entry[P] }>({
+  name,
+  rows,
+  versions,
+  isLoading,
+}: Props<Entry>) {
   const [version, setVersion] = useState<SelectOption | undefined>(undefined);
 
   useEffect(() => {
@@ -42,9 +50,10 @@ function Versions<T>({ name, rows, versions, isLoading }: Props<T>) {
       <div className="flex flex-col">
         <div className="flex justify-between items-end gap-2 px-2 py-3">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            {name}
+            {name ? `${name} Versions` : 'Versions'}
           </h2>
           <Select
+            icon={<VersionIcon className='fill-gray-300'/>}
             options={Array.from(Array(versions.length - 1).keys())
               .map((key) => key + 1)
               .map((key) => ({

@@ -14,14 +14,14 @@ interface EntryPointWithVersions extends EntryPoint {
   versions: Version[];
 }
 
-interface VersionTableRecord
+interface EntryPointVersionTableRecord
   extends Pick<EntryPoint, 'entry_point' | 'section'> {
   change_date: string;
   change_user: string;
   region: string;
 }
 
-const rows: Array<VersionTableRow<VersionTableRecord>> = [
+const rows: Array<VersionTableRow<EntryPointVersionTableRecord>> = [
   { field: 'change_date', label: 'Change Date' },
   { field: 'change_user', label: 'Change User' },
   { field: 'entry_point', label: 'Entry Point' },
@@ -40,7 +40,7 @@ function useEntryPointVersionsTableData(id: string) {
   const sectionsLookup = useSectionsLookup();
   const regionsLookup = useRegionsLookup();
 
-  const versions: VersionTableRecord[] = useMemo(() => {
+  const versions: EntryPointVersionTableRecord[] = useMemo(() => {
     if (!data || !sectionsLookup || !regionsLookup) return [];
 
     return data.versions.map((version) => {
@@ -52,7 +52,7 @@ function useEntryPointVersionsTableData(id: string) {
         entry_point: deserialised.entry_point,
         section: get(sectionsLookup[deserialised.section], 'section'),
         region: get(regionsLookup[deserialised.region], 'language_name'),
-      } satisfies VersionTableRecord;
+      } satisfies EntryPointVersionTableRecord;
     });
   }, [data, sectionsLookup, regionsLookup]);
 

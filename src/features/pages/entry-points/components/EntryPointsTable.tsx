@@ -9,6 +9,7 @@ import useEntryPointTableData, {
 import DeleteEntryPoint from './DeleteEntryPoint';
 import HistoricalCallflow from './HistoricalCallflow';
 import CurrentCallflow from './CurrentCallflow';
+import EntryPointVersions from './EntryPointVersions';
 
 function EntryPointsTable() {
   const { data, isLoading } = useEntryPointTableData();
@@ -43,20 +44,27 @@ function EntryPointsTable() {
     []
   );
 
+  const Versions = react.useCallback(
+    (record: { entry: EntryPointTableRecord }) => (
+      <EntryPointVersions id={record.entry.id} />
+    ),
+    []
+  );
+
   const columns: TableColumn<EntryPointTableRecord>[] = [
     {
       field: 'name',
       label: 'name',
       Cell: EntryPointLink,
     },
+    { field: 'section', label: 'Section' },
     {
       field: 'region',
       label: 'Region',
     },
-    { field: 'section', label: 'Section' },
     {
       field: 'id',
-      label: 'Historical Callfow',
+      label: 'Versions',
       Cell: History,
       ignoreFiltering: true,
     },
@@ -64,6 +72,12 @@ function EntryPointsTable() {
       field: 'id',
       label: 'Current Callflow',
       Cell: Current,
+      ignoreFiltering: true,
+    },
+    {
+      field: 'id',
+      label: 'Versions',
+      Cell: Versions,
       ignoreFiltering: true,
     },
     { field: 'id', label: '', Cell: Delete, ignoreFiltering: true },
