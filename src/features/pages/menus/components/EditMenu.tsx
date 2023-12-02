@@ -23,7 +23,7 @@ function EditMenu() {
             console.log('edit menu', data);
             navigate('..');
           }}
-          defaultValues={menuQuery.data}
+          defaultValues={{ ...menuQuery.data, welcome: '' }}
         />
       )}
     </ContentLayout>
