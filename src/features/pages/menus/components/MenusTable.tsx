@@ -3,7 +3,12 @@ import react from 'react';
 import Link from '@/components/Navigation/Link';
 import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
-import useMenusTableData, { MenuTableRecord } from '../hooks/useMenusTableData';
+import Badge from '@/components/Data-Display/Badge';
+import { Tooltip } from 'react-tooltip';
+import useMenusTableData, {
+  MenuTableRecord,
+  menuOptions,
+} from '../hooks/useMenusTableData';
 import DeleteMenu from './DeleteMenu';
 
 function MenusTable() {
@@ -16,6 +21,25 @@ function MenusTable() {
     []
   );
 
+  const Option = (option: (typeof menuOptions)[number]) =>
+    react.useCallback((record: { entry: MenuTableRecord }) => {
+      const route = record.entry[option.key];
+      if (!route)
+        return <Badge variant="secondary" label={option.label} size="sm" />;
+      return (
+        <>
+          <Tooltip id={option.key} />
+          <Badge
+            data-tooltip-id={option.key}
+            data-tooltip-content={route}
+            variant="primary"
+            size="sm"
+            label={option.label}
+          />
+        </>
+      );
+    }, []);
+
   const Delete = react.useCallback(
     (record: { entry: MenuTableRecord }) => (
       <div className="text-right">
@@ -25,12 +49,22 @@ function MenusTable() {
     []
   );
 
+  const optionRecords: TableColumn<MenuTableRecord>[] = menuOptions.map(
+    (opt) => ({
+      field: opt.key,
+      label: '',
+      ignoreFiltering: true,
+      Cell: Option(opt),
+    })
+  );
+
   const columns: TableColumn<MenuTableRecord>[] = [
     {
       field: 'name',
       label: 'name',
       Cell: EntityLink,
     },
+    ...optionRecords,
     {
       field: 'id',
       label: '',

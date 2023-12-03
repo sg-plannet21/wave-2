@@ -1,7 +1,6 @@
 export interface Menu {
   url: string;
   menu_id: string;
-  dependencies?: number[];
   menu_name: string;
   max_retries: number;
   business_unit: string;

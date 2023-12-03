@@ -3,8 +3,8 @@ import { SubmitHandler } from 'react-hook-form';
 
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
-import MessageSelectField from '@/features/messages/components/MessageSelectField';
 import schema, { FormValues } from '../types/schema';
+import MessageSelectField from '../../messages/components/MessageSelectField';
 
 interface Props {
   defaultValues?: FormValues;

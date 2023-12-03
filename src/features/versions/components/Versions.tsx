@@ -50,10 +50,10 @@ function Versions<Entry extends { [P in keyof Entry]: Entry[P] }>({
       <div className="flex flex-col">
         <div className="flex justify-between items-end gap-2 px-2 py-3">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            {name ? `${name} Versions` : 'Versions'}
+            {name}
           </h2>
           <Select
-            icon={<VersionIcon className='fill-gray-300'/>}
+            icon={<VersionIcon className="fill-gray-300" />}
             options={Array.from(Array(versions.length - 1).keys())
               .map((key) => key + 1)
               .map((key) => ({

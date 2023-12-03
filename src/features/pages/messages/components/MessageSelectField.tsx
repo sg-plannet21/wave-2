@@ -1,9 +1,9 @@
 import SelectField, { PassthroughProps } from '@/components/Form/SelectField';
 import React, { useMemo } from 'react';
 import FormInputSkeleton from '@/components/Skeletons/Form-Input/FormInput';
-import { orderBy } from 'lodash';
 import AudioPlayerDialog from '@/components/Composite/Audio-Player-Dialog';
 import { useFormContext } from 'react-hook-form';
+import { SelectOption } from '@/components/Inputs/Select';
 import useMessages from '../hooks/useMessages';
 import useMessagesLookup from '../hooks/useMessagesLookup';
 
@@ -23,6 +23,8 @@ function PlayAudio({ name }: PlayAudioProps) {
 
   const message = messagesLookup[selectedMessage];
 
+  if (!message) return null;
+
   return (
     <AudioPlayerDialog
       trackList={{
@@ -37,15 +39,15 @@ const MessageSelectField = React.forwardRef<
   HTMLSelectElement,
   PassthroughProps
 >((props, ref) => {
-  const { data } = useMessages();
+  const { data, isLoading } = useMessages();
 
-  const options = useMemo(
+  const options: Array<SelectOption> = useMemo(
     () => [
       {
         value: '',
         label: 'Select Prompt',
       },
-      ...orderBy(data, ['prompt_name'], 'asc').map((message) => ({
+      ...(data ?? []).map((message) => ({
         value: message.prompt_id,
         label: message.prompt_name,
       })),
@@ -53,18 +55,17 @@ const MessageSelectField = React.forwardRef<
     [data]
   );
 
-  if (options)
-    return (
-      <div className="flex w-full gap-1 justify-between items-end">
-        <div className="flex-1">
-          <SelectField {...props} ref={ref} options={options} />
-        </div>
+  if (isLoading) return <FormInputSkeleton />;
 
-        <PlayAudio name={props.name} />
+  return (
+    <div className="flex w-full gap-2 justify-between items-end">
+      <div className="flex-1">
+        <SelectField {...props} ref={ref} options={options} />
       </div>
-    );
 
-  return <FormInputSkeleton />;
+      <PlayAudio name={props.name} />
+    </div>
+  );
 });
 
 MessageSelectField.displayName = 'MessageSelectField';
