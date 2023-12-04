@@ -1,6 +1,6 @@
 import ContentLayout from '@/components/Layouts/ContentLayout';
 import { useNavigate } from 'react-router-dom';
-import MenusForm from './MenusForm';
+import MenuForm from './MenuForm';
 import useCreateMenu from '../hooks/useCreateMenu';
 
 function NewMenu() {
@@ -9,9 +9,8 @@ function NewMenu() {
 
   return (
     <ContentLayout title="New Menu">
-      <MenusForm
+      <MenuForm
         isSubmitting={createMenu.isLoading}
-                defaultValues={{welcome:'3',menu_name:'test'}}
         onSubmit={async (values) => {
           // eslint-disable-next-line no-console
           console.log('new menu', values);

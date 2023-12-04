@@ -3,7 +3,7 @@ import ContentLayout from '@/components/Layouts/ContentLayout';
 import LoadingComponent from '@/components/Feedback/LoadingComponent';
 import useMenu from '../hooks/useMenu';
 import useUpdateMenu from '../hooks/useUpdateMenu';
-import MenusForm from './MenusForm';
+import MenuForm from './MenuForm';
 
 function EditMenu() {
   const { id } = useParams();
@@ -16,14 +16,13 @@ function EditMenu() {
   return (
     <ContentLayout title="Edit Business Unit">
       {menuQuery.data && (
-        <MenusForm
+        <MenuForm
           isSubmitting={updateMenu.isLoading}
           onSubmit={async (data) => {
             // eslint-disable-next-line no-console
             console.log('edit menu', data);
             navigate('..');
           }}
-          defaultValues={{ ...menuQuery.data, welcome: '' }}
         />
       )}
     </ContentLayout>
