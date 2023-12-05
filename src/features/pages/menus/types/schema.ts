@@ -17,13 +17,16 @@ export const menuOptions = [
   { prefix: 'hash', label: 'Option #' },
 ];
 
-const messageSchema = z.coerce.number().nullable().default(null);
+const messageSchema = z.coerce
+  .string()
+  .nullable()
+  .transform((val) => (val && parseInt(val, 10)) ?? null);
 const routeSchema = z.string().nullable().default(null);
 
 const schema = z
   .object({
     menu_name: z.string().min(1, ' Menu name is required'),
-    max_retries: z.string().min(1, 'Max Retries is required'),
+    max_retries: z.coerce.number().min(1, 'Max Retries is required'),
     menu_message: z.coerce.number().min(1, 'Menu Message is required'),
     opt0_message: messageSchema,
     opt0_route: routeSchema,

@@ -11,9 +11,8 @@ function NewMenu() {
     <ContentLayout title="New Menu">
       <MenuForm
         isSubmitting={createMenu.isLoading}
-        onSubmit={async (values) => {
-          // eslint-disable-next-line no-console
-          console.log('new menu', values);
+        onSubmit={async (data) => {
+          await createMenu.mutateAsync(data);
           navigate('..');
         }}
       />

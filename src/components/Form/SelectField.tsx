@@ -21,7 +21,7 @@ type Props = PassthroughProps & OptionType;
 
 function renderOption({ label, value }: Option) {
   return (
-    <option key={label?.toString()} value={value}>
+    <option key={value.toString()} value={value}>
       {label}
     </option>
   );

@@ -19,10 +19,13 @@ function EditMenu() {
         <MenuForm
           isSubmitting={updateMenu.isLoading}
           onSubmit={async (data) => {
-            // eslint-disable-next-line no-console
-            console.log('edit menu', data);
+            await updateMenu.mutateAsync({
+              id: id as string,
+              data: { ...data, menu_id: id as string },
+            });
             navigate('..');
           }}
+          defaultValues={menuQuery.data}
         />
       )}
     </ContentLayout>

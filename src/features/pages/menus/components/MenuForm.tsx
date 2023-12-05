@@ -19,35 +19,58 @@ const retryRange: SelectOption[] = Array.from(Array(10).keys()).map((key) => ({
   label: key,
 }));
 
+const fieldSetClasses =
+  'border border-solid border-gray-300 dark:border-gray-700 rounded p-3';
+
+const legendClasses = 'text-sm text-gray-400 dark:text-gray-400';
+
 function BusinessUnitForm({ defaultValues, onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
   return (
     <Form<FormValues> form={form} onSubmit={onSubmit}>
-      <InputField label="Name" {...form.register('menu_name')} />
+      <fieldset className={fieldSetClasses}>
+        <legend className={legendClasses}>General</legend>
 
-      <MessageSelectField
-        label="Menu Message"
-        {...form.register('menu_message')}
-      />
+        <div className="grid grid-cols-1 lg:grid-cols-5 items-start gap-4">
 
-      <SelectField
-        label="Max Retries"
-        options={retryRange}
-        {...form.register('max_retries')}
-      />
+          <div className="lg:col-span-2">
+            <InputField label="Name" {...form.register('menu_name')} />
+          </div>
+
+          <div className="lg:col-span-2">
+            <MessageSelectField
+              label="Menu Message"
+              {...form.register('menu_message')}
+            />
+          </div>
+
+          <SelectField
+            label="Max Retries"
+            options={retryRange}
+            defaultValue={2}
+            {...form.register('max_retries')}
+          />
+
+        </div>
+      </fieldset>
 
       {menuOptions.map((option) => (
-        <div key={option.prefix}>
-          <MessageSelectField
-            label={`${option.label} Message`}
-            {...form.register(`${option.prefix}_message` as keyof FormValues)}
-          />
+        <fieldset key={option.prefix} className={fieldSetClasses}>
+          <legend className={legendClasses}>{option.label}</legend>
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-4">
 
-          <RouteSelectField
-            label={`${option.label} Route`}
-            {...form.register(`${option.prefix}_route` as keyof FormValues)}
-          />
-        </div>
+            <MessageSelectField
+              label="Message"
+              {...form.register(`${option.prefix}_message` as keyof FormValues)}
+            />
+
+            <RouteSelectField
+              label="Route"
+              {...form.register(`${option.prefix}_route` as keyof FormValues)}
+            />
+
+          </div>
+        </fieldset>
       ))}
 
       <Button
@@ -58,6 +81,7 @@ function BusinessUnitForm({ defaultValues, onSubmit, isSubmitting }: Props) {
       >
         Submit
       </Button>
+
     </Form>
   );
 }
