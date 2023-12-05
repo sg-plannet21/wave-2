@@ -7,9 +7,10 @@ import Badge from '@/components/Data-Display/Badge';
 import { Tooltip } from 'react-tooltip';
 import useMenusTableData, {
   MenuTableRecord,
-  menuOptions,
+  menuTableOptions,
 } from '../hooks/useMenusTableData';
 import DeleteMenu from './DeleteMenu';
+import MenuVersions from './MenuVersions';
 
 function MenusTable() {
   const { data, isLoading } = useMenusTableData();
@@ -21,7 +22,7 @@ function MenusTable() {
     []
   );
 
-  const Option = (option: (typeof menuOptions)[number]) =>
+  const Option = (option: (typeof menuTableOptions)[number]) =>
     react.useCallback((record: { entry: MenuTableRecord }) => {
       const route = record.entry[option.key];
       if (!route)
@@ -40,6 +41,13 @@ function MenusTable() {
       );
     }, []);
 
+  const Versions = react.useCallback(
+    (record: { entry: MenuTableRecord }) => (
+      <MenuVersions id={record.entry.id} />
+    ),
+    []
+  );
+
   const Delete = react.useCallback(
     (record: { entry: MenuTableRecord }) => (
       <div className="text-right">
@@ -49,7 +57,7 @@ function MenusTable() {
     []
   );
 
-  const optionRecords: TableColumn<MenuTableRecord>[] = menuOptions.map(
+  const optionRecords: TableColumn<MenuTableRecord>[] = menuTableOptions.map(
     (opt) => ({
       field: opt.key,
       label: '',
@@ -65,6 +73,12 @@ function MenusTable() {
       Cell: EntityLink,
     },
     ...optionRecords,
+    {
+      field: 'id',
+      label: '',
+      ignoreFiltering: true,
+      Cell: Versions,
+    },
     {
       field: 'id',
       label: '',

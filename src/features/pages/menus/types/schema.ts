@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { optionalMessageSchema } from '@/features/pages/messages/types/schema';
 
 export const menuOptions = [
   { prefix: 'no_input', label: 'No Input' },
@@ -17,10 +18,6 @@ export const menuOptions = [
   { prefix: 'hash', label: 'Option #' },
 ];
 
-const messageSchema = z.coerce
-  .string()
-  .nullable()
-  .transform((val) => (val && parseInt(val, 10)) ?? null);
 const routeSchema = z.string().nullable().default(null);
 
 const schema = z
@@ -28,33 +25,33 @@ const schema = z
     menu_name: z.string().min(1, ' Menu name is required'),
     max_retries: z.coerce.number().min(1, 'Max Retries is required'),
     menu_message: z.coerce.number().min(1, 'Menu Message is required'),
-    opt0_message: messageSchema,
+    opt0_message: optionalMessageSchema,
     opt0_route: routeSchema,
-    opt1_message: messageSchema,
+    opt1_message: optionalMessageSchema,
     opt1_route: routeSchema,
-    opt2_message: messageSchema,
+    opt2_message: optionalMessageSchema,
     opt2_route: routeSchema,
-    opt3_message: messageSchema,
+    opt3_message: optionalMessageSchema,
     opt3_route: routeSchema,
-    opt4_message: messageSchema,
+    opt4_message: optionalMessageSchema,
     opt4_route: routeSchema,
-    opt5_message: messageSchema,
+    opt5_message: optionalMessageSchema,
     opt5_route: routeSchema,
-    opt6_message: messageSchema,
+    opt6_message: optionalMessageSchema,
     opt6_route: routeSchema,
-    opt7_message: messageSchema,
+    opt7_message: optionalMessageSchema,
     opt7_route: routeSchema,
-    opt8_message: messageSchema,
+    opt8_message: optionalMessageSchema,
     opt8_route: routeSchema,
-    opt9_message: messageSchema,
+    opt9_message: optionalMessageSchema,
     opt9_route: routeSchema,
-    no_input_message: messageSchema,
+    no_input_message: optionalMessageSchema,
     no_input_route: z.string().min(1, 'No Input Route is a required field'),
-    no_match_message: messageSchema,
+    no_match_message: optionalMessageSchema,
     no_match_route: z.string().min(1, 'No Match Route is a required field'),
-    asterisk_message: messageSchema,
+    asterisk_message: optionalMessageSchema,
     asterisk_route: routeSchema,
-    hash_message: messageSchema,
+    hash_message: optionalMessageSchema,
     hash_route: routeSchema,
   })
   .superRefine((val, ctx) => {

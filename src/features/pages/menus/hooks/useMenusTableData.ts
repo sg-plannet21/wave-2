@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import useMenus from './useMenus';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
 
-export const menuOptions: Array<{ key: keyof MenuOptions; label: string }> = [
+export const menuTableOptions: Array<{ key: keyof MenuOptions; label: string }> = [
   { key: 'no_input_route', label: 'NI' },
   { key: 'no_match_route', label: 'NM' },
   { key: 'opt0_route', label: '0' },
@@ -54,7 +54,7 @@ function useMenusTableData() {
     return menus.map((menu) => ({
       id: menu.menu_id,
       name: menu.menu_name,
-      ...menuOptions.reduce((acc, option) => {
+      ...menuTableOptions.reduce((acc, option) => {
         acc[option.key] =
           menu[option.key] &&
           get(

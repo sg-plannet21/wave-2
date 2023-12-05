@@ -33,7 +33,7 @@ const entryPointClient = new ApiClient<EntryPointWithVersions>('/entrypoints');
 
 function useEntryPointVersionsTableData(id: string) {
   const { data } = useQuery({
-    queryKey: ['entry-point', id],
+    queryKey: ['entry-point', 'version', id],
     queryFn: () => entryPointClient.get(`${id}?versions=true`),
     enabled: !!id,
   });
