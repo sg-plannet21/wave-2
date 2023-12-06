@@ -87,7 +87,7 @@ function MenusTable() {
     },
   ];
 
-  if (isLoading) return <WaveTableSkeleton numberOfColumns={3} />;
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={12} />;
 
   return <WaveTable<MenuTableRecord> data={data} columns={columns} />;
 }

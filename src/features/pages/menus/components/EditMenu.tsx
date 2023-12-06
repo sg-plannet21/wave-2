@@ -14,7 +14,7 @@ function EditMenu() {
   if (menuQuery.isLoading) return <LoadingComponent />;
 
   return (
-    <ContentLayout title="Edit Business Unit">
+    <ContentLayout title="Edit Menu">
       {menuQuery.data && (
         <MenuForm
           isSubmitting={updateMenu.isLoading}

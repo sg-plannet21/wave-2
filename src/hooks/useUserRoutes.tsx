@@ -15,6 +15,7 @@ import UserRoutes from '@/features/pages/users/routes';
 import EntryPointRoutes from '@/features/pages/entry-points/routes';
 import UnassignedEntitiesRoutes from '@/features/pages/unassigned-entities/routes';
 import MenuRoutes from '@/features/pages/menus/routes';
+import QueueRoutes from '@/features/pages/queues/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -22,7 +23,7 @@ const commonAuthRoutes: RouteObject[] = [
     element: <Home />,
   },
   { path: 'entry-points/*', element: <EntryPointRoutes /> },
-  { path: 'queues/*', element: <>Queues</> },
+  { path: 'queues/*', element: <QueueRoutes /> },
   { path: 'menus/*', element: <MenuRoutes /> },
   { path: 'messages/*', element: <>Messages</> },
   { path: 'sections/*', element: <>Sections</> },

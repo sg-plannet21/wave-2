@@ -34,17 +34,14 @@ function WaveTable<Entry extends { [P in keyof Entry]: Entry[P] }>({
   const filteredData: Entry[] = useMemo(() => {
     if (!searchTerm.trim().length) return data;
 
-    // TODO: fix invalid regex exception (ex. "english (ire")
+    const lowerCaseTerm = searchTerm.toLowerCase();
     const filtered = data.filter((entry) => {
       for (let i = 0; i < filterableFields.length; i++) {
-        if (!filterableFields[i].ignoreFiltering)
-          if (
-            entry[filterableFields[i].field] &&
-            (entry[filterableFields[i].field] as string)
-              .toLowerCase()
-              .indexOf(searchTerm.toLowerCase()) !== -1
-          )
+        const field = entry[filterableFields[i].field];
+        if (field && (typeof field === 'string' || typeof field === 'number')) {
+          if (field.toString().toLowerCase().indexOf(lowerCaseTerm) !== -1)
             return true;
+        }
       }
 
       return false;

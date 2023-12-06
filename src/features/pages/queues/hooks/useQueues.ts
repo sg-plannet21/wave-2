@@ -1,15 +1,15 @@
 import ApiClient from '@/services/api-client';
 import { useQuery } from 'react-query';
 import { getEntityKey } from '@/lib/entity-keys';
-import { Menu } from '../types';
+import { Queue } from '../types';
 
-const menuClient = new ApiClient<Menu>('/menus');
+const menuClient = new ApiClient<Queue>('/queues');
 
-function useMenus() {
+function useQueues() {
   return useQuery({
-    queryKey: getEntityKey('menus'),
+    queryKey: getEntityKey('queues'),
     queryFn: menuClient.getAll,
   });
 }
 
-export default useMenus;
+export default useQueues;

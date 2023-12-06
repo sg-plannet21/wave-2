@@ -15,6 +15,7 @@ type EntityKey =
   | 'messages'
   | 'sections'
   | 'menus'
+  | 'queues'
   | 'business-unit-roles';
 
 export function getEntityKey(entity: EntityKey): string[] {
