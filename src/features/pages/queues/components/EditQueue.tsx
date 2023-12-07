@@ -19,10 +19,15 @@ function EditQueue() {
         <QueueForm
           isSubmitting={updateQueue.isLoading}
           onSubmit={async (data) => {
+
+            // eslint-disable-next-line no-console
+            console.log('data', data);
+            /*
             await updateQueue.mutateAsync({
               id: id as string,
               data: { ...data, queue_id: id as string },
             });
+                        */
             navigate('..');
           }}
           defaultValues={queueQuery.data}

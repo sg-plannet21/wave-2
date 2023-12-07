@@ -1,7 +1,6 @@
 export interface Queue {
   url: string;
   queue_id: string;
-  dependencies?: number[];
   cc_queue_id: string;
   queue_name: string;
   queue_priority: number;

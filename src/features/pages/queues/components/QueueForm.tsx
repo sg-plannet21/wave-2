@@ -26,20 +26,34 @@ const priorityRange: SelectOption[] = Array.from(Array(10).keys())
 interface FieldInfo {
   label: string;
   prefix: string;
+  watchToggle: boolean;
 }
-
-const threeColumnLayouts: Array<FieldInfo> = [
-  { label: 'Closed', prefix: 'closed' },
-  { label: 'No Agents', prefix: 'no_agents' },
-];
-
-const fourColumnLayouts: Array<FieldInfo> = [
-  { label: 'Max Queue Calls', prefix: 'max_queue_calls' },
-  { label: 'Max Queue Time', prefix: 'max_queue_time' },
-];
 
 function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
+  const closedToggle = form.watch('closed_toggle', false);
+  const noAgentsToggle = form.watch('no_agents_toggle', false);
+  const maxQueueCallsToggle = form.watch('max_queue_calls_toggle', false);
+  const maxQueueTimeToggle = form.watch('max_queue_time_toggle', false);
+  const callBackToggle = form.watch('callback_toggle', false);
+
+  const threeColumnLayouts: Array<FieldInfo> = [
+    { label: 'Closed', prefix: 'closed', watchToggle: closedToggle },
+    { label: 'No Agents', prefix: 'no_agents', watchToggle: noAgentsToggle },
+  ];
+
+  const fourColumnLayouts: Array<FieldInfo> = [
+    {
+      label: 'Max Queue Calls',
+      prefix: 'max_queue_calls',
+      watchToggle: maxQueueCallsToggle,
+    },
+    {
+      label: 'Max Queue Time',
+      prefix: 'max_queue_time',
+      watchToggle: maxQueueTimeToggle,
+    },
+  ];
   return (
     <Form<FormValues> form={form} onSubmit={onSubmit}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -96,7 +110,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
                     label="Status"
                     isChecked={field.value}
                     onChange={field.onChange}
-                    className="flex w-24 lg:h-full text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                    className="flex w-24 lg:h-16 text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
                   />
                 )}
               />
@@ -105,6 +119,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
             <div className="lg:col-span-5 items-start">
               <MessageSelectField
                 label="Message"
+                disabled={!layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_message` as 'closed_message'
                 )}
@@ -114,6 +129,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
             <div className="lg:col-span-5 items-start">
               <RouteSelectField
                 label="Route"
+                disabled={!layout.watchToggle}
                 {...form.register(`${layout.prefix}_route` as 'closed_route')}
               />
             </div>
@@ -133,7 +149,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
                     label="Status"
                     isChecked={field.value}
                     onChange={field.onChange}
-                    className="flex w-24 lg:h-full text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                    className="flex w-24 lg:h-16 text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
                   />
                 )}
               />
@@ -146,6 +162,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
                     ? 'Threshold (seconds)'
                     : 'Threshold (calls)'
                 }
+                disabled={!layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_threshold` as 'max_queue_time_threshold'
                 )}
@@ -154,6 +171,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
             <div className="lg:col-span-4 items-start">
               <MessageSelectField
+                disabled={!layout.watchToggle}
                 label="Message"
                 {...form.register(
                   `${layout.prefix}_message` as 'max_queue_time_message'
@@ -164,6 +182,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
             <div className="lg:col-span-4 items-start">
               <RouteSelectField
                 label="Route"
+                disabled={!layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_route` as 'max_queue_time_route'
                 )}
@@ -184,7 +203,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
                   label="Status"
                   isChecked={field.value}
                   onChange={field.onChange}
-                  className="flex w-24 lg:h-full text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                  className="flex w-24 text-sm flex-row-reverse items-end lg:h-16 lg:items-start justify-between text-right lg:w-auto lg:flex-col"
                 />
               )}
             />
@@ -192,6 +211,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
           <div className="lg:col-span-3 items-start">
             <InputField
+              disabled={!callBackToggle}
               label="Threshold (calls)"
               {...form.register('callback_calls_threshold')}
             />
@@ -199,6 +219,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
           <div className="lg:col-span-4 items-start">
             <InputField
+              disabled={!callBackToggle}
               label="Threshold (time)"
               {...form.register('callback_time_threshold')}
             />
@@ -206,13 +227,13 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
           <div className="lg:col-span-4 items-start">
             <RouteSelectField
+              disabled={!callBackToggle}
               label="Route"
               {...form.register('callback_route')}
             />
           </div>
         </div>
       </FieldSet>
-
       <Button
         disabled={isSubmitting || !form.formState.isDirty}
         isLoading={isSubmitting}
