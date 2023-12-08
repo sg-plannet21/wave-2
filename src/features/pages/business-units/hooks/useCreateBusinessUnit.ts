@@ -16,7 +16,7 @@ function useCreateBusinessUnit() {
     mutationFn: (data: FormValues) => createBusinessUnit(data),
     onSuccess(newBusinessUnit) {
       queryClient.setQueryData<BusinessUnit[]>(
-        ['business-unit', newBusinessUnit.business_unit_id],
+        'business-units',
         (businessUnits = []) => [newBusinessUnit, ...businessUnits]
       );
       addNotification({
