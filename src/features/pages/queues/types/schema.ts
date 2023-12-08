@@ -32,7 +32,7 @@ const schema = z
     queue_message_3: optionalMessageSchema,
     queue_message_4: optionalMessageSchema,
     queue_message_5: optionalMessageSchema,
-    queue_music: z.coerce.number().min(1, 'Menu Message is required'),
+    queue_music: z.coerce.number().min(1, 'Queue Music is required'),
     whisper_message: optionalMessageSchema,
     queue_welcome: optionalMessageSchema,
     closed_toggle: z.boolean(),

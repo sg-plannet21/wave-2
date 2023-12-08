@@ -10,7 +10,7 @@ const updateQueue = new ApiClient<Queue>('/queues').update;
 
 interface UpdateVariables {
   id: string;
-  data: FormValues & Pick<Queue, 'queue_id'>;
+  data: FormValues & Pick<Queue, 'queue_id' | 'queue_name'>;
 }
 
 function useUpdateQueue() {

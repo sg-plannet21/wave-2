@@ -14,6 +14,7 @@ interface Props {
   defaultValues?: FormValues;
   onSubmit: SubmitHandler<FormValues>;
   isSubmitting: boolean;
+  exceptionRouteName: string;
 }
 
 const priorityRange: SelectOption[] = Array.from(Array(10).keys())
@@ -29,13 +30,18 @@ interface FieldInfo {
   watchToggle: boolean;
 }
 
-function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
+function QueueForm({
+  exceptionRouteName,
+  defaultValues,
+  onSubmit,
+  isSubmitting,
+}: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
-  const closedToggle = form.watch('closed_toggle', false);
-  const noAgentsToggle = form.watch('no_agents_toggle', false);
-  const maxQueueCallsToggle = form.watch('max_queue_calls_toggle', false);
-  const maxQueueTimeToggle = form.watch('max_queue_time_toggle', false);
-  const callBackToggle = form.watch('callback_toggle', false);
+  const closedToggle = form.watch('closed_toggle');
+  const noAgentsToggle = form.watch('no_agents_toggle');
+  const maxQueueCallsToggle = form.watch('max_queue_calls_toggle');
+  const maxQueueTimeToggle = form.watch('max_queue_time_toggle');
+  const callBackToggle = form.watch('callback_toggle');
 
   const threeColumnLayouts: Array<FieldInfo> = [
     { label: 'Closed', prefix: 'closed', watchToggle: closedToggle },
@@ -128,6 +134,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
             <div className="lg:col-span-5 items-start">
               <RouteSelectField
+                exceptionRouteName={exceptionRouteName}
                 label="Route"
                 disabled={!layout.watchToggle}
                 {...form.register(`${layout.prefix}_route` as 'closed_route')}
@@ -181,6 +188,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
             <div className="lg:col-span-4 items-start">
               <RouteSelectField
+                exceptionRouteName={exceptionRouteName}
                 label="Route"
                 disabled={!layout.watchToggle}
                 {...form.register(
@@ -227,6 +235,7 @@ function QueueForm({ defaultValues, onSubmit, isSubmitting }: Props) {
 
           <div className="lg:col-span-4 items-start">
             <RouteSelectField
+              exceptionRouteName={exceptionRouteName}
               disabled={!callBackToggle}
               label="Route"
               {...form.register('callback_route')}

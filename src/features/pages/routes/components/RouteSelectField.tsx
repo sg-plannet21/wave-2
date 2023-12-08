@@ -7,8 +7,12 @@ import FormInputSkeleton from '@/components/Skeletons/Form-Input/FormInput';
 import useRouteDestinations from '../hooks/useRouteDestinations';
 import useRoutes from '../hooks/useRoutes';
 
-const RouteSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
-  (props, ref) => {
+interface Props extends PassthroughProps {
+  exceptionRouteName?: string;
+}
+
+const RouteSelectField = React.forwardRef<HTMLSelectElement, Props>(
+  ({ exceptionRouteName, ...props }, ref) => {
     const { data: routes } = useRoutes();
     const { data: destinationTypes } = useRouteDestinations();
 
@@ -25,13 +29,17 @@ const RouteSelectField = React.forwardRef<HTMLSelectElement, PassthroughProps>(
         },
       ];
 
-      const options: GroupOption[] = Object.values(destinationTypes)
+      const options: GroupOption[] = destinationTypes
         .map(({ destination_type_id, destination_type }) => ({
           optgroup: destination_type,
           options: Object.values(routes)
             .filter(
               ({ destination_type: routeDestinationType }) =>
                 destination_type_id === routeDestinationType
+            )
+            .filter(
+              (route) =>
+                !exceptionRouteName || route.route_name !== exceptionRouteName
             )
             .map((route) => ({
               label: route.route_name,
