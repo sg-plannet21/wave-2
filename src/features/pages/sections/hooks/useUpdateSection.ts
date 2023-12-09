@@ -10,7 +10,7 @@ const updateSection = new ApiClient<Section>('/section').update;
 
 interface UpdateVariables {
   id: string;
-  data: FormValues;
+  data: FormValues & Pick<Section, 'section_id'>;
 }
 
 function useUpdateSection() {

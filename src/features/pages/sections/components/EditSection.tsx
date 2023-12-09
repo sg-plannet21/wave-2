@@ -14,12 +14,15 @@ function EditSection() {
   if (sectionQuery.isLoading) return <LoadingComponent />;
 
   return (
-    <ContentLayout title="Edit Section">
+    <ContentLayout title="Edit Unit">
       {sectionQuery.data && (
         <SectionForm
           isSubmitting={updateSection.isLoading}
           onSubmit={async (data) => {
-            await updateSection.mutateAsync({ id: id as string, data });
+            await updateSection.mutateAsync({
+              id: id as string,
+              data: { section_id: id as string, ...data },
+            });
             navigate('..');
           }}
           defaultValues={sectionQuery.data}
