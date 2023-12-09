@@ -13,6 +13,7 @@ function DeleteMenu({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Menu"
       body={`Delete ${name}?`}
       icon="danger"

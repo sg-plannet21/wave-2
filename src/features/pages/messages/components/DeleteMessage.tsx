@@ -13,6 +13,7 @@ function DeleteMessage({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Message"
       body={`Delete ${name}?`}
       icon="danger"

@@ -13,6 +13,7 @@ function DeleteQueue({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Queue"
       body={`Delete ${name}?`}
       icon="danger"

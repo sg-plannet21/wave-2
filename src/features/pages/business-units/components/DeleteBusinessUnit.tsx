@@ -13,6 +13,7 @@ function DeleteBusinessUnit({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Business Unit"
       body={`Delete ${name}?`}
       icon="danger"

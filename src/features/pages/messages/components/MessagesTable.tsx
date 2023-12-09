@@ -22,7 +22,7 @@ function MessagesTable() {
     (message: { entry: MessageTableRecord }) => (
       <div className="text-right">
         <DeleteMessage
-          id={message.entry.id.toString()}
+          id={String(message.entry.id)}
           name={message.entry.name}
         />
       </div>

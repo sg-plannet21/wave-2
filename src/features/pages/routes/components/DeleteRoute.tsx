@@ -13,6 +13,7 @@ function DeleteRoute({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Route"
       body={`Delete ${name}?`}
       icon="danger"

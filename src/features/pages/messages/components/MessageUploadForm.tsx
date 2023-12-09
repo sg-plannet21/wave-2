@@ -4,18 +4,19 @@ import { useFieldArray } from 'react-hook-form';
 import { useCallback } from 'react';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
-import storage from '@/utils/storage';
-import { useNavigate } from 'react-router-dom';
 import FileUpload from './FileUpload';
 import { UploadFormValues, messageUploadSchema } from '../types/schema';
-import useBusinessUnit from '../../business-units/hooks/useBusinessUnit';
-import useCreateMessage, { MessageDTO } from '../hooks/useCreateMessage';
 
 function removeExtension(value: string) {
   return value.replace(/\.[^/.]+$/, '');
 }
-function MessageUploadForm() {
-  const navigate = useNavigate();
+
+interface Props {
+  onSubmit: (values: UploadFormValues) => void;
+  isSubmitting: boolean;
+}
+
+function MessageUploadForm({ onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof messageUploadSchema>({
     schema: messageUploadSchema,
     defaultValues: {
@@ -28,11 +29,6 @@ function MessageUploadForm() {
     name: 'files',
   });
 
-  const mutate = useCreateMessage();
-
-  const currentBusinessUnit = storage.businessUnit.getBusinessUnit();
-  const { data: businessUnit } = useBusinessUnit(currentBusinessUnit.id);
-
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
       const mappedFiles: Array<{ file: File; name: string }> =
@@ -43,24 +39,6 @@ function MessageUploadForm() {
       replace(mappedFiles);
     },
     [replace]
-  );
-
-  const onSubmit = useCallback(
-    async (values: UploadFormValues) => {
-      Promise.all(
-        values.files.map((fileData) => {
-          const payload: MessageDTO = {
-            file: fileData.file,
-            name: fileData.name,
-            region_id: businessUnit?.default_region ?? 52,
-            business_unit: currentBusinessUnit.id,
-          };
-
-          return mutate.mutate(payload);
-        })
-      ).finally(() => navigate('..'));
-    },
-    [businessUnit?.default_region, currentBusinessUnit.id, mutate, navigate]
   );
 
   return (
@@ -85,6 +63,9 @@ function MessageUploadForm() {
                 <DeleteIcon className="w-7 h-7 fill-current" />
               </button>
             </div>
+            <div className="mt-1 text-sm font-semibold text-red-600 dark:text-red-500">
+              {form.formState.errors.files?.[index]?.name?.message}
+            </div>
           </section>
         ))}
         <div className="text-red-500">
@@ -92,7 +73,12 @@ function MessageUploadForm() {
         </div>
         {fields.length > 0 && (
           <div>
-            <Button type="submit" className="w-full">
+            <Button
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+              type="submit"
+              className="w-full"
+            >
               Upload {fields.length > 1 ? 'Messages' : 'Message'}
             </Button>
           </div>

@@ -21,7 +21,7 @@ function useDeleteMessage() {
 
       addNotification({
         type: 'success',
-        title: 'Business Unit Deleted',
+        title: 'Message Deleted',
         duration: 5000,
       });
     },

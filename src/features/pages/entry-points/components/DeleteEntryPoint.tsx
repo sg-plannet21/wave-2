@@ -13,6 +13,7 @@ function DeleteEntryPoint({ id, name }: Props) {
 
   return (
     <ConfirmationDialog
+      key={id}
       title="Delete Entry Point"
       body={`Delete ${name}?`}
       icon="danger"
