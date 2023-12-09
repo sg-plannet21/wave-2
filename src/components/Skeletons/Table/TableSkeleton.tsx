@@ -21,7 +21,11 @@ function TableSkeleton({
               <thead className="text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   {columnArray.map((col) => (
-                    <th key={`th${col}`} className="px-6 py-3">
+                    <th
+                      key={`th${col}`}
+                      className="px-6 py-3"
+                      aria-label="loading placeholder"
+                    >
                       <div
                         className={classNames(
                           'h-2.5 bg-gray-100 rounded-full dark:bg-gray-600 animate-pulse',
@@ -40,7 +44,11 @@ function TableSkeleton({
                     className="odd:bg-white odd:dark:bg-slate-800 even:bg-gray-200 even:dark:bg-gray-700"
                   >
                     {columnArray.map((col) => (
-                      <td key={`${row}${col}`} className="px-6 py-4">
+                      <td
+                        key={`${row}${col}`}
+                        className="px-6 py-4"
+                        aria-label="loading placeholder"
+                      >
                         <div
                           className={classNames(
                             'h-2 bg-gray-100 rounded-full dark:bg-gray-600 animate-pulse',

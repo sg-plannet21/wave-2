@@ -38,6 +38,7 @@ function CurrentCallflow({ id, name }: Props) {
     <>
       <div className="text-center">
         <button
+          aria-label="Open Callflow"
           type="button"
           className="fill-emerald-600 dark:fill-emerald-400 transition-transform hover:scale-110"
           onClick={open}

@@ -13,6 +13,7 @@ function VersionsDrawer<Entry extends { [P in keyof Entry]: Entry[P] }>(
     <>
       <div className="text-center">
         <button
+          aria-label="Show Versions"
           type="button"
           className="fill-emerald-600 dark:fill-emerald-400 transition-transform hover:scale-110"
           onClick={open}

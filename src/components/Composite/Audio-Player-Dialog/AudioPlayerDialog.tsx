@@ -50,6 +50,7 @@ function AudioPlayerDialog({
   return (
     <>
       <button
+        aria-label="Play"
         type="button"
         onClick={open}
         className={classNames(

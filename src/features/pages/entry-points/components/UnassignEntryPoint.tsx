@@ -18,6 +18,7 @@ function UnassignEntryPoint({ id, name }: Props) {
       icon="danger"
       triggerButton={
         <button
+          aria-label="Delete"
           type="button"
           className="p-1 text-red-600 dark:text-red-400 transition-transform hover:scale-110 outline-none focus:outline-none"
         >

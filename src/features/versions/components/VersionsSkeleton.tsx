@@ -23,11 +23,11 @@ function VersionsSkeleton({ numberOfRows = 8 }: Props) {
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <td className="w-48" />
-            <th className="px-6 py-3">
+            <td className="w-48" aria-label="Loading Placeholder" />
+            <th className="px-6 py-3" aria-label="Loading Placeholder">
               <div className="h-2.5 bg-gray-100 rounded-full dark:bg-gray-600 animate-pulse w-32" />
             </th>
-            <th className="px-6 py-3">
+            <th className="px-6 py-3" aria-label="Loading Placeholder">
               <div className="h-2.5 bg-gray-100 rounded-full dark:bg-gray-600 animate-pulse w-32" />
             </th>
           </tr>
@@ -39,7 +39,11 @@ function VersionsSkeleton({ numberOfRows = 8 }: Props) {
               className="odd:bg-white odd:dark:bg-slate-800 even:bg-gray-200 even:dark:bg-gray-700"
             >
               {columnArray.map((col) => (
-                <td key={`${row}${col}`} className="px-6 py-4">
+                <td
+                  key={`${row}${col}`}
+                  className="px-6 py-4"
+                  aria-label="Loading Placeholder"
+                >
                   <div
                     className={classNames(
                       'h-2 bg-gray-100 rounded-full dark:bg-gray-600 animate-pulse',
