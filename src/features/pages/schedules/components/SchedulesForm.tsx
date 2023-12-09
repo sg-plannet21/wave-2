@@ -10,7 +10,7 @@ interface Props {
   isSubmitting: boolean;
 }
 
-function SectionForm({ defaultValues, onSubmit, isSubmitting }: Props) {
+function SchedulesForm({ defaultValues, onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
   return (
     <Form<FormValues> form={form} onSubmit={onSubmit}>
@@ -27,4 +27,4 @@ function SectionForm({ defaultValues, onSubmit, isSubmitting }: Props) {
   );
 }
 
-export default SectionForm;
+export default SchedulesForm;

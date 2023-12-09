@@ -3,35 +3,39 @@ import react from 'react';
 import Link from '@/components/Navigation/Link';
 import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
-import useSectionsTableData, {
-  SectionTableRecord,
-} from '../hooks/useSectionsTableData';
-import DeleteSection from './DeleteSection';
+import useSchedulesTableData, {
+  ScheduleTableRecord,
+} from '../hooks/useSchedulesTableData';
+import DeleteSchedule from './DeleteSchedule';
 
-function SectionsTable() {
-  const { data, isLoading } = useSectionsTableData();
+function SchedulesTable() {
+  const { data, isLoading } = useSchedulesTableData();
 
   const EntityLink = react.useCallback(
-    (section: { entry: SectionTableRecord }) => (
+    (section: { entry: ScheduleTableRecord }) => (
       <Link to={section.entry.id}>{section.entry.name}</Link>
     ),
     []
   );
 
   const Delete = react.useCallback(
-    (section: { entry: SectionTableRecord }) => (
+    (section: { entry: ScheduleTableRecord }) => (
       <div className="text-right">
-        <DeleteSection id={section.entry.id} name={section.entry.name} />
+        <DeleteSchedule id={section.entry.id} name={section.entry.name} />
       </div>
     ),
     []
   );
 
-  const columns: TableColumn<SectionTableRecord>[] = [
+  const columns: TableColumn<ScheduleTableRecord>[] = [
     {
       field: 'name',
       label: 'name',
       Cell: EntityLink,
+    },
+    {
+      field: 'weekday',
+      label: 'Day',
     },
     {
       field: 'id',
@@ -43,7 +47,7 @@ function SectionsTable() {
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
 
-  return <WaveTable<SectionTableRecord> data={data} columns={columns} />;
+  return <WaveTable<ScheduleTableRecord> data={data} columns={columns} />;
 }
 
-export default SectionsTable;
+export default SchedulesTable;

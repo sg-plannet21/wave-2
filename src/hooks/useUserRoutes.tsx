@@ -18,6 +18,7 @@ import MenuRoutes from '@/features/pages/menus/routes';
 import QueueRoutes from '@/features/pages/queues/routes';
 import MessageRoutes from '@/features/pages/messages/routes';
 import SectionRoutes from '@/features/pages/sections/routes';
+import ScheduleRoutes from '@/features/pages/schedules/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -29,7 +30,7 @@ const commonAuthRoutes: RouteObject[] = [
   { path: 'menus/*', element: <MenuRoutes /> },
   { path: 'messages/*', element: <MessageRoutes /> },
   { path: 'sections/*', element: <SectionRoutes /> },
-  { path: 'schedules/*', element: <>Schedules</> },
+  { path: 'schedules/*', element: <ScheduleRoutes /> },
   { path: 'schedule-exceptions/*', element: <>Schedule Exceptions</> },
 ];
 
