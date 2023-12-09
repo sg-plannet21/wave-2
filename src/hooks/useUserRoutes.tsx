@@ -17,6 +17,7 @@ import UnassignedEntitiesRoutes from '@/features/pages/unassigned-entities/route
 import MenuRoutes from '@/features/pages/menus/routes';
 import QueueRoutes from '@/features/pages/queues/routes';
 import MessageRoutes from '@/features/pages/messages/routes';
+import SectionRoutes from '@/features/pages/sections/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -27,7 +28,7 @@ const commonAuthRoutes: RouteObject[] = [
   { path: 'queues/*', element: <QueueRoutes /> },
   { path: 'menus/*', element: <MenuRoutes /> },
   { path: 'messages/*', element: <MessageRoutes /> },
-  { path: 'sections/*', element: <>Sections</> },
+  { path: 'sections/*', element: <SectionRoutes /> },
   { path: 'schedules/*', element: <>Schedules</> },
   { path: 'schedule-exceptions/*', element: <>Schedule Exceptions</> },
 ];
