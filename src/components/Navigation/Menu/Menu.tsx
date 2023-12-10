@@ -37,9 +37,10 @@ export function MenuItem(props: LinkProps) {
 }
 interface MenuItemsProps {
   children: React.ReactNode;
+  location?: 'left' | 'right';
 }
 
-export function MenuItems({ children }: MenuItemsProps) {
+export function MenuItems({ children, location = 'left' }: MenuItemsProps) {
   return (
     <Transition
       as={Fragment}
@@ -50,7 +51,12 @@ export function MenuItems({ children }: MenuItemsProps) {
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <HeadlessMenu.Items className="z-20 origin-top-left absolute left-0 mt-2 w-56 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <HeadlessMenu.Items
+        className={classNames(
+          'z-20 origin-top-left absolute mt-2 w-56 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none',
+          { 'left-0 ': location === 'left', 'right-0': location === 'right' }
+        )}
+      >
         {children}
       </HeadlessMenu.Items>
     </Transition>

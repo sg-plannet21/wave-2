@@ -1,19 +1,22 @@
-import { TableColumn } from '@/components/Data-Display/Table';
+import Table, { TableColumn } from '@/components/Data-Display/Table';
 import react from 'react';
 import Link from '@/components/Navigation/Link';
-import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
+import { useParams } from 'react-router-dom';
 import useSchedulesTableData, {
   ScheduleTableRecord,
 } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
 
 function SchedulesTable() {
-  const { data, isLoading } = useSchedulesTableData();
+  const { sectionName } = useParams();
+  const { data, isLoading } = useSchedulesTableData(
+    decodeURIComponent(sectionName as string)
+  );
 
   const EntityLink = react.useCallback(
     (section: { entry: ScheduleTableRecord }) => (
-      <Link to={section.entry.id}>{section.entry.name}</Link>
+      <Link to={section.entry.id}>{section.entry.weekday}</Link>
     ),
     []
   );
@@ -21,7 +24,7 @@ function SchedulesTable() {
   const Delete = react.useCallback(
     (section: { entry: ScheduleTableRecord }) => (
       <div className="text-right">
-        <DeleteSchedule id={section.entry.id} name={section.entry.name} />
+        <DeleteSchedule id={section.entry.id} name={section.entry.weekday} />
       </div>
     ),
     []
@@ -29,14 +32,13 @@ function SchedulesTable() {
 
   const columns: TableColumn<ScheduleTableRecord>[] = [
     {
-      field: 'name',
-      label: 'name',
-      Cell: EntityLink,
-    },
-    {
       field: 'weekday',
       label: 'Day',
+      Cell: EntityLink,
     },
+    { field: 'startTime', label: 'Start Time' },
+    { field: 'endTime', label: 'End Time' },
+    { field: 'route', label: 'Route' },
     {
       field: 'id',
       label: '',
@@ -45,9 +47,9 @@ function SchedulesTable() {
     },
   ];
 
-  if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={6} />;
 
-  return <WaveTable<ScheduleTableRecord> data={data} columns={columns} />;
+  return <Table<ScheduleTableRecord> data={data} columns={columns} />;
 }
 
 export default SchedulesTable;
