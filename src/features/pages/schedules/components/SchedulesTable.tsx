@@ -16,7 +16,13 @@ function SchedulesTable() {
 
   const EntityLink = react.useCallback(
     (section: { entry: ScheduleTableRecord }) => (
-      <Link to={section.entry.id}>{section.entry.weekday}</Link>
+      <Link className="relative" to={section.entry.id}>
+        {section.entry.weekday}
+
+        {section.entry.isActive && (
+          <span className="top-[2px] -left-5 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 animate-pulse rounded-full" />
+        )}
+      </Link>
     ),
     []
   );
