@@ -35,7 +35,7 @@ function useSchedulesTableData(sectionName: string) {
       .orderBy(['week_day', 'is_default', 'start_time'], 'asc')
       .value();
 
-    const currentDay = new Date().getDay() + 1;
+    const currentDay = new Date().getDay();
     const daySchedules = sectionSchedules.filter(
       (schedule) => schedule.week_day === currentDay
     );
@@ -45,9 +45,7 @@ function useSchedulesTableData(sectionName: string) {
     for (let i = 0; i < daySchedules.length; i++) {
       const currentSchedule = daySchedules[i];
       if (currentSchedule.is_default) {
-        if (!activeScheduleId) {
-          activeScheduleId = currentSchedule.schedule_id;
-        }
+        activeScheduleId = currentSchedule.schedule_id;
       } else if (
         isActiveTimeRange(
           currentSchedule.start_time as string,

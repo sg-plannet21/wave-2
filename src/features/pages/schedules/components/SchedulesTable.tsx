@@ -1,12 +1,14 @@
 import Table, { TableColumn } from '@/components/Data-Display/Table';
-import react from 'react';
+import react, { useContext, useEffect } from 'react';
 import Link from '@/components/Navigation/Link';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import { useParams } from 'react-router-dom';
+import classNames from 'classnames';
 import useSchedulesTableData, {
   ScheduleTableRecord,
 } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
+import SelectedScheduleContext from '../context/selectedScheduleContext';
 
 function SchedulesTable() {
   const { sectionName } = useParams();
@@ -14,13 +16,54 @@ function SchedulesTable() {
     decodeURIComponent(sectionName as string)
   );
 
-  const EntityLink = react.useCallback(
-    (section: { entry: ScheduleTableRecord }) => (
-      <Link className="relative" to={section.entry.id}>
-        {section.entry.weekday}
+  const { schedules, isDefault, dispatch } = useContext(
+    SelectedScheduleContext
+  );
 
-        {section.entry.isActive && (
-          <span className="top-[2px] -left-5 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 animate-pulse rounded-full" />
+  useEffect(() => {
+    dispatch({ type: 'RESET' });
+  }, [sectionName, dispatch]);
+
+  const Check = react.useCallback(
+    (record: { entry: ScheduleTableRecord }) => {
+      const scheduleId = record.entry.id;
+      const isChecked = schedules.includes(record.entry.id);
+      const isDisabled =
+        schedules.length > 0 && isDefault !== record.entry.isDefault;
+      return (
+        <div className="flex items-center">
+          <input
+            disabled={isDisabled}
+            checked={isChecked}
+            onChange={() =>
+              isChecked
+                ? dispatch({ type: 'DELETE', scheduleId })
+                : dispatch({
+                    type: 'ADD',
+                    scheduleId,
+                    isDefault: record.entry.isDefault,
+                  })
+            }
+            type="checkbox"
+            className={classNames(
+              'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600',
+              { 'cursor-not-allowed': isDisabled }
+            )}
+          />
+          <label className="sr-only">checkbox</label>
+        </div>
+      );
+    },
+    [schedules, dispatch, isDefault]
+  );
+
+  const EntityLink = react.useCallback(
+    (record: { entry: ScheduleTableRecord }) => (
+      <Link className="relative" to={record.entry.id}>
+        {record.entry.weekday}
+
+        {record.entry.isActive && (
+          <span className="top-[2px] -left-7 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 animate-pulse rounded-full" />
         )}
       </Link>
     ),
@@ -28,15 +71,16 @@ function SchedulesTable() {
   );
 
   const Delete = react.useCallback(
-    (section: { entry: ScheduleTableRecord }) => (
+    (record: { entry: ScheduleTableRecord }) => (
       <div className="text-right">
-        <DeleteSchedule id={section.entry.id} name={section.entry.weekday} />
+        <DeleteSchedule id={record.entry.id} name={record.entry.weekday} />
       </div>
     ),
     []
   );
 
   const columns: TableColumn<ScheduleTableRecord>[] = [
+    { field: 'id', label: '', ignoreFiltering: true, Cell: Check },
     {
       field: 'weekday',
       label: 'Day',

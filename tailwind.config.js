@@ -1,4 +1,4 @@
-import colors from "tailwindcss/colors"
+import colors from 'tailwindcss/colors';
 
 const brandColor = colors.gray;
 
@@ -22,5 +22,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
