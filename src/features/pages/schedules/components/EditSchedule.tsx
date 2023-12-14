@@ -2,30 +2,37 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ContentLayout from '@/components/Layouts/ContentLayout';
 import LoadingComponent from '@/components/Feedback/LoadingComponent';
 import useSchedule from '../hooks/useSchedule';
-import SchedulesForm from './SchedulesForm';
 import useUpdateSchedule from '../hooks/useUpdateSchedule';
+import EditSchedulesForm from './EditSchedulesForm';
+import { customSchema } from '../types/schema';
 
 function EditSchedule() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const sectionQuery = useSchedule(id as string);
+  const scheduleQuery = useSchedule(id as string);
   const updateSchedule = useUpdateSchedule();
 
-  if (sectionQuery.isLoading) return <LoadingComponent />;
+  if (scheduleQuery.isLoading) return <LoadingComponent />;
 
   return (
     <ContentLayout title="Edit Schedule">
-      {sectionQuery.data && (
-        <SchedulesForm
+      {scheduleQuery.data && (
+        <EditSchedulesForm<typeof customSchema>
+          schema={customSchema}
           isSubmitting={updateSchedule.isLoading}
           onSubmit={async (data) => {
+            // eslint-disable-next-line no-console
+            console.log('submit', data);
+            /*
             await updateSchedule.mutateAsync({
               id: id as string,
               data: { schedule_id: id as string, ...data },
             });
+                        */
             navigate('..');
           }}
-          defaultValues={sectionQuery.data}
+          defaultValues={scheduleQuery.data}
+          isDefault={scheduleQuery.data.is_default}
         />
       )}
     </ContentLayout>

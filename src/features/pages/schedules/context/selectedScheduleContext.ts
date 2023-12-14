@@ -1,5 +1,8 @@
 import React from 'react';
-import { ScheduleAction, SelectedScheduleType } from './reducer';
+import {
+  ScheduleAction,
+  SelectedScheduleType,
+} from './selectedScheduleReducer';
 
 interface ContextType extends SelectedScheduleType {
   dispatch: React.Dispatch<ScheduleAction>;

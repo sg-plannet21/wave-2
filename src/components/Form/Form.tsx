@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import classNames from 'classnames';
 import { ComponentProps } from 'react';
 import {
   UseFormReturn,
@@ -60,13 +61,14 @@ function Form<T extends FieldValues>({
   form,
   onSubmit,
   children,
+  className,
   ...rest
 }: Props<T>) {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} {...rest}>
         <fieldset
-          className="flex flex-col space-y-4 py-2"
+          className={classNames('flex flex-col space-y-4 py-2', className)}
           disabled={form.formState.isSubmitting}
         >
           {children}

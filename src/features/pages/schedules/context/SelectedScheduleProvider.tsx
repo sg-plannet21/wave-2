@@ -1,6 +1,6 @@
 import { useMemo, useReducer } from 'react';
 import SelectedScheduleContext from './selectedScheduleContext';
-import selectedScheduleReducer from './reducer';
+import selectedScheduleReducer from './selectedScheduleReducer';
 
 interface Props {
   children: React.ReactNode;

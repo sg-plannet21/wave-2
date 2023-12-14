@@ -134,7 +134,7 @@ function QueueForm({
 
             <div className="lg:col-span-5 items-start">
               <RouteSelectField
-                exceptionRouteName={exceptionRouteName}
+                exceptionRouteNames={[exceptionRouteName]}
                 label="Route"
                 disabled={!layout.watchToggle}
                 {...form.register(`${layout.prefix}_route` as 'closed_route')}
@@ -188,7 +188,7 @@ function QueueForm({
 
             <div className="lg:col-span-4 items-start">
               <RouteSelectField
-                exceptionRouteName={exceptionRouteName}
+                exceptionRouteNames={[exceptionRouteName]}
                 label="Route"
                 disabled={!layout.watchToggle}
                 {...form.register(
@@ -235,7 +235,7 @@ function QueueForm({
 
           <div className="lg:col-span-4 items-start">
             <RouteSelectField
-              exceptionRouteName={exceptionRouteName}
+              exceptionRouteNames={[exceptionRouteName]}
               disabled={!callBackToggle}
               label="Route"
               {...form.register('callback_route')}

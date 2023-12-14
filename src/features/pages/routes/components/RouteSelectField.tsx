@@ -8,11 +8,11 @@ import useRouteDestinations from '../hooks/useRouteDestinations';
 import useRoutes from '../hooks/useRoutes';
 
 interface Props extends PassthroughProps {
-  exceptionRouteName?: string;
+  exceptionRouteNames?: Array<string>;
 }
 
 const RouteSelectField = React.forwardRef<HTMLSelectElement, Props>(
-  ({ exceptionRouteName, ...props }, ref) => {
+  ({ exceptionRouteNames = [], ...props }, ref) => {
     const { data: routes } = useRoutes();
     const { data: destinationTypes } = useRouteDestinations();
 
@@ -39,7 +39,8 @@ const RouteSelectField = React.forwardRef<HTMLSelectElement, Props>(
             )
             .filter(
               (route) =>
-                !exceptionRouteName || route.route_name !== exceptionRouteName
+                !exceptionRouteNames.length ||
+                !exceptionRouteNames.includes(route.route_name)
             )
             .map((route) => ({
               label: route.route_name,

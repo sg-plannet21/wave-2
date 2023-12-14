@@ -12,7 +12,9 @@ function NewSchedule() {
       <SchedulesForm
         isSubmitting={createSchedule.isLoading}
         onSubmit={async (values) => {
-          await createSchedule.mutateAsync(values);
+          // eslint-disable-next-line no-console
+          console.log('submit', values);
+          // await createSchedule.mutateAsync(values);
           navigate('..');
         }}
       />

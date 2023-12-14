@@ -1,5 +1,5 @@
 import Table, { TableColumn } from '@/components/Data-Display/Table';
-import react, { useContext, useEffect } from 'react';
+import react, { useEffect } from 'react';
 import Link from '@/components/Navigation/Link';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import { useParams } from 'react-router-dom';
@@ -8,16 +8,13 @@ import useSchedulesTableData, {
   ScheduleTableRecord,
 } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
-import SelectedScheduleContext from '../context/selectedScheduleContext';
+import useSelectedSchedules from '../hooks/useSelectedSchedules';
 
 function SchedulesTable() {
   const { sectionName } = useParams();
+  const { dispatch, isDefault, schedules } = useSelectedSchedules();
   const { data, isLoading } = useSchedulesTableData(
     decodeURIComponent(sectionName as string)
-  );
-
-  const { schedules, isDefault, dispatch } = useContext(
-    SelectedScheduleContext
   );
 
   useEffect(() => {
@@ -46,7 +43,7 @@ function SchedulesTable() {
             }
             type="checkbox"
             className={classNames(
-              'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600',
+              'form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-600 dark:border-gray-600',
               { 'cursor-not-allowed': isDisabled }
             )}
           />
