@@ -2,12 +2,13 @@ import Form, { FieldError, useZodForm } from '@/components/Form/Form';
 import { SubmitHandler, useController, useFormContext } from 'react-hook-form';
 import Button from '@/components/Inputs/Button';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { xor } from 'lodash';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import { Weekdays } from '../types';
 import RouteSelectField from '../../routes/components/RouteSelectField';
 import { NewFormValues, newSchema } from '../types/schema';
+import useValidateSchedule from '../hooks/useValidateSchedule';
 
 interface Props {
   onSubmit: SubmitHandler<NewFormValues>;
@@ -63,12 +64,33 @@ function WeekdayCheckboxes() {
   );
 }
 
-function SchedulesForm({ onSubmit, isSubmitting }: Props) {
+function NewSchedulesForm({ onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof newSchema>({ schema: newSchema });
+  const { validate } = useValidateSchedule();
+
+  const handleSubmit = useCallback(
+    (data: NewFormValues) => {
+      const [startTime, endTime] = data.timeRange;
+
+      const isValid = data.weekDays.every((day) => {
+        const outcome = validate({ day, startTime, endTime });
+        if (outcome.success) return true;
+
+        form.setError('weekDays', { message: outcome.message });
+        return false;
+      });
+
+      if (isValid) {
+        onSubmit(data);
+      }
+    },
+    [form, onSubmit, validate]
+  );
+
   return (
     <Form<NewFormValues>
       form={form}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       className="mx-auto max-w-md"
     >
       <WeekdayCheckboxes />
@@ -97,4 +119,4 @@ function SchedulesForm({ onSubmit, isSubmitting }: Props) {
   );
 }
 
-export default SchedulesForm;
+export default NewSchedulesForm;

@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import SelectedScheduleContext from '../context/selectedScheduleContext';
 
-function useSelectedSchedule() {
+function useSelectedSchedules() {
   return useContext(SelectedScheduleContext);
 }
 
-export default useSelectedSchedule;
+export default useSelectedSchedules;

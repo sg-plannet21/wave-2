@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { chain, get } from 'lodash';
 import { formatServerTime, isActiveTimeRange } from '@/lib/date-time';
 import useSchedules from './useSchedules';
-import useSections from '../../sections/hooks/useSections';
 import { Weekdays } from '../types';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
+import useSectionId from './useSectionId';
 
 export type ScheduleTableRecord = {
   id: string;
@@ -16,16 +16,10 @@ export type ScheduleTableRecord = {
   isActive: boolean;
 };
 
-function useSchedulesTableData(sectionName: string) {
+function useSchedulesTableData() {
   const { data: schedules, error } = useSchedules();
-  const { data: sections } = useSections();
+  const sectionId = useSectionId();
   const routesLookup = useRoutesLookup();
-
-  const sectionId = useMemo(
-    () =>
-      sections?.find((section) => section.section === sectionName)?.section_id,
-    [sectionName, sections]
-  );
 
   const data: ScheduleTableRecord[] = useMemo(() => {
     if (!sectionId || !schedules || !routesLookup) return [];

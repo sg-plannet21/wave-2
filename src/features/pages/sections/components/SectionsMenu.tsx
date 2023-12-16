@@ -19,7 +19,7 @@ function SectionMenu() {
         as={Button}
         startIcon={<SectionIcon className="h-5 w-5 fill-current" />}
         endIcon={<ExpandDownIcon className="h-5 w-5 fill-current" />}
-        className="w-full justify-between"
+        className="w-full justify-between h-11"
       >
         {sections[0].section}
       </MenuButton>

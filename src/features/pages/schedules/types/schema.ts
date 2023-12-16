@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { optionalMessageSchema } from '../../messages/types/schema';
+import { Schedule } from '.';
 
 export const baseSchema = z.object({
   message_1: optionalMessageSchema,
@@ -26,4 +27,5 @@ export const customSchema = z
 export type NewFormValues = z.infer<typeof newSchema>;
 export type CustomFormValues = z.infer<typeof customSchema>;
 
-export type FormValues = z.infer<typeof baseSchema> & { weekday: number };
+export type FormValues = z.infer<typeof baseSchema> &
+  Pick<Schedule, 'start_time' | 'end_time' | 'week_day' | 'section'>;

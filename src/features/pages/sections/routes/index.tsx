@@ -8,6 +8,7 @@ function SectionRoutes() {
     <Routes>
       <Route index element={<Sections />} />
       <Route path="new" element={<NewSection />} />
+      <Route path="edit" element={<EditSection />} />
       <Route path=":id" element={<EditSection />} />
       <Route path="*" element={<Navigate to="." />} />
     </Routes>

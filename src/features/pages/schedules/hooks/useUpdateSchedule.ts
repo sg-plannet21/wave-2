@@ -10,7 +10,7 @@ const updateSchedule = new ApiClient<Schedule>('/schedules').update;
 
 interface UpdateVariables {
   id: string;
-  data: FormValues & Pick<Schedule, 'schedule_id'>;
+  data: FormValues;
 }
 
 function useUpdateSchedule() {
@@ -19,25 +19,25 @@ function useUpdateSchedule() {
 
   return useMutation<Schedule, WaveError, UpdateVariables>({
     mutationFn: ({ id, data }) => updateSchedule(id, data),
-    onSuccess(newSchedule) {
+    onSuccess(updatedSchedule) {
       queryClient.setQueryData<Schedule>(
-        ['schedule', newSchedule.schedule_id],
-        newSchedule
+        ['schedule', updatedSchedule.schedule_id],
+        updatedSchedule
       );
 
       queryClient.setQueryData<Schedule[]>(
         getEntityKey('schedules'),
         (schedules = []) =>
           schedules.map((schedule) =>
-            schedule.schedule_id === newSchedule.schedule_id
-              ? newSchedule
+            schedule.schedule_id === updatedSchedule.schedule_id
+              ? updatedSchedule
               : schedule
           )
       );
       addNotification({
         type: 'success',
         title: 'Schedule Updated',
-        message: `${Weekdays[newSchedule.week_day]} has been updated.`,
+        message: `${Weekdays[updatedSchedule.week_day]} has been updated.`,
         duration: 5000,
       });
     },

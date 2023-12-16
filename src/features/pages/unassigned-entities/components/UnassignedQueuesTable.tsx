@@ -39,6 +39,7 @@ function UnassignedQueuesTable() {
     {
       field: 'businessUnit',
       label: 'Business Unit',
+      ignoreFiltering: true,
     },
     { field: 'id', label: '', Cell: AssignQueue, ignoreFiltering: true },
   ];

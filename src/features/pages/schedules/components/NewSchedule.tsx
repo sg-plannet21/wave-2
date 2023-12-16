@@ -1,21 +1,34 @@
 import ContentLayout from '@/components/Layouts/ContentLayout';
 import { useNavigate } from 'react-router-dom';
 import useCreateSchedule from '../hooks/useCreateSchedule';
-import SchedulesForm from './SchedulesForm';
+import NewScheduleForm from './NewScheduleForm';
+import useSectionId from '../hooks/useSectionId';
 
 function NewSchedule() {
   const navigate = useNavigate();
   const createSchedule = useCreateSchedule();
+  const sectionId = useSectionId();
 
   return (
     <ContentLayout title="New Schedule">
-      <SchedulesForm
+      <NewScheduleForm
         isSubmitting={createSchedule.isLoading}
         onSubmit={async (values) => {
-          // eslint-disable-next-line no-console
-          console.log('submit', values);
-          // await createSchedule.mutateAsync(values);
-          navigate('..');
+          Promise.all(
+            values.weekDays.map((weekday) => {
+              const { weekDays, timeRange, ...rest } = values;
+              const [startTime, endTime] = timeRange;
+              return createSchedule.mutateAsync({
+                ...rest,
+                week_day: weekday,
+                start_time: startTime,
+                end_time: endTime,
+                section: sectionId as string,
+              });
+            })
+          ).then(() => {
+            navigate('..');
+          });
         }}
       />
     </ContentLayout>

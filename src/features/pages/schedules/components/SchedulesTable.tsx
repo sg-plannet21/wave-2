@@ -13,9 +13,7 @@ import useSelectedSchedules from '../hooks/useSelectedSchedules';
 function SchedulesTable() {
   const { sectionName } = useParams();
   const { dispatch, isDefault, schedules } = useSelectedSchedules();
-  const { data, isLoading } = useSchedulesTableData(
-    decodeURIComponent(sectionName as string)
-  );
+  const { data, isLoading } = useSchedulesTableData();
 
   useEffect(() => {
     dispatch({ type: 'RESET' });
