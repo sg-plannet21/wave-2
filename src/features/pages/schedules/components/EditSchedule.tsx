@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentLayout from '@/components/Layouts/ContentLayout';
 import LoadingComponent from '@/components/Feedback/LoadingComponent';
+import { formatServerTime } from '@/lib/date-time';
 import useSchedule from '../hooks/useSchedule';
 import useUpdateSchedule from '../hooks/useUpdateSchedule';
 import EditSchedulesForm from './EditSchedulesForm';
@@ -12,7 +13,7 @@ function EditSchedule() {
   const { id } = useParams();
   const navigate = useNavigate();
   const updateSchedule = useUpdateSchedule();
-  const { schedules: scheduleList } = useSelectedSchedules();
+  const { schedules: scheduleList, dispatch } = useSelectedSchedules();
   const scheduleLookup = useSchedulesLookup();
 
   const scheduleQuery = useSchedule(
@@ -55,10 +56,19 @@ function EditSchedule() {
                 });
               })
             ).then(() => {
+              dispatch({ type: 'RESET' });
               navigate('..');
             });
           }}
-          defaultValues={scheduleQuery.data}
+          defaultValues={{
+            ...scheduleQuery.data,
+            ...(!scheduleQuery.data.is_default && {
+              timeRange: [
+                formatServerTime(scheduleQuery.data.start_time as string),
+                formatServerTime(scheduleQuery.data.end_time as string),
+              ],
+            }),
+          }}
           isDefault={scheduleQuery.data.is_default}
         />
       )}

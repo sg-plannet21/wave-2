@@ -4,7 +4,7 @@ import { useNotificationStore } from '@/state/notifications';
 import { getEntityKey } from '@/lib/entity-keys';
 import { Schedule } from '../types';
 
-const deleteSchedule = new ApiClient<Schedule>('/schedule').delete;
+const deleteSchedule = new ApiClient<Schedule>('/schedules').delete;
 
 function useDeleteSchedule() {
   const queryClient = useQueryClient();

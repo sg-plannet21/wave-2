@@ -4,6 +4,7 @@ import Link from '@/components/Navigation/Link';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
+import Switch from '@/components/Inputs/Switch';
 import useSchedulesTableData, {
   ScheduleTableRecord,
 } from '../hooks/useSchedulesTableData';
@@ -13,7 +14,12 @@ import useSelectedSchedules from '../hooks/useSelectedSchedules';
 function SchedulesTable() {
   const { sectionName } = useParams();
   const { dispatch, isDefault, schedules } = useSelectedSchedules();
-  const { data, isLoading } = useSchedulesTableData();
+  const {
+    data,
+    isLoading,
+    isDefault: isDefaultSchedule,
+    toggleDefault,
+  } = useSchedulesTableData();
 
   useEffect(() => {
     dispatch({ type: 'RESET' });
@@ -68,7 +74,9 @@ function SchedulesTable() {
   const Delete = react.useCallback(
     (record: { entry: ScheduleTableRecord }) => (
       <div className="text-right">
-        <DeleteSchedule id={record.entry.id} name={record.entry.weekday} />
+        {!record.entry.isDefault && (
+          <DeleteSchedule id={record.entry.id} name={record.entry.weekday} />
+        )}
       </div>
     ),
     []
@@ -94,7 +102,21 @@ function SchedulesTable() {
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={6} />;
 
-  return <Table<ScheduleTableRecord> data={data} columns={columns} />;
+  return (
+    <div className="flex flex-col">
+      <div className="hidden md:flex lg:items-center md:justify-end">
+        <div className="border border-gray-200 py-2 px-4 rounded-lg dark:border-gray-800">
+          <Switch
+            colour="emerald"
+            label="Show Default Schedules"
+            isChecked={isDefaultSchedule}
+            onChange={toggleDefault}
+          />
+        </div>
+      </div>
+      <Table<ScheduleTableRecord> data={data} columns={columns} />
+    </div>
+  );
 }
 
 export default SchedulesTable;

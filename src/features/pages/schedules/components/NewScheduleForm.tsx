@@ -64,7 +64,7 @@ function WeekdayCheckboxes() {
   );
 }
 
-function NewSchedulesForm({ onSubmit, isSubmitting }: Props) {
+function NewScheduleForm({ onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof newSchema>({ schema: newSchema });
   const { validate } = useValidateSchedule();
 
@@ -119,4 +119,4 @@ function NewSchedulesForm({ onSubmit, isSubmitting }: Props) {
   );
 }
 
-export default NewSchedulesForm;
+export default NewScheduleForm;

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { chain, get } from 'lodash';
 import { formatServerTime, isActiveTimeRange } from '@/lib/date-time';
 import useSchedules from './useSchedules';
@@ -17,11 +17,14 @@ export type ScheduleTableRecord = {
 };
 
 function useSchedulesTableData() {
+  const [showDefault, setShowDefault] = useState(true);
   const { data: schedules, error } = useSchedules();
   const sectionId = useSectionId();
   const routesLookup = useRoutesLookup();
 
-  const data: ScheduleTableRecord[] = useMemo(() => {
+  const toggleDefault = useCallback(() => setShowDefault((prev) => !prev), []);
+
+  const mapped: ScheduleTableRecord[] = useMemo(() => {
     if (!sectionId || !schedules || !routesLookup) return [];
 
     const sectionSchedules = chain(schedules)
@@ -29,7 +32,9 @@ function useSchedulesTableData() {
       .orderBy(['week_day', 'is_default', 'start_time'], 'asc')
       .value();
 
-    const currentDay = new Date().getDay();
+    const day = new Date().getDay();
+    const currentDay = day === 0 ? 7 : day;
+
     const daySchedules = sectionSchedules.filter(
       (schedule) => schedule.week_day === currentDay
     );
@@ -66,7 +71,18 @@ function useSchedulesTableData() {
     }));
   }, [schedules, sectionId, routesLookup]);
 
-  return { data, isLoading: !sectionId || !schedules || !routesLookup, error };
+  const filtered: ScheduleTableRecord[] = useMemo(() => {
+    if (showDefault) return mapped;
+    return mapped.filter((record) => !record.isDefault);
+  }, [showDefault, mapped]);
+
+  return {
+    data: filtered,
+    isLoading: !sectionId || !schedules || !routesLookup,
+    error,
+    isDefault: showDefault,
+    toggleDefault,
+  };
 }
 
 export default useSchedulesTableData;

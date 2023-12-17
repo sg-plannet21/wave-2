@@ -65,7 +65,7 @@ function Switch({
   label,
   isChecked,
   onChange,
-  className = 'flex items-center justify-between py-1',
+  className = 'flex items-center justify-between gap-2 py-1',
   colour = 'indigo',
   disabled = false,
 }: SwitchProps) {

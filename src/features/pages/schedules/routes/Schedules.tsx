@@ -9,9 +9,9 @@ function Schedules() {
   const { schedules } = useSelectedSchedules();
   return (
     <ContentLayout title="Schedules">
-      <div className="flex gap-2 items-center justify-end">
+      <div className="flex flex-col md:flex-row gap-2 md:items-center md:justify-end">
         <EditSchedulesLink to="edit" disabled={!schedules.length}>
-          Edit Schedules
+          Edit Selected
         </EditSchedulesLink>
         <NewEntityLink to="new">New Schedule</NewEntityLink>
         <SectionMenu />
