@@ -11,7 +11,7 @@ import useSectionsLookup from '../../sections/hooks/useSectionsLookup';
 import useRegionsLookup from '../../business-units/hooks/useRegionsLookup';
 
 interface EntryPointWithVersions extends EntryPoint {
-  versions: Version[];
+  versions: Array<Version>;
 }
 
 interface EntryPointVersionTableRecord

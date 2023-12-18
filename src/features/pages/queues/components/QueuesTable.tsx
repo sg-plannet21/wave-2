@@ -8,6 +8,7 @@ import useQueuesTableData, {
   QueueTableRecord,
 } from '../hooks/useQueuesTableData';
 import DeleteQueue from './DeleteQueue';
+import QueueVersions from './QueueVersions';
 
 function QueuesTable() {
   const { data, isLoading } = useQueuesTableData();
@@ -26,6 +27,13 @@ function QueuesTable() {
         return <Badge label={route as string} variant="primary" size="sm" />;
       return <Badge label="Not Set" variant="secondary" size="sm" />;
     }, []);
+
+  const Versions = react.useCallback(
+    (record: { entry: QueueTableRecord }) => (
+      <QueueVersions id={record.entry.id} />
+    ),
+    []
+  );
 
   const Delete = react.useCallback(
     (record: { entry: QueueTableRecord }) => (
@@ -67,6 +75,12 @@ function QueuesTable() {
       field: 'callback_route',
       label: 'Callback',
       Cell: StatusBadge('callback_route'),
+    },
+    {
+      field: 'id',
+      label: '',
+      ignoreFiltering: true,
+      Cell: Versions,
     },
     {
       field: 'id',
