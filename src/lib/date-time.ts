@@ -13,11 +13,15 @@ dayjs.extend(utc);
 const timeFormat = 'HH:mm';
 
 function utcDateFromTime(utcTime: string): dayjs.Dayjs {
-  return dayjs.utc(utcTime, timeFormat);
+  return dayjs(utcTime, timeFormat).utc(true);
 }
 
-export function formatServerTime(utcTime: string) {
+export function formatServerTime(utcTime: string): string {
   return utcDateFromTime(utcTime).local().format(timeFormat);
+}
+
+export function utcFormat(localTime: string): string {
+  return dayjs(localTime, timeFormat).utc().format(timeFormat);
 }
 
 export function isActiveTimeRange(start: string, end: string): boolean {
