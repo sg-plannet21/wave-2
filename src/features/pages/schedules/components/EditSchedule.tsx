@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentLayout from '@/components/Layouts/ContentLayout';
 import LoadingComponent from '@/components/Feedback/LoadingComponent';
-import { formatServerTime } from '@/lib/date-time';
+import { formatServerTime, utcFormat } from '@/lib/date-time';
 import useSchedule from '../hooks/useSchedule';
 import useUpdateSchedule from '../hooks/useUpdateSchedule';
 import EditSchedulesForm from './EditSchedulesForm';
@@ -40,10 +40,10 @@ function EditSchedule() {
                   data: {
                     start_time: isDefault
                       ? null
-                      : (values as CustomFormValues).timeRange[0],
+                      : utcFormat((values as CustomFormValues).timeRange[0]),
                     end_time: isDefault
                       ? null
-                      : (values as CustomFormValues).timeRange[1],
+                      : utcFormat((values as CustomFormValues).timeRange[1]),
                     message_1: values.message_1,
                     message_2: values.message_2,
                     message_3: values.message_3,
