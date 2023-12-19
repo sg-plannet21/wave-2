@@ -10,6 +10,7 @@ import useSchedulesTableData, {
 } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
 import useSelectedSchedules from '../hooks/useSelectedSchedules';
+import ScheduleVersions from './ScheduleVersions';
 
 function SchedulesTable() {
   const { sectionName } = useParams();
@@ -71,6 +72,13 @@ function SchedulesTable() {
     []
   );
 
+  const Versions = react.useCallback(
+    (record: { entry: ScheduleTableRecord }) => (
+      <ScheduleVersions id={record.entry.id} />
+    ),
+    []
+  );
+
   const Delete = react.useCallback(
     (record: { entry: ScheduleTableRecord }) => (
       <div className="text-right">
@@ -92,6 +100,12 @@ function SchedulesTable() {
     { field: 'startTime', label: 'Start Time' },
     { field: 'endTime', label: 'End Time' },
     { field: 'route', label: 'Route' },
+    {
+      field: 'id',
+      label: '',
+      ignoreFiltering: true,
+      Cell: Versions,
+    },
     {
       field: 'id',
       label: '',
