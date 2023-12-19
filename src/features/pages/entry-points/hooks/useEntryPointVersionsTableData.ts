@@ -4,8 +4,8 @@ import { Version } from '@/features/versions/types';
 import { useMemo } from 'react';
 import deserialiseEntityFields from '@/features/versions/utils/deserialise-entity-fields';
 import { VersionTableRow } from '@/features/versions/components/Versions';
-import { get } from 'lodash';
 import formatVersionDate from '@/features/versions/utils/format-version-date';
+import versionEntityLookup from '@/features/versions/utils/versionEntityLookup';
 import { EntryPoint } from '../types';
 import useSectionsLookup from '../../sections/hooks/useSectionsLookup';
 import useRegionsLookup from '../../business-units/hooks/useRegionsLookup';
@@ -50,8 +50,16 @@ function useEntryPointVersionsTableData(id: string) {
         change_date: formatVersionDate(version.change_date),
         change_user: version.change_user,
         entry_point: deserialised.entry_point,
-        section: get(sectionsLookup[deserialised.section], 'section'),
-        region: get(regionsLookup[deserialised.region], 'language_name'),
+        section: versionEntityLookup(
+          sectionsLookup,
+          deserialised.section as keyof typeof sectionsLookup,
+          'section'
+        ),
+        region: versionEntityLookup(
+          regionsLookup,
+          deserialised.region,
+          'language_name'
+        ),
       } satisfies EntryPointVersionTableRecord;
     });
   }, [data, sectionsLookup, regionsLookup]);

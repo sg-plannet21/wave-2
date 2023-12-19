@@ -4,8 +4,8 @@ import { Version } from '@/features/versions/types';
 import { useMemo } from 'react';
 import deserialiseEntityFields from '@/features/versions/utils/deserialise-entity-fields';
 import { VersionTableRow } from '@/features/versions/components/Versions';
-import { get } from 'lodash';
 import formatVersionDate from '@/features/versions/utils/format-version-date';
+import versionEntityLookup from '@/features/versions/utils/versionEntityLookup';
 import { Menu } from '../types';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
 import useMessagesLookup from '../../messages/hooks/useMessagesLookup';
@@ -74,16 +74,18 @@ function useMenuVersionsTableData(id: string) {
           const messageKey = `${item.prefix}_message` as keyof Menu;
           acc[messageKey] =
             deserialised[messageKey] &&
-            get(
-              messagesLookup[deserialised[messageKey] as keyof Menu],
+            versionEntityLookup(
+              messagesLookup,
+              deserialised[messageKey] as keyof Menu,
               'prompt_name'
             );
 
           const routeKey = `${item.prefix}_route` as keyof Menu;
           acc[routeKey] =
             deserialised[routeKey] &&
-            get(
-              routesLookup[deserialised[routeKey] as keyof Menu],
+            versionEntityLookup(
+              routesLookup,
+              deserialised[routeKey] as keyof Menu,
               'route_name'
             );
           return acc;

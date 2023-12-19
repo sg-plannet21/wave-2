@@ -4,8 +4,8 @@ import { useQuery } from 'react-query';
 import { useMemo } from 'react';
 import formatVersionDate from '@/features/versions/utils/format-version-date';
 import deserialiseEntityFields from '@/features/versions/utils/deserialise-entity-fields';
-import { get } from 'lodash';
 import { VersionTableRow } from '@/features/versions/components/Versions';
+import versionEntityLookup from '@/features/versions/utils/versionEntityLookup';
 import { Queue } from '../types';
 import useMessagesLookup from '../../messages/hooks/useMessagesLookup';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
@@ -14,7 +14,7 @@ interface QueueWithVersions extends Queue {
   versions: Array<Version>;
 }
 
-type MessageRecordType = string | null;
+type MessageRecordType = React.ReactNode;
 
 interface QueueVersionTableRecord
   extends Pick<
@@ -50,6 +50,19 @@ interface QueueVersionTableRecord
   max_queue_time_message: MessageRecordType;
   callback_toggle: string;
 }
+type QueueMessage =
+  | 'queue_message_1'
+  | 'queue_message_2'
+  | 'queue_message_3'
+  | 'queue_message_4'
+  | 'queue_message_5';
+
+const messageRows: Array<VersionTableRow<QueueVersionTableRecord>> = [
+  1, 2, 3, 4, 5,
+].map((index) => ({
+  field: `queue_message_${index}` as keyof QueueVersionTableRecord,
+  label: `Message ${index}`,
+}));
 
 const rows: Array<VersionTableRow<QueueVersionTableRecord>> = [
   { field: 'change_date', label: 'Change Date' },
@@ -58,11 +71,7 @@ const rows: Array<VersionTableRow<QueueVersionTableRecord>> = [
   { field: 'whisper_message', label: 'Whisper Announcement' },
   { field: 'queue_welcome', label: 'Welcome' },
   { field: 'queue_music', label: 'Queue Music' },
-  { field: 'queue_message_1', label: 'Message 1' },
-  { field: 'queue_message_2', label: 'Message 2' },
-  { field: 'queue_message_3', label: 'Message 3' },
-  { field: 'queue_message_4', label: 'Message 4' },
-  { field: 'queue_message_5', label: 'Message 5' },
+  ...messageRows,
   { field: 'closed_toggle', label: 'Closed Status' },
   { field: 'closed_message', label: 'Closed Message' },
   { field: 'closed_route', label: 'Closed Route' },
@@ -97,18 +106,6 @@ function useQueueVersionTableData(id: string) {
   const versions: Array<QueueVersionTableRecord> = useMemo(() => {
     if (!data || !messageLookup || !useRoutesLookup) return [];
 
-    function getPromptName(queueId: number | null): MessageRecordType {
-      return queueId && messageLookup
-        ? get(messageLookup[queueId], 'prompt_name')
-        : null;
-    }
-
-    function getRouteName(routeId: string | null): string | null {
-      return routeId && routeLookup
-        ? get(routeLookup[routeId], 'route_name')
-        : null;
-    }
-
     return data.versions.map((version) => {
       const deserialised = deserialiseEntityFields<Queue>(version);
 
@@ -116,42 +113,100 @@ function useQueueVersionTableData(id: string) {
         change_date: formatVersionDate(version.change_date),
         change_user: version.change_user,
         queue_priority: deserialised.queue_priority,
-        whisper_message: getPromptName(deserialised.whisper_message),
-        queue_welcome: getPromptName(deserialised.queue_welcome),
-        queue_music: getPromptName(deserialised.queue_music),
-        queue_message_1: getPromptName(deserialised.queue_message_1),
-        queue_message_2: getPromptName(deserialised.queue_message_2),
-        queue_message_3: getPromptName(deserialised.queue_message_3),
-        queue_message_4: getPromptName(deserialised.queue_message_4),
-        queue_message_5: getPromptName(deserialised.queue_message_5),
+        whisper_message: versionEntityLookup(
+          messageLookup,
+          deserialised.whisper_message,
+          'prompt_name'
+        ),
+        queue_welcome: versionEntityLookup(
+          messageLookup,
+          deserialised.queue_welcome,
+          'prompt_name'
+        ),
+        queue_music: versionEntityLookup(
+          messageLookup,
+          deserialised.queue_music,
+          'prompt_name'
+        ),
+
+        ...[1, 2, 3, 4, 5].reduce(
+          (acc, item) => {
+            const messageKey = `queue_message_${item}` as QueueMessage;
+            acc[messageKey as QueueMessage] = versionEntityLookup(
+              messageLookup,
+              deserialised[messageKey] as keyof typeof messageLookup,
+              'prompt_name'
+            );
+
+            return acc;
+          },
+          {} as Pick<QueueVersionTableRecord, QueueMessage>
+        ),
+
         closed_toggle: deserialised.closed_toggle ? 'Enabled' : 'Disabled',
-        closed_message: getPromptName(deserialised.closed_message),
-        closed_route: getRouteName(deserialised.closed_route),
+        closed_message: versionEntityLookup(
+          messageLookup,
+          deserialised.closed_message,
+          'prompt_name'
+        ),
+        closed_route: versionEntityLookup(
+          routeLookup,
+          deserialised.closed_route as keyof typeof routeLookup,
+          'route_name'
+        ),
+
         no_agents_toggle: deserialised.no_agents_toggle
           ? 'Enabled'
           : 'Disabled',
-        no_agents_message: getPromptName(deserialised.no_agents_message),
-        no_agents_route: getRouteName(deserialised.no_agents_route),
+        no_agents_message: versionEntityLookup(
+          messageLookup,
+          deserialised.no_agents_message,
+          'prompt_name'
+        ),
+        no_agents_route: versionEntityLookup(
+          routeLookup,
+          deserialised.no_agents_route as keyof typeof routeLookup,
+          'route_name'
+        ),
+
         max_queue_calls_toggle: deserialised.max_queue_calls_toggle
           ? 'Enabled'
           : 'Disabled',
         max_queue_calls_threshold: deserialised.max_queue_calls_threshold,
-        max_queue_calls_message: getPromptName(
-          deserialised.max_queue_calls_message
+        max_queue_calls_message: versionEntityLookup(
+          messageLookup,
+          deserialised.max_queue_calls_message,
+          'prompt_name'
         ),
-        max_queue_calls_route: getRouteName(deserialised.max_queue_calls_route),
+        max_queue_calls_route: versionEntityLookup(
+          routeLookup,
+          deserialised.max_queue_calls_route as keyof typeof routeLookup,
+          'route_name'
+        ),
+
         max_queue_time_toggle: deserialised.max_queue_time_toggle
           ? 'Enabled'
           : 'Disabled',
         max_queue_time_threshold: deserialised.max_queue_time_threshold,
-        max_queue_time_message: getPromptName(
-          deserialised.max_queue_time_message
+        max_queue_time_message: versionEntityLookup(
+          messageLookup,
+          deserialised.max_queue_time_message,
+          'prompt_name'
         ),
-        max_queue_time_route: getRouteName(deserialised.max_queue_time_route),
+        max_queue_time_route: versionEntityLookup(
+          routeLookup,
+          deserialised.max_queue_time_route as keyof typeof routeLookup,
+          'route_name'
+        ),
+
         callback_toggle: deserialised.callback_toggle ? 'Enabled' : 'Disabled',
         callback_calls_threshold: deserialised.callback_calls_threshold,
         callback_time_threshold: deserialised.callback_time_threshold,
-        callback_route: getRouteName(deserialised.callback_route),
+        callback_route: versionEntityLookup(
+          routeLookup,
+          deserialised.callback_route as keyof typeof routeLookup,
+          'route_name'
+        ),
       };
     });
   }, [data, messageLookup, routeLookup]);
