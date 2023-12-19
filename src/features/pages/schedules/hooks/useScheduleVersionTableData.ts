@@ -41,11 +41,11 @@ const rows: Array<VersionTableRow<ScheduleVersionTableRecord>> = [
 
 const scheduleClient = new ApiClient<ScheduleWithVersions>('/schedules');
 
-function useScheduleVersionTableData(id: string) {
+function useScheduleVersionTableData(id: string, isEnabled = false) {
   const { data } = useQuery({
     queryKey: ['schedule', 'version', id],
     queryFn: () => scheduleClient.get(`${id}?versions=true`),
-    enabled: !!id,
+    enabled: isEnabled,
   });
   const routesLookup = useRoutesLookup();
   const messagesLookup = useMessagesLookup();
