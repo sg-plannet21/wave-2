@@ -13,3 +13,8 @@ export interface ScheduleException {
   message_4: number | null;
   message_5: number | null;
 }
+
+export type ScheduleExceptionDto = Omit<
+  ScheduleException,
+  'url' | 'business_unit'
+>;

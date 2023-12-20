@@ -17,15 +17,25 @@ function EditException() {
     <ContentLayout title="Edit Exception">
       {exceptionQuery.data && (
         <ExceptionForm
+          id={id}
           isSubmitting={updateException.isLoading}
           onSubmit={async (data) => {
             await updateException.mutateAsync({
-              id: id as string,
-              data: { schedule_exception_id: id as string, ...data },
+              ...data,
+              schedule_exception_id: exceptionQuery.data.schedule_exception_id,
+              start_time: new Date(data.dateRange[0]).toJSON(),
+              end_time: new Date(data.dateRange[1]).toJSON(),
+              section: exceptionQuery.data.section,
             });
             navigate('..');
           }}
-          defaultValues={exceptionQuery.data}
+          defaultValues={{
+            ...exceptionQuery.data,
+            dateRange: [
+              new Date(exceptionQuery.data.start_time),
+              new Date(exceptionQuery.data.end_time),
+            ],
+          }}
         />
       )}
     </ContentLayout>

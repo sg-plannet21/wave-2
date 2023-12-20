@@ -3,23 +3,19 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useNotificationStore } from '@/state/notifications';
 import { WaveError } from '@/entities/wave-error';
 import { getEntityKey } from '@/lib/entity-keys';
-import { ScheduleException } from '../types';
-import { FormValues } from '../types/schema';
+import { ScheduleException, ScheduleExceptionDto } from '../types';
 
 const updateException = new ApiClient<ScheduleException>('/scheduleexceptions')
   .update;
 
-interface UpdateVariables {
-  id: string;
-  data: FormValues & Pick<ScheduleException, 'schedule_exception_id'>;
-}
+
 
 function useUpdateException() {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
-  return useMutation<ScheduleException, WaveError, UpdateVariables>({
-    mutationFn: ({ id, data }) => updateException(id, data),
+  return useMutation<ScheduleException, WaveError, ScheduleExceptionDto>({
+    mutationFn: (data) => updateException(data.schedule_exception_id, data),
     onSuccess(newException) {
       queryClient.setQueryData<ScheduleException>(
         ['schedule-exception', newException.schedule_exception_id],

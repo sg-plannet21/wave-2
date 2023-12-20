@@ -6,7 +6,7 @@ import SectionMenu from '../../sections/components/SectionsMenu';
 function Exceptions() {
   return (
     <ContentLayout title="Schedule Exceptions">
-      <div className="flex flex-col lg:flex-row gap-2 lg:items-center lg:justify-end">
+      <div className="flex flex-col md:flex-row gap-2 md:items-center md:justify-end">
         <NewEntityLink to="new">New Schedule Exception</NewEntityLink>
         <SectionMenu />
       </div>
