@@ -8,12 +8,21 @@ import useScheduleVersionTableData from '../hooks/useScheduleVersionTableData';
 interface Props {
   id: string;
 }
+
+function ScheduleVersionsTable({ id }: { id: string }) {
+  const { name, versions, rows, isLoading } = useScheduleVersionTableData(id);
+
+  return (
+    <Versions
+      name={name}
+      versions={versions}
+      rows={rows}
+      isLoading={isLoading}
+    />
+  );
+}
 function ScheduleVersions({ id }: Props) {
   const { open, isOpen, close } = useDisclosure();
-  const { name, versions, rows, isLoading } = useScheduleVersionTableData(
-    id,
-    isOpen
-  );
 
   return (
     <>
@@ -38,12 +47,7 @@ function ScheduleVersions({ id }: Props) {
           </Button>
         )}
       >
-        <Versions
-          name={name}
-          versions={versions}
-          rows={rows}
-          isLoading={isLoading}
-        />
+        <ScheduleVersionsTable id={id} />
       </Drawer>
     </>
   );
