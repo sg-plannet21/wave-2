@@ -14,7 +14,7 @@ function EditSection() {
   if (sectionQuery.isLoading) return <LoadingComponent />;
 
   return (
-    <ContentLayout title="Edit Unit">
+    <ContentLayout title="Edit Section">
       {sectionQuery.data && (
         <SectionForm
           isSubmitting={updateSection.isLoading}

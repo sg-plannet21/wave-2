@@ -19,6 +19,7 @@ import QueueRoutes from '@/features/pages/queues/routes';
 import MessageRoutes from '@/features/pages/messages/routes';
 import SectionRoutes from '@/features/pages/sections/routes';
 import ScheduleRoutes from '@/features/pages/schedules/routes';
+import ExceptionRoutes from '@/features/pages/schedule-exceptions/routes';
 
 const commonAuthRoutes: RouteObject[] = [
   {
@@ -31,7 +32,7 @@ const commonAuthRoutes: RouteObject[] = [
   { path: 'messages/*', element: <MessageRoutes /> },
   { path: 'sections/*', element: <SectionRoutes /> },
   { path: 'schedules/*', element: <ScheduleRoutes /> },
-  { path: 'schedule-exceptions/*', element: <>Schedule Exceptions</> },
+  { path: 'schedule-exceptions/*', element: <ExceptionRoutes /> },
 ];
 
 const superUserRoutes: RouteObject[] = [

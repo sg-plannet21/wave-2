@@ -18,6 +18,7 @@ type EntityKey =
   | 'queues'
   | 'sections'
   | 'schedules'
+  | 'schedule-exceptions'
   | 'business-unit-roles';
 
 export function getEntityKey(entity: EntityKey): string[] {
