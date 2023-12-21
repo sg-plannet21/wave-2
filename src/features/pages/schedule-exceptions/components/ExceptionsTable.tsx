@@ -10,6 +10,7 @@ import useExceptionsTableData, {
   ExceptionTableRecord,
 } from '../hooks/useExceptionsTableData';
 import DeleteException from './DeleteException';
+import ExceptionVersions from './ExceptionVersions';
 
 const dateFormat = 'ddd D MMM YYYY, h:mm a';
 
@@ -58,6 +59,13 @@ function ExceptionsTable() {
     []
   );
 
+  const Versions = react.useCallback(
+    (record: { entry: ExceptionTableRecord }) => (
+      <ExceptionVersions id={record.entry.id} />
+    ),
+    []
+  );
+
   const Delete = react.useCallback(
     (record: { entry: ExceptionTableRecord }) => (
       <div className="text-right">
@@ -81,6 +89,13 @@ function ExceptionsTable() {
       ignoreFiltering: true,
       Cell: Status,
     },
+    { field: 'route', label: 'Route' },
+    {
+      field: 'id',
+      label: '',
+      ignoreFiltering: true,
+      Cell: Versions,
+    },
     {
       field: 'id',
       label: '',
@@ -89,7 +104,7 @@ function ExceptionsTable() {
     },
   ];
 
-  if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
+  if (isLoading) return <WaveTableSkeleton numberOfColumns={6} />;
 
   return <WaveTable<ExceptionTableRecord> data={data} columns={columns} />;
 }

@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { timeDifferenceLabel, TimeDifferenceReturn } from '@/lib/date-time';
+import { get } from 'lodash';
 import useExceptions from './useExceptions';
 import useSectionId from '../../schedules/hooks/useSectionId';
+import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
 
 export type ExceptionTableRecord = {
   id: string;
@@ -10,14 +12,16 @@ export type ExceptionTableRecord = {
   startDate: number;
   endDate: number;
   difference: TimeDifferenceReturn;
+  route: string;
 };
 
 function useExceptionsTableData() {
   const { data: exceptions, error } = useExceptions();
   const sectionId = useSectionId();
+  const routesLookup = useRoutesLookup();
 
   const data: ExceptionTableRecord[] = useMemo(() => {
-    if (!exceptions || !sectionId) return [];
+    if (!exceptions || !sectionId || !routesLookup) return [];
 
     return exceptions
       .filter((exception) => exception.section === sectionId)
@@ -33,11 +37,12 @@ function useExceptionsTableData() {
           startDate: start.valueOf(),
           endDate: end.valueOf(),
           difference,
+          route: get(routesLookup[exception.route], 'route_name'),
         };
       });
-  }, [exceptions, sectionId]);
+  }, [exceptions, routesLookup, sectionId]);
 
-  return { data, isLoading: !exceptions || !sectionId, error };
+  return { data, isLoading: !exceptions || !sectionId || !routesLookup, error };
 }
 
 export default useExceptionsTableData;
