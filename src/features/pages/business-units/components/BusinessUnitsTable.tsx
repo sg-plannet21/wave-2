@@ -44,6 +44,7 @@ function BusinessUnitsTable() {
     },
   ];
 
+
   if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
 
   return <WaveTable<BusinessUnitTableRecord> data={data} columns={columns} />;

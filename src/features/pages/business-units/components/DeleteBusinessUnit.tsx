@@ -1,6 +1,6 @@
 import { ReactComponent as DeleteIcon } from '@/assets/delete.svg';
-import ConfirmationDialog from '@/components/Feedback/Confirmation-Dialog';
 import Button from '@/components/Inputs/Button';
+import DeleteDialog from '@/components/Feedback/DeleteDialog/DeleteDialog';
 import useDeleteBusinessUnit from '../hooks/useDeleteBusinessUnit';
 
 interface Props {
@@ -12,11 +12,12 @@ function DeleteBusinessUnit({ id, name }: Props) {
   const mutation = useDeleteBusinessUnit();
 
   return (
-    <ConfirmationDialog
+    <DeleteDialog
       key={id}
+      entityId={id}
+      entityType="businessunits"
       title="Delete Business Unit"
       body={`Delete ${name}?`}
-      icon="danger"
       triggerButton={
         <button
           aria-label="Delete"

@@ -64,7 +64,7 @@ function EntryPointsTable() {
     },
     {
       field: 'id',
-      label: 'Versions',
+      label: 'Historical Callflow',
       Cell: History,
       ignoreFiltering: true,
     },
