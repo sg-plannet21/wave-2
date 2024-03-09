@@ -1,13 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
-import { chain, get } from 'lodash';
+import { get, orderBy } from 'lodash';
 import { formatServerTime, isActiveTimeRange } from '@/lib/date-time';
 import useSchedules from './useSchedules';
-import { Weekdays } from '../types';
+import { Schedule, Weekdays } from '../types';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
 import useSectionId from './useSectionId';
 
+type ActiveSectionSchedule = { [sectionId: Schedule['section']]: string };
+
 export type ScheduleTableRecord = {
   id: string;
+  section: string;
   weekday: string;
   isDefault: boolean;
   startTime: string | null;
@@ -25,59 +28,73 @@ function useSchedulesTableData() {
   const toggleDefault = useCallback(() => setShowDefault((prev) => !prev), []);
 
   const mapped: ScheduleTableRecord[] = useMemo(() => {
-    if (!sectionId || !schedules || !routesLookup) return [];
-
-    const sectionSchedules = chain(schedules)
-      .filter((schedule) => schedule.section === sectionId)
-      .orderBy(['week_day', 'is_default', 'start_time'], 'asc')
-      .value();
+    if (!schedules || !routesLookup) return [];
 
     const day = new Date().getDay();
     const currentDay = day === 0 ? 7 : day;
 
-    const daySchedules = sectionSchedules.filter(
-      (schedule) => schedule.week_day === currentDay
+    const ordered = orderBy(
+      schedules,
+      ['week_day', 'is_default', 'start_time'],
+      'asc'
     );
 
-    let activeScheduleId: string | undefined;
-
-    for (let i = 0; i < daySchedules.length; i++) {
-      const currentSchedule = daySchedules[i];
-      if (currentSchedule.is_default) {
-        activeScheduleId = currentSchedule.schedule_id;
-      } else if (
-        isActiveTimeRange(
-          currentSchedule.start_time as string,
-          currentSchedule.end_time as string
-        )
-      ) {
-        activeScheduleId = currentSchedule.schedule_id;
-        break;
+    const activeSectionSchedules: ActiveSectionSchedule = {};
+    for (let i = 0; i < ordered.length; i++) {
+      const currentSchedule = ordered[i];
+      if (currentSchedule.week_day === currentDay) {
+        if (currentSchedule.is_default) {
+          if (!activeSectionSchedules[currentSchedule.section])
+            activeSectionSchedules[currentSchedule.section] =
+              currentSchedule.schedule_id;
+        } else if (
+          isActiveTimeRange(
+            currentSchedule.start_time as string,
+            currentSchedule.end_time as string
+          )
+        ) {
+          activeSectionSchedules[currentSchedule.section] =
+            currentSchedule.schedule_id;
+        }
       }
     }
 
-    return sectionSchedules.map((schedule) => ({
-      id: schedule.schedule_id,
-      weekday: Weekdays[schedule.week_day],
-      isDefault: schedule.is_default,
-      startTime: schedule.is_default
-        ? 'Default'
-        : formatServerTime(schedule.start_time as string),
-      endTime: schedule.is_default
-        ? 'Default'
-        : formatServerTime(schedule.end_time as string),
-      route: get(routesLookup[schedule.route], 'route_name'),
-      isActive: schedule.schedule_id === activeScheduleId,
-    }));
-  }, [schedules, sectionId, routesLookup]);
+    const tableRecords: Array<ScheduleTableRecord> = [];
+    for (let i = 0; i < ordered.length; i++) {
+      tableRecords.push({
+        id: ordered[i].schedule_id,
+        section: ordered[i].section,
+        weekday: Weekdays[ordered[i].week_day],
+        isDefault: ordered[i].is_default,
+        startTime: ordered[i].is_default
+          ? 'Default'
+          : formatServerTime(ordered[i].start_time as string),
+        endTime: ordered[i].is_default
+          ? 'Default'
+          : formatServerTime(ordered[i].end_time as string),
+        route: get(routesLookup[ordered[i].route], 'route_name'),
+        isActive:
+          activeSectionSchedules[ordered[i].section] === ordered[i].schedule_id,
+      });
+    }
 
-  const filtered: ScheduleTableRecord[] = useMemo(() => {
-    if (showDefault) return mapped;
-    return mapped.filter((record) => !record.isDefault);
-  }, [showDefault, mapped]);
+    return tableRecords;
+  }, [schedules, routesLookup]);
+
+  const sectionSchedules: Array<ScheduleTableRecord> = useMemo(
+    () => mapped.filter((schedule) => schedule.section === sectionId),
+
+    [mapped, sectionId]
+  );
+
+  const sectionFiltered: ScheduleTableRecord[] = useMemo(() => {
+    if (showDefault) return sectionSchedules;
+    return sectionSchedules.filter((record) => !record.isDefault);
+  }, [showDefault, sectionSchedules]);
 
   return {
-    data: filtered,
+    sectionSchedules: sectionFiltered,
+    data: mapped,
     isLoading: !sectionId || !schedules || !routesLookup,
     error,
     isDefault: showDefault,

@@ -16,7 +16,7 @@ function SchedulesTable() {
   const { sectionName } = useParams();
   const { dispatch, isDefault, schedules } = useSelectedSchedules();
   const {
-    data,
+    sectionSchedules,
     isLoading,
     isDefault: isDefaultSchedule,
     toggleDefault,
@@ -128,7 +128,7 @@ function SchedulesTable() {
           />
         </div>
       </div>
-      <Table<ScheduleTableRecord> data={data} columns={columns} />
+      <Table<ScheduleTableRecord> data={sectionSchedules} columns={columns} />
     </div>
   );
 }

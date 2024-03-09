@@ -11,6 +11,7 @@ interface Dependencies {
 type ModelType =
   | 'Route'
   | 'Menu'
+  | 'Prompt'
   | 'EntryPoint'
   | 'Queue'
   | 'Section'

@@ -1,6 +1,6 @@
 import { ReactComponent as DeleteIcon } from '@/assets/delete.svg';
-import ConfirmationDialog from '@/components/Feedback/Confirmation-Dialog';
 import Button from '@/components/Inputs/Button';
+import DeleteDialog from '@/components/Feedback/DeleteDialog/DeleteDialog';
 import useDeleteRoute from '../hooks/useDeleteRoute';
 
 interface Props {
@@ -12,12 +12,12 @@ function DeleteRoute({ id, name }: Props) {
   const mutation = useDeleteRoute();
 
   return (
-    <ConfirmationDialog
+    <DeleteDialog
       key={id}
+      entityId={id}
+      entityType="routes"
       title="Delete Route"
       body={`Delete ${name}?`}
-      icon="danger"
-      isDone={mutation.isSuccess}
       triggerButton={
         <button
           aria-label="Delete"
@@ -40,6 +40,7 @@ function DeleteRoute({ id, name }: Props) {
         </Button>
       }
     />
+
   );
 }
 

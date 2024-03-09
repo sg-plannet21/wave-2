@@ -39,7 +39,7 @@ export function timeDifferenceLabel(
   }
   return {
     status: 'EXPIRED',
-    label: end.toNow(),
+    label: end.fromNow(),
   };
 }
 

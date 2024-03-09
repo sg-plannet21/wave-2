@@ -15,6 +15,7 @@ const mapping: {
     Menu: 'menus',
     Queue: 'queues',
     EntryPoint: 'entry-points',
+    Prompt: 'messages',
     Section: 'sections',
     Schedule: 'schedules',
     ScheduleException: 'schedule-exceptions',
@@ -26,6 +27,7 @@ function renderListItem(
     switch (relatedObject.related_model) {
         case 'Route':
         case 'Menu':
+        case 'Prompt':
         case 'Queue':
         case 'EntryPoint':
         case 'Section':

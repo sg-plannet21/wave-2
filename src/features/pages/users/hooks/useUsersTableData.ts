@@ -14,7 +14,7 @@ export interface UserTableRecord {
 }
 
 function useUsersTableData() {
-  const { data, isLoading } = useUsers();
+  const { data } = useUsers();
   const { data: businessUnitRoles } = useBusinessUnitRoles();
 
   const roles = useMemo(() => {
@@ -54,7 +54,7 @@ function useUsersTableData() {
       }));
   }, [data, roles]);
 
-  return { data: users, isLoading, roles };
+  return { data: users, isLoading: !users || !businessUnitRoles, roles };
 }
 
 export default useUsersTableData;

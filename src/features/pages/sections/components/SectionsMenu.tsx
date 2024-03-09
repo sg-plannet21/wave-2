@@ -6,10 +6,12 @@ import Menu, {
   MenuItems,
   MenuItem,
 } from '@/components/Navigation/Menu';
+import { useParams } from 'react-router-dom';
 import useSections from '../hooks/useSections';
 
 function SectionMenu() {
   const { data: sections } = useSections();
+  const { sectionName } = useParams();
 
   if (!sections || !sections.length) return null;
 
@@ -21,7 +23,7 @@ function SectionMenu() {
         endIcon={<ExpandDownIcon className="h-5 w-5 fill-current" />}
         className="w-full justify-between h-11"
       >
-        {sections[0].section}
+        {decodeURIComponent(sectionName as string)}
       </MenuButton>
       <MenuItems location="right">
         {sections.map(({ section_id, section }) => (

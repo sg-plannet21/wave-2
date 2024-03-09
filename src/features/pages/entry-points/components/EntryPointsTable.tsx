@@ -21,6 +21,15 @@ function EntryPointsTable() {
     []
   );
 
+  const SectionLink = react.useCallback(
+    (record: { entry: EntryPointTableRecord }) => (
+      <Link to={`../schedules/${encodeURI(record.entry.section as string)}`}>
+        {record.entry.section}
+      </Link>
+    ),
+    []
+  );
+
   const Delete = react.useCallback(
     (record: { entry: EntryPointTableRecord }) => (
       <div className="text-right">
@@ -57,7 +66,7 @@ function EntryPointsTable() {
       label: 'name',
       Cell: EntryPointLink,
     },
-    { field: 'section', label: 'Section' },
+    { field: 'section', label: 'Section', Cell: SectionLink },
     {
       field: 'region',
       label: 'Region',
