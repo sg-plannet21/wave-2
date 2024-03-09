@@ -9,6 +9,7 @@ import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
 export type ExceptionTableRecord = {
   id: string;
   name: string;
+  section: string;
   startDate: number;
   endDate: number;
   difference: TimeDifferenceReturn;
@@ -34,6 +35,7 @@ function useExceptionsTableData() {
         return {
           id: exception.schedule_exception_id,
           name: exception.description,
+          section: exception.section,
           startDate: start.valueOf(),
           endDate: end.valueOf(),
           difference,

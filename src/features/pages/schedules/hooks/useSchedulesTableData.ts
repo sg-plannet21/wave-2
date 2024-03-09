@@ -1,10 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { get, orderBy } from 'lodash';
 import { formatServerTime, isActiveTimeRange } from '@/lib/date-time';
 import useSchedules from './useSchedules';
 import { Schedule, Weekdays } from '../types';
 import useRoutesLookup from '../../routes/hooks/useRoutesLookup';
-import useSectionId from './useSectionId';
 
 type ActiveSectionSchedule = { [sectionId: Schedule['section']]: string };
 
@@ -20,12 +19,8 @@ export type ScheduleTableRecord = {
 };
 
 function useSchedulesTableData() {
-  const [showDefault, setShowDefault] = useState(true);
   const { data: schedules, error } = useSchedules();
-  const sectionId = useSectionId();
   const routesLookup = useRoutesLookup();
-
-  const toggleDefault = useCallback(() => setShowDefault((prev) => !prev), []);
 
   const mapped: ScheduleTableRecord[] = useMemo(() => {
     if (!schedules || !routesLookup) return [];
@@ -81,24 +76,10 @@ function useSchedulesTableData() {
     return tableRecords;
   }, [schedules, routesLookup]);
 
-  const sectionSchedules: Array<ScheduleTableRecord> = useMemo(
-    () => mapped.filter((schedule) => schedule.section === sectionId),
-
-    [mapped, sectionId]
-  );
-
-  const sectionFiltered: ScheduleTableRecord[] = useMemo(() => {
-    if (showDefault) return sectionSchedules;
-    return sectionSchedules.filter((record) => !record.isDefault);
-  }, [showDefault, sectionSchedules]);
-
   return {
-    sectionSchedules: sectionFiltered,
     data: mapped,
-    isLoading: !sectionId || !schedules || !routesLookup,
+    isLoading: !schedules || !routesLookup,
     error,
-    isDefault: showDefault,
-    toggleDefault,
   };
 }
 

@@ -5,22 +5,21 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import Switch from '@/components/Inputs/Switch';
-import useSchedulesTableData, {
-  ScheduleTableRecord,
-} from '../hooks/useSchedulesTableData';
+import { ScheduleTableRecord } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
 import useSelectedSchedules from '../hooks/useSelectedSchedules';
 import ScheduleVersions from './ScheduleVersions';
+import useSchedulesSectionTableData from '../hooks/useScheduleSectionTableData';
 
 function SchedulesTable() {
   const { sectionName } = useParams();
   const { dispatch, isDefault, schedules } = useSelectedSchedules();
   const {
-    sectionSchedules,
+    data,
     isLoading,
     isDefault: isDefaultSchedule,
     toggleDefault,
-  } = useSchedulesTableData();
+  } = useSchedulesSectionTableData();
 
   useEffect(() => {
     dispatch({ type: 'RESET' });
@@ -128,7 +127,7 @@ function SchedulesTable() {
           />
         </div>
       </div>
-      <Table<ScheduleTableRecord> data={sectionSchedules} columns={columns} />
+      <Table<ScheduleTableRecord> data={data} columns={columns} />
     </div>
   );
 }
