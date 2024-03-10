@@ -9,6 +9,7 @@ function useSchedules(options?: UseQueryOptions<Schedule[]>) {
   return useQuery({
     queryKey: getEntityKey('schedules'),
     queryFn: getSchedules,
+    refetchInterval: 1 * 60 * 1000,
     ...options,
   });
 }

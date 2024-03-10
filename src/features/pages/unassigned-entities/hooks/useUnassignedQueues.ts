@@ -9,6 +9,7 @@ function useUnassignedQueues() {
   return useQuery({
     queryKey: 'unassigned-queues',
     queryFn: getUnassignedQueues,
+    refetchInterval: 1 * 60 * 1000,
   });
 }
 

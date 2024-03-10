@@ -10,6 +10,7 @@ function useUnassignedEntryPoints() {
   return useQuery({
     queryKey: 'unassigned-entry-points',
     queryFn: getUnassignedEntryPoints,
+    refetchInterval: 1 * 60 * 1000,
   });
 }
 

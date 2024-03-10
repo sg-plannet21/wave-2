@@ -10,7 +10,7 @@ export type ActiveScheduleTableRecord = ScheduleTableRecord & {
 };
 
 function useActiveScheduleTableData() {
-  const { data: schedules, isLoading } = useScheduleTableData();
+  const { data: schedules, isLoading, refetch } = useScheduleTableData();
   const sectionsLookup = useSectionsLookup();
 
   const activeSchedules: Array<ActiveScheduleTableRecord> = useMemo(() => {
@@ -24,7 +24,11 @@ function useActiveScheduleTableData() {
       }));
   }, [schedules, sectionsLookup]);
 
-  return { data: activeSchedules, isLoading: isLoading || !sectionsLookup };
+  return {
+    data: activeSchedules,
+    isLoading: isLoading || !sectionsLookup,
+    refetch,
+  };
 }
 
 export default useActiveScheduleTableData;

@@ -52,7 +52,7 @@ function useEntryPointVersionsTableData(id: string) {
         entry_point: deserialised.entry_point,
         section: versionEntityLookup(
           sectionsLookup,
-          deserialised.section as keyof typeof sectionsLookup,
+          deserialised.section,
           'section'
         ),
         region: versionEntityLookup(

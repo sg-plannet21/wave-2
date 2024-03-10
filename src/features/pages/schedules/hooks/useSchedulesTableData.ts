@@ -19,7 +19,7 @@ export type ScheduleTableRecord = {
 };
 
 function useSchedulesTableData() {
-  const { data: schedules, error } = useSchedules();
+  const { data: schedules, error, refetch } = useSchedules();
   const routesLookup = useRoutesLookup();
 
   const mapped: ScheduleTableRecord[] = useMemo(() => {
@@ -80,6 +80,7 @@ function useSchedulesTableData() {
     data: mapped,
     isLoading: !schedules || !routesLookup,
     error,
+        refetch
   };
 }
 

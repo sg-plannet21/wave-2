@@ -6,16 +6,15 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import dayjs from 'dayjs';
 import { BadgeProps } from '@/components/Data-Display/Badge/Badge';
 import Badge from '@/components/Data-Display/Badge';
-import useExceptionsTableData, {
-  ExceptionTableRecord,
-} from '../hooks/useExceptionsTableData';
 import DeleteException from './DeleteException';
 import ExceptionVersions from './ExceptionVersions';
+import useSectionExceptionsTableData  from '../hooks/useSectionExceptionsTableData';
+import { ExceptionTableRecord } from '../hooks/useExceptionsTableData';
 
 const dateFormat = 'ddd D MMM YYYY, h:mm a';
 
 function ExceptionsTable() {
-  const { data, isLoading } = useExceptionsTableData();
+  const { data, isLoading } = useSectionExceptionsTableData();
 
   const EntityLink = react.useCallback(
     (record: { entry: ExceptionTableRecord }) => (
