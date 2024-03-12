@@ -63,25 +63,12 @@ axiosInstance.interceptors.response.use(
       if (isExpiredToken) {
         originalRequest.waveRetry = true;
 
-        useNotificationStore.getState().addNotification({
-          title: 'Token Expired',
-          message: 'Refreshing Token',
-          type: 'info',
-          duration: 5000,
-        });
-
         try {
           await refreshAccessToken();
           return await axiosInstance(originalRequest);
         } catch (err) {
           // eslint-disable-next-line no-console
           console.log('token refresh err ->', err);
-          useNotificationStore.getState().addNotification({
-            title: 'Token Expired',
-            message: 'Login Required',
-            type: 'warning',
-            duration: 10000,
-          });
           window.location.assign('/auth/logout');
         }
       }

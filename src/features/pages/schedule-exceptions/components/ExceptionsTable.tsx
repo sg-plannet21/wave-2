@@ -6,15 +6,18 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import dayjs from 'dayjs';
 import { BadgeProps } from '@/components/Data-Display/Badge/Badge';
 import Badge from '@/components/Data-Display/Badge';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import DeleteException from './DeleteException';
 import ExceptionVersions from './ExceptionVersions';
-import useSectionExceptionsTableData  from '../hooks/useSectionExceptionsTableData';
+import useSectionExceptionsTableData from '../hooks/useSectionExceptionsTableData';
 import { ExceptionTableRecord } from '../hooks/useExceptionsTableData';
 
 const dateFormat = 'ddd D MMM YYYY, h:mm a';
 
 function ExceptionsTable() {
   const { data, isLoading } = useSectionExceptionsTableData();
+  const { hasWriteAccess } = useAuth();
 
   const EntityLink = react.useCallback(
     (record: { entry: ExceptionTableRecord }) => (
@@ -95,13 +98,16 @@ function ExceptionsTable() {
       ignoreFiltering: true,
       Cell: Versions,
     },
-    {
+  ];
+
+  if (hasWriteAccess([EntityRoles.Schedules])) {
+    columns.push({
       field: 'id',
       label: '',
       ignoreFiltering: true,
       Cell: Delete,
-    },
-  ];
+    });
+  }
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={6} />;
 

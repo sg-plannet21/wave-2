@@ -5,6 +5,8 @@ import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import AudioPlayerDialog from '@/components/Composite/Audio-Player-Dialog';
 import { ReactComponent as DownloadIcon } from '@/assets/download.svg';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import useMessagesTableData, {
   MessageTableRecord,
 } from '../hooks/useMessagesTableData';
@@ -12,6 +14,7 @@ import DeleteMessage from './DeleteMessage';
 
 function MessagesTable() {
   const { data, isLoading } = useMessagesTableData();
+  const { hasWriteAccess } = useAuth();
 
   const EntityLink = react.useCallback(
     (message: { entry: MessageTableRecord }) => (
@@ -69,13 +72,16 @@ function MessagesTable() {
     },
     { field: 'id', label: 'Download', ignoreFiltering: true, Cell: Download },
     { field: 'id', label: 'Play', ignoreFiltering: true, Cell: Play },
-    {
+  ];
+
+  if (hasWriteAccess([EntityRoles.Prompts])) {
+    columns.push({
       field: 'id',
       label: '',
       ignoreFiltering: true,
       Cell: Delete,
-    },
-  ];
+    });
+  }
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={2} />;
 

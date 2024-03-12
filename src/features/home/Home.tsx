@@ -3,7 +3,7 @@ import FilteredExceptions from './FilteredExceptions';
 
 function Home() {
   return (
-    <div className="flex flex-col gap-8 p-6">
+    <div className="max-w-6xl mx-auto flex flex-col gap-8 p-6">
       <ActiveSchedules />
       <FilteredExceptions status="ACTIVE" />
       <FilteredExceptions status="UPCOMING" />

@@ -4,6 +4,8 @@ import { TypeOf, ZodSchema, z } from 'zod';
 import Button from '@/components/Inputs/Button';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
 import react from 'react';
+import { EntityRoles } from '@/entities/auth';
+import useAuth from '@/state/hooks/useAuth';
 import RouteSelectField from '../../routes/components/RouteSelectField';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import { CustomFormValues } from '../types/schema';
@@ -30,6 +32,8 @@ function EditSchedulesForm<T extends ZodFormSchema>({
 }: UseZodFormProps<T>) {
   const form = useZodForm<typeof schema>({ defaultValues, schema });
   const { validate, scheduleLookup } = useValidateSchedule();
+  const { hasWriteAccess } = useAuth();
+  const canWrite = hasWriteAccess([EntityRoles.Schedules]);
 
   const handleSubmit = react.useCallback((data: CustomFormValues) => {
     if (isDefault || !scheduleLookup) {
@@ -64,10 +68,14 @@ function EditSchedulesForm<T extends ZodFormSchema>({
       onSubmit={(data) =>
         isDefault ? onSubmit(data) : handleSubmit(data as CustomFormValues)
       }
-      className="mx-auto max-w-md"
+      className="mx-auto max-w-md gap-1"
     >
       {!isDefault && (
-        <TimeRangePickerField name="timeRange" label="Time Range" />
+        <TimeRangePickerField
+          name="timeRange"
+          label="Time Range"
+          disabled={!canWrite}
+        />
       )}
 
       {Array.from(Array(5).keys()).map((key) => (
@@ -75,16 +83,18 @@ function EditSchedulesForm<T extends ZodFormSchema>({
           key={key}
           label={`Message ${key + 1}`}
           {...form.register(`message_${key + 1}` as Path<TypeOf<T>>)}
+          disabled={!canWrite}
         />
       ))}
 
       <RouteSelectField
         label="Route"
         {...form.register('route' as Path<TypeOf<T>>)}
+        disabled={!canWrite}
       />
 
       <Button
-        disabled={isSubmitting}
+        disabled={!canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

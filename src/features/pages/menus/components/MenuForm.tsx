@@ -5,6 +5,8 @@ import Button from '@/components/Inputs/Button';
 import SelectField from '@/components/Form/SelectField';
 import { SelectOption } from '@/components/Inputs/Select';
 import FieldSet from '@/components/Form/FieldSet';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import schema, { FormValues, menuOptions } from '../types/schema';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import RouteSelectField from '../../routes/components/RouteSelectField';
@@ -22,18 +24,27 @@ const retryRange: SelectOption[] = Array.from(Array(10).keys()).map((key) => ({
 
 function MenuForm({ defaultValues, onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
+  const { hasWriteAccess } = useAuth();
+
+  const canWrite = hasWriteAccess([EntityRoles.Menus]);
+
   return (
     <Form<FormValues> form={form} onSubmit={onSubmit}>
       <FieldSet legend="General">
         <div className="grid grid-cols-1 lg:grid-cols-5 items-start gap-4">
           <div className="lg:col-span-2">
-            <InputField label="Name" {...form.register('menu_name')} />
+            <InputField
+              label="Name"
+              {...form.register('menu_name')}
+              disabled={!canWrite}
+            />
           </div>
 
           <div className="lg:col-span-2">
             <MessageSelectField
               label="Menu Message"
               {...form.register('menu_message')}
+              disabled={!canWrite}
             />
           </div>
 
@@ -42,6 +53,7 @@ function MenuForm({ defaultValues, onSubmit, isSubmitting }: Props) {
             options={retryRange}
             defaultValue={2}
             {...form.register('max_retries')}
+            disabled={!canWrite}
           />
         </div>
       </FieldSet>
@@ -52,18 +64,20 @@ function MenuForm({ defaultValues, onSubmit, isSubmitting }: Props) {
             <MessageSelectField
               label="Message"
               {...form.register(`${option.prefix}_message` as keyof FormValues)}
+              disabled={!canWrite}
             />
 
             <RouteSelectField
               label="Route"
               {...form.register(`${option.prefix}_route` as keyof FormValues)}
+              disabled={!canWrite}
             />
           </div>
         </FieldSet>
       ))}
 
       <Button
-        disabled={isSubmitting}
+        disabled={!canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

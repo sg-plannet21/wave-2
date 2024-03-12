@@ -4,6 +4,8 @@ import Link from '@/components/Navigation/Link';
 import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import Badge from '@/components/Data-Display/Badge';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import useQueuesTableData, {
   QueueTableRecord,
 } from '../hooks/useQueuesTableData';
@@ -12,6 +14,7 @@ import QueueVersions from './QueueVersions';
 
 function QueuesTable() {
   const { data, isLoading } = useQueuesTableData();
+  const { hasWriteAccess } = useAuth();
 
   const EntityLink = react.useCallback(
     (record: { entry: QueueTableRecord }) => (
@@ -82,13 +85,16 @@ function QueuesTable() {
       ignoreFiltering: true,
       Cell: Versions,
     },
-    {
+  ];
+
+  if (hasWriteAccess([EntityRoles.Queues])) {
+    columns.push({
       field: 'id',
       label: '',
       ignoreFiltering: true,
       Cell: Delete,
-    },
-  ];
+    });
+  }
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={3} />;
 

@@ -5,6 +5,8 @@ import WaveTable from '@/components/Composite/Wave-Table';
 import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkeleton';
 import Badge from '@/components/Data-Display/Badge';
 import { Tooltip } from 'react-tooltip';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import useMenusTableData, {
   MenuTableRecord,
   menuTableOptions,
@@ -14,6 +16,7 @@ import MenuVersions from './MenuVersions';
 
 function MenusTable() {
   const { data, isLoading } = useMenusTableData();
+  const { hasWriteAccess } = useAuth();
 
   const EntityLink = react.useCallback(
     (record: { entry: MenuTableRecord }) => (
@@ -79,13 +82,15 @@ function MenusTable() {
       ignoreFiltering: true,
       Cell: Versions,
     },
-    {
+  ];
+
+  if (hasWriteAccess([EntityRoles.Menus]))
+    columns.push({
       field: 'id',
       label: '',
       ignoreFiltering: true,
       Cell: Delete,
-    },
-  ];
+    });
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={12} />;
 

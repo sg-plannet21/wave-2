@@ -14,15 +14,13 @@
 }
 
 .react-timerange-picker--disabled {
-  background-color: #f0f0f0;
   color: #6d6d6d;
+  opacity: 0.75;
 }
 
 html.dark .react-timerange-picker--disabled {
-  background-color: #f0f0f0;
   color: #ffffff;
 }
-
 
 .react-timerange-picker__wrapper {
   display: flex;
@@ -30,6 +28,7 @@ html.dark .react-timerange-picker--disabled {
   flex-shrink: 0;
   align-items: center;
   border: thin solid #d1d5db;
+  background-color: transparent;
   background: white;
   padding: 4px 2px;
   border-radius: 4px;
@@ -107,8 +106,10 @@ html.dark .react-timerange-picker__wrapper {
   cursor: pointer;
 }
 
-.react-timerange-picker__button:enabled:hover .react-timerange-picker__button__icon,
-.react-timerange-picker__button:enabled:focus .react-timerange-picker__button__icon {
+.react-timerange-picker__button:enabled:hover
+  .react-timerange-picker__button__icon,
+.react-timerange-picker__button:enabled:focus
+  .react-timerange-picker__button__icon {
   stroke: #0078d7;
 }
 

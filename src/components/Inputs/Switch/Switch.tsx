@@ -71,7 +71,7 @@ function Switch({
 }: SwitchProps) {
   return (
     <UISwitch.Group as="div" className={classNames(className)}>
-      <UISwitch.Label className="flex-1">{label}</UISwitch.Label>
+      <UISwitch.Label className="flex-1 font-medium text-base">{label}</UISwitch.Label>
       <UISwitch
         as="button"
         disabled={disabled}
@@ -81,7 +81,7 @@ function Switch({
           isChecked
             ? `${colourList[colour].background}`
             : 'bg-gray-200 dark:bg-gray-700'
-        } relative inline-flex flex-shrink-0 h-6 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer w-11 focus:outline-none focus:shadow-outline focus:ring-4 ${
+        } disabled:opacity-50 relative inline-flex flex-shrink-0 h-6 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer disabled:cursor-default w-11 focus:outline-none focus:shadow-outline focus:ring-4 ${
           colourList[colour].ring
         }`}
       >

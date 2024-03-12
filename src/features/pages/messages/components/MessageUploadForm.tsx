@@ -4,6 +4,8 @@ import { useFieldArray } from 'react-hook-form';
 import { useCallback } from 'react';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import FileUpload from './FileUpload';
 import { UploadFormValues, messageUploadSchema } from '../types/schema';
 
@@ -17,6 +19,9 @@ interface Props {
 }
 
 function MessageUploadForm({ onSubmit, isSubmitting }: Props) {
+  const { hasWriteAccess } = useAuth();
+  const canWrite = hasWriteAccess([EntityRoles.Prompts]);
+
   const form = useZodForm<typeof messageUploadSchema>({
     schema: messageUploadSchema,
     defaultValues: {
@@ -76,7 +81,7 @@ function MessageUploadForm({ onSubmit, isSubmitting }: Props) {
           <div>
             <Button
               isLoading={isSubmitting}
-              disabled={isSubmitting}
+              disabled={!canWrite || isSubmitting}
               type="submit"
               className="w-full"
             >

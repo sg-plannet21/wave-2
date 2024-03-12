@@ -5,6 +5,9 @@ import WaveTableSkeleton from '@/components/Skeletons/Wave-Table/WaveTableSkelet
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import Switch from '@/components/Inputs/Switch';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
+import { Tooltip } from 'react-tooltip';
 import { ScheduleTableRecord } from '../hooks/useSchedulesTableData';
 import DeleteSchedule from './DeleteSchedule';
 import useSelectedSchedules from '../hooks/useSelectedSchedules';
@@ -12,6 +15,7 @@ import ScheduleVersions from './ScheduleVersions';
 import useSchedulesSectionTableData from '../hooks/useScheduleSectionTableData';
 
 function SchedulesTable() {
+  const { hasWriteAccess } = useAuth();
   const { sectionName } = useParams();
   const { dispatch, isDefault, schedules } = useSelectedSchedules();
   const {
@@ -33,9 +37,12 @@ function SchedulesTable() {
         schedules.length > 0 && isDefault !== record.entry.isDefault;
       return (
         <div className="flex items-center">
+          {isDisabled && <Tooltip id={record.entry.id} />}
           <input
             disabled={isDisabled}
             checked={isChecked}
+            data-tooltip-id={record.entry.id}
+            data-tooltip-content={`${isDefault ? 'Default' : 'Custom'} schedules selected`}
             onChange={() =>
               isChecked
                 ? dispatch({ type: 'DELETE', scheduleId })
@@ -48,7 +55,7 @@ function SchedulesTable() {
             type="checkbox"
             className={classNames(
               'form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-600 dark:border-gray-600',
-              { 'cursor-not-allowed': isDisabled }
+              { 'cursor-not-allowed opacity-20': isDisabled }
             )}
           />
           <label className="sr-only">checkbox</label>
@@ -105,13 +112,16 @@ function SchedulesTable() {
       ignoreFiltering: true,
       Cell: Versions,
     },
-    {
+  ];
+
+  if (hasWriteAccess([EntityRoles.Schedules])) {
+    columns.push({
       field: 'id',
       label: '',
       ignoreFiltering: true,
       Cell: Delete,
-    },
-  ];
+    });
+  }
 
   if (isLoading) return <WaveTableSkeleton numberOfColumns={6} />;
 

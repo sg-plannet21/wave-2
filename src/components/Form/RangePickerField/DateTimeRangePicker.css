@@ -14,12 +14,11 @@
 }
 
 .react-datetimerange-picker--disabled {
-  background-color: #f0f0f0;
   color: #6d6d6d;
+  opacity: 0.75;
 }
 
 html.dark .react-datetimerange-picker--disabled {
-  background-color: #f0f0f0;
   color: #ffffff;
 }
 

@@ -4,6 +4,8 @@ import Button from '@/components/Inputs/Button';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
 import React, { useCallback } from 'react';
 import { xor } from 'lodash';
+import useAuth from '@/state/hooks/useAuth';
+import { EntityRoles } from '@/entities/auth';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import { Weekdays } from '../types';
 import RouteSelectField from '../../routes/components/RouteSelectField';
@@ -15,7 +17,7 @@ interface Props {
   isSubmitting: boolean;
 }
 
-function WeekdayCheckboxes() {
+function WeekdayCheckboxes({ disabled }: { disabled: boolean }) {
   const weekdays = Array.from(Array(7).keys()).map((key) => key + 1);
 
   const { control } = useFormContext();
@@ -49,7 +51,7 @@ function WeekdayCheckboxes() {
                 // update local state
                 setValue(valueCopy);
               }}
-              disabled={false}
+              disabled={disabled}
               type="checkbox"
               checked={value.includes(day)}
               value={day}
@@ -67,6 +69,8 @@ function WeekdayCheckboxes() {
 function NewScheduleForm({ onSubmit, isSubmitting }: Props) {
   const form = useZodForm<typeof newSchema>({ schema: newSchema });
   const { validate } = useValidateSchedule();
+  const { hasWriteAccess } = useAuth();
+  const canWrite = hasWriteAccess([EntityRoles.Schedules]);
 
   const handleSubmit = useCallback(
     (data: NewFormValues) => {
@@ -91,24 +95,33 @@ function NewScheduleForm({ onSubmit, isSubmitting }: Props) {
     <Form<NewFormValues>
       form={form}
       onSubmit={handleSubmit}
-      className="mx-auto max-w-md"
+      className="mx-auto max-w-md gap-1"
     >
-      <WeekdayCheckboxes />
+      <WeekdayCheckboxes disabled={!canWrite} />
 
-      <TimeRangePickerField name="timeRange" label="Time Range" />
+      <TimeRangePickerField
+        name="timeRange"
+        label="Time Range"
+        disabled={!canWrite}
+      />
 
       {Array.from(Array(5).keys()).map((key) => (
         <MessageSelectField
           key={key}
           label={`Message ${key + 1}`}
           {...form.register(`message_${key + 1}` as 'message_5')}
+          disabled={!canWrite}
         />
       ))}
 
-      <RouteSelectField label="Route" {...form.register('route')} />
+      <RouteSelectField
+        label="Route"
+        {...form.register('route')}
+        disabled={!canWrite}
+      />
 
       <Button
-        disabled={isSubmitting}
+        disabled={!canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

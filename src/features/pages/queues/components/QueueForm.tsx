@@ -6,6 +6,8 @@ import SelectField from '@/components/Form/SelectField';
 import { SelectOption } from '@/components/Inputs/Select';
 import Switch from '@/components/Inputs/Switch';
 import InputField from '@/components/Form/InputField';
+import { EntityRoles } from '@/entities/auth';
+import useAuth from '@/state/hooks/useAuth';
 import schema, { FormValues } from '../types/schema';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import RouteSelectField from '../../routes/components/RouteSelectField';
@@ -37,11 +39,14 @@ function QueueForm({
   isSubmitting,
 }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
+  const { hasWriteAccess } = useAuth();
   const closedToggle = form.watch('closed_toggle');
   const noAgentsToggle = form.watch('no_agents_toggle');
   const maxQueueCallsToggle = form.watch('max_queue_calls_toggle');
   const maxQueueTimeToggle = form.watch('max_queue_time_toggle');
   const callBackToggle = form.watch('callback_toggle');
+
+  const canWrite = hasWriteAccess([EntityRoles.Queues]);
 
   const threeColumnLayouts: Array<FieldInfo> = [
     { label: 'Closed', prefix: 'closed', watchToggle: closedToggle },
@@ -70,21 +75,25 @@ function QueueForm({
               options={priorityRange}
               defaultValue={1}
               {...form.register('queue_priority')}
+              disabled={!canWrite}
             />
 
             <MessageSelectField
               label="Whisper Announcement"
               {...form.register('whisper_message')}
+              disabled={!canWrite}
             />
 
             <MessageSelectField
               label="Queue Welcome"
               {...form.register('queue_welcome')}
+              disabled={!canWrite}
             />
 
             <MessageSelectField
               label="Queue Music"
               {...form.register('queue_music')}
+              disabled={!canWrite}
             />
           </div>
         </FieldSet>
@@ -98,6 +107,7 @@ function QueueForm({
                 {...form.register(
                   `queue_message_${index + 1}` as 'queue_message_5'
                 )}
+                disabled={!canWrite}
               />
             ))}
           </div>
@@ -117,6 +127,7 @@ function QueueForm({
                     isChecked={field.value}
                     onChange={field.onChange}
                     className="flex w-24 lg:h-16 text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                    disabled={!canWrite}
                   />
                 )}
               />
@@ -125,7 +136,7 @@ function QueueForm({
             <div className="lg:col-span-5 items-start">
               <MessageSelectField
                 label="Message"
-                disabled={!layout.watchToggle}
+                disabled={!canWrite || !layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_message` as 'closed_message'
                 )}
@@ -136,7 +147,7 @@ function QueueForm({
               <RouteSelectField
                 exceptionRouteNames={[exceptionRouteName]}
                 label="Route"
-                disabled={!layout.watchToggle}
+                disabled={!canWrite || !layout.watchToggle}
                 {...form.register(`${layout.prefix}_route` as 'closed_route')}
               />
             </div>
@@ -157,6 +168,7 @@ function QueueForm({
                     isChecked={field.value}
                     onChange={field.onChange}
                     className="flex w-24 lg:h-16 text-sm flex-row-reverse items-end lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                    disabled={!canWrite}
                   />
                 )}
               />
@@ -169,7 +181,7 @@ function QueueForm({
                     ? 'Threshold (seconds)'
                     : 'Threshold (calls)'
                 }
-                disabled={!layout.watchToggle}
+                disabled={!canWrite || !layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_threshold` as 'max_queue_time_threshold'
                 )}
@@ -178,7 +190,7 @@ function QueueForm({
 
             <div className="lg:col-span-4 items-start">
               <MessageSelectField
-                disabled={!layout.watchToggle}
+                disabled={!canWrite || !layout.watchToggle}
                 label="Message"
                 {...form.register(
                   `${layout.prefix}_message` as 'max_queue_time_message'
@@ -190,7 +202,7 @@ function QueueForm({
               <RouteSelectField
                 exceptionRouteNames={[exceptionRouteName]}
                 label="Route"
-                disabled={!layout.watchToggle}
+                disabled={!canWrite || !layout.watchToggle}
                 {...form.register(
                   `${layout.prefix}_route` as 'max_queue_time_route'
                 )}
@@ -212,6 +224,7 @@ function QueueForm({
                   isChecked={field.value}
                   onChange={field.onChange}
                   className="flex w-24 text-sm flex-row-reverse items-end lg:h-16 lg:items-start justify-between text-right lg:w-auto lg:flex-col"
+                  disabled={!canWrite}
                 />
               )}
             />
@@ -219,7 +232,7 @@ function QueueForm({
 
           <div className="lg:col-span-3 items-start">
             <InputField
-              disabled={!callBackToggle}
+              disabled={!canWrite || !callBackToggle}
               label="Threshold (calls)"
               {...form.register('callback_calls_threshold')}
             />
@@ -227,7 +240,7 @@ function QueueForm({
 
           <div className="lg:col-span-4 items-start">
             <InputField
-              disabled={!callBackToggle}
+              disabled={!canWrite || !callBackToggle}
               label="Threshold (time)"
               {...form.register('callback_time_threshold')}
             />
@@ -236,7 +249,7 @@ function QueueForm({
           <div className="lg:col-span-4 items-start">
             <RouteSelectField
               exceptionRouteNames={[exceptionRouteName]}
-              disabled={!callBackToggle}
+              disabled={!canWrite || !callBackToggle}
               label="Route"
               {...form.register('callback_route')}
             />
@@ -244,7 +257,7 @@ function QueueForm({
         </div>
       </FieldSet>
       <Button
-        disabled={isSubmitting || !form.formState.isDirty}
+        disabled={!canWrite || isSubmitting || !form.formState.isDirty}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"
