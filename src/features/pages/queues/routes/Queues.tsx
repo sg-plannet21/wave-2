@@ -3,7 +3,7 @@ import QueuesTable from '../components/QueuesTable';
 
 function Queues() {
   return (
-    <ContentLayout title="Queues">
+    <ContentLayout width='xl' title="Queues">
       <QueuesTable />
     </ContentLayout>
   );

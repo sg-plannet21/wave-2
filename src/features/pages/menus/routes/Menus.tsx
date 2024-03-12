@@ -5,16 +5,14 @@ import { EntityRoles } from '@/entities/auth';
 import MenusTable from '../components/MenusTable';
 
 function Menus() {
-  const { hasWriteAccess } = useAuth();
-  const canWrite = hasWriteAccess([EntityRoles.Menus]);
+    const {hasWriteAccess} = useAuth();
+    const canWrite = hasWriteAccess([EntityRoles.Menus]);
 
   return (
-    <ContentLayout title="Menus">
-      {canWrite && (
-        <div className="flex justify-end">
-          <NewEntityLink to="new">New Menu</NewEntityLink>
-        </div>
-      )}
+    <ContentLayout width='xl' title="Menus">
+     {canWrite&& <div className="flex justify-end">
+        <NewEntityLink to="new">New Menu</NewEntityLink>
+      </div>}
       <div className="mt-4">
         <MenusTable />
       </div>
