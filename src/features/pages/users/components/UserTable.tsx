@@ -16,8 +16,8 @@ import useUsersTableData, { UserTableRecord } from '../hooks/useUsersTableData';
 import useUpdateUser from '../hooks/useUpdateUser';
 
 const iconClasses = 'w-6 h-6 fill-current';
-const activeClasses = 'fill-green-600 dark:fill-green-400';
-const inactiveClasses = 'fill-gray-600 dark:fill-gray-600';
+const activeClasses = 'fill-green-500 dark:fill-green-400';
+const inactiveClasses = 'fill-gray-300 dark:fill-gray-600';
 const clickableClasses =
   'cursor-pointer hover:scale-125 transition-transform duration-300';
 

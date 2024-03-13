@@ -150,7 +150,7 @@ function SideNavigation() {
             )
           }
         >
-          <item.icon className="h-6 w-6 mr-2 fill-current group-hover:scale-125 transition-transform duration-100 group-hover:fill-none" />
+          <item.icon className="h-6 w-6 mr-2 fill-current group-hover:scale-125 transition-transform duration-100" />
           {item.label}
         </NavLink>
       ))}
