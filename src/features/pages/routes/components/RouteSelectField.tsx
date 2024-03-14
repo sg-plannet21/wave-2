@@ -43,7 +43,9 @@ const RouteSelectField = React.forwardRef<HTMLSelectElement, Props>(
                 !exceptionRouteNames.includes(route.route_name)
             )
             .map((route) => ({
-              label: route.route_name,
+              label: route.system_created
+                ? route.route_name
+                : `${route.route_name} (${route.destination})`,
               value: route.route_id,
             })),
         }))

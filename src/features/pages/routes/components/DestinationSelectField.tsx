@@ -14,10 +14,12 @@ const DestinationSelectField = React.forwardRef<
       <SelectField
         {...props}
         ref={ref}
-        options={data.map((routeDestination) => ({
-          value: routeDestination.destination_type_id,
-          label: routeDestination.destination_type,
-        }))}
+        options={data
+          .filter((destType) => !destType.system_created)
+          .map((routeDestination) => ({
+            value: routeDestination.destination_type_id,
+            label: routeDestination.destination_type,
+          }))}
       />
     );
 

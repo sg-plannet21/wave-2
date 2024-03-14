@@ -19,7 +19,11 @@ function BusinessUnitForm({
 }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
   return (
-    <Form<FormValues> form={form} onSubmit={onSubmit}>
+    <Form<FormValues>
+      form={form}
+      onSubmit={onSubmit}
+      className="mx-auto max-w-md gap-1"
+    >
       <InputField label="Name" {...form.register('business_unit')} />
       <RegionSelectField label="Region" {...form.register('default_region')} />
       <Button

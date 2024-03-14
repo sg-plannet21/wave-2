@@ -18,7 +18,11 @@ function RouteForm({ schema, onSubmit, isSubmitting, defaultValues }: Props) {
   const form = useZodForm<typeof schema>({ schema, defaultValues });
 
   return (
-    <Form<FormValues> form={form} onSubmit={onSubmit}>
+    <Form<FormValues>
+      form={form}
+      onSubmit={onSubmit}
+      className="mx-auto max-w-md gap-1"
+    >
       <InputField label="Name" {...form.register('route_name')} />
       <InputField label="Destination" {...form.register('destination')} />
       <DestinationSelectField

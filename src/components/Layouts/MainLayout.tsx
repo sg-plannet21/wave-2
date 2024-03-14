@@ -72,10 +72,10 @@ const superuserSidebarItems: SidebarItem[] = [
 
 function Logo() {
   return (
-    <div className="flex items-center">
+    <Link to="/" className="flex items-center">
       <WaveLogo className="h-8 w-auto fill-indigo-800 dark:fill-white" />
       <span className="text-xl font-semibold dark:text-white">Wave</span>
-    </div>
+    </Link>
   );
 }
 function UserNavigation() {
