@@ -1,16 +1,17 @@
 import Form, { FieldError, useZodForm } from '@/components/Form/Form';
-import { SubmitHandler, useController, useFormContext } from 'react-hook-form';
-import Button from '@/components/Inputs/Button';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
-import React, { useCallback } from 'react';
-import { xor } from 'lodash';
-import useAuth from '@/state/hooks/useAuth';
+import Button from '@/components/Inputs/Button';
 import { EntityRoles } from '@/entities/auth';
+import useAuth from '@/state/hooks/useAuth';
+import { xor } from 'lodash';
+import React, { useCallback } from 'react';
+import { SubmitHandler, useController, useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import MessageSelectField from '../../messages/components/MessageSelectField';
-import { Weekdays } from '../types';
 import RouteSelectField from '../../routes/components/RouteSelectField';
-import { NewFormValues, newSchema } from '../types/schema';
 import useValidateSchedule from '../hooks/useValidateSchedule';
+import { Weekdays } from '../types';
+import { NewFormValues, newSchema } from '../types/schema';
 
 interface Props {
   onSubmit: SubmitHandler<NewFormValues>;
@@ -67,6 +68,7 @@ function WeekdayCheckboxes({ disabled }: { disabled: boolean }) {
 }
 
 function NewScheduleForm({ onSubmit, isSubmitting }: Props) {
+  const { sectionName } = useParams();
   const form = useZodForm<typeof newSchema>({ schema: newSchema });
   const { validate } = useValidateSchedule();
   const { hasWriteAccess } = useAuth();
@@ -118,10 +120,11 @@ function NewScheduleForm({ onSubmit, isSubmitting }: Props) {
         label="Route"
         {...form.register('route')}
         disabled={!canWrite}
+        exceptionRouteNames={[decodeURIComponent(sectionName as string)]}
       />
 
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

@@ -1,15 +1,15 @@
-import Form, { useZodForm } from '@/components/Form/Form';
-import { SubmitHandler } from 'react-hook-form';
-import InputField from '@/components/Form/InputField';
-import Button from '@/components/Inputs/Button';
-import SelectField from '@/components/Form/SelectField';
-import { SelectOption } from '@/components/Inputs/Select';
 import FieldSet from '@/components/Form/FieldSet';
-import useAuth from '@/state/hooks/useAuth';
+import Form, { useZodForm } from '@/components/Form/Form';
+import InputField from '@/components/Form/InputField';
+import SelectField from '@/components/Form/SelectField';
+import Button from '@/components/Inputs/Button';
+import { SelectOption } from '@/components/Inputs/Select';
 import { EntityRoles } from '@/entities/auth';
-import schema, { FormValues, menuOptions } from '../types/schema';
+import useAuth from '@/state/hooks/useAuth';
+import { SubmitHandler } from 'react-hook-form';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import RouteSelectField from '../../routes/components/RouteSelectField';
+import schema, { FormValues, menuOptions } from '../types/schema';
 
 interface Props {
   defaultValues?: FormValues;
@@ -77,7 +77,7 @@ function MenuForm({ defaultValues, onSubmit, isSubmitting }: Props) {
       ))}
 
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

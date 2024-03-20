@@ -1,15 +1,15 @@
 import Form, { useZodForm } from '@/components/Form/Form';
-import { SubmitHandler } from 'react-hook-form';
 import InputField from '@/components/Form/InputField';
-import Button from '@/components/Inputs/Button';
 import DateTimeRangePickerField from '@/components/Form/RangePickerField/DateTimeRangePickerField';
-import { useCallback } from 'react';
+import Button from '@/components/Inputs/Button';
 import { EntityRoles } from '@/entities/auth';
 import useAuth from '@/state/hooks/useAuth';
-import schema, { FormValues } from '../types/schema';
+import { useCallback } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import RouteSelectField from '../../routes/components/RouteSelectField';
 import useValidateException from '../hooks/useValidateException';
+import schema, { FormValues } from '../types/schema';
 
 interface Props {
   id?: string;
@@ -78,7 +78,7 @@ function ExceptionForm({ id, defaultValues, onSubmit, isSubmitting }: Props) {
       />
 
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

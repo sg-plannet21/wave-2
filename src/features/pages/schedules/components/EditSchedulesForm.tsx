@@ -1,15 +1,16 @@
 import Form, { useZodForm } from '@/components/Form/Form';
-import { Path, SubmitHandler, UseFormProps } from 'react-hook-form';
-import { TypeOf, ZodSchema, z } from 'zod';
-import Button from '@/components/Inputs/Button';
 import TimeRangePickerField from '@/components/Form/RangePickerField/TimeRangePickerField';
-import react from 'react';
+import Button from '@/components/Inputs/Button';
 import { EntityRoles } from '@/entities/auth';
 import useAuth from '@/state/hooks/useAuth';
-import RouteSelectField from '../../routes/components/RouteSelectField';
+import react from 'react';
+import { Path, SubmitHandler, UseFormProps } from 'react-hook-form';
+import { TypeOf, ZodSchema, z } from 'zod';
+import { useParams } from 'react-router-dom';
 import MessageSelectField from '../../messages/components/MessageSelectField';
-import { CustomFormValues } from '../types/schema';
+import RouteSelectField from '../../routes/components/RouteSelectField';
 import useValidateSchedule from '../hooks/useValidateSchedule';
+import { CustomFormValues } from '../types/schema';
 
 type ZodFormSchema = ZodSchema<Record<string, unknown>>;
 
@@ -30,6 +31,7 @@ function EditSchedulesForm<T extends ZodFormSchema>({
   idList,
   isSubmitting,
 }: UseZodFormProps<T>) {
+  const { sectionName } = useParams();
   const form = useZodForm<typeof schema>({ defaultValues, schema });
   const { validate, scheduleLookup } = useValidateSchedule();
   const { hasWriteAccess } = useAuth();
@@ -91,10 +93,11 @@ function EditSchedulesForm<T extends ZodFormSchema>({
         label="Route"
         {...form.register('route' as Path<TypeOf<T>>)}
         disabled={!canWrite}
+        exceptionRouteNames={[decodeURIComponent(sectionName as string)]}
       />
 
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

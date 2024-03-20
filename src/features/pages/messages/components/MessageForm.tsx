@@ -3,8 +3,8 @@ import { SubmitHandler } from 'react-hook-form';
 
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
-import useAuth from '@/state/hooks/useAuth';
 import { EntityRoles } from '@/entities/auth';
+import useAuth from '@/state/hooks/useAuth';
 import schema, { FormValues } from '../types/schema';
 
 interface Props {
@@ -30,7 +30,7 @@ function MessageForm({ defaultValues, onSubmit, isSubmitting }: Props) {
         disabled={!canWrite}
       />
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

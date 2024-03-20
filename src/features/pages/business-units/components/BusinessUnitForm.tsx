@@ -27,7 +27,7 @@ function BusinessUnitForm({
       <InputField label="Name" {...form.register('business_unit')} />
       <RegionSelectField label="Region" {...form.register('default_region')} />
       <Button
-        disabled={isSubmitting}
+        disabled={!form.formState.isDirty || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

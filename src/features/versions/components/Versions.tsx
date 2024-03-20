@@ -29,7 +29,7 @@ function Versions<Entry extends { [P in keyof Entry]: Entry[P] }>({
 
   useEffect(() => {
     setVersion({
-      label: `Version ${versions.length - 1}`,
+      label: versions.length - 1,
       value: 1,
     });
   }, [versions.length]);

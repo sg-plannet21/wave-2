@@ -1,12 +1,12 @@
 import Form, { useZodForm } from '@/components/Form/Form';
-import { SubmitHandler } from 'react-hook-form';
 import InputField from '@/components/Form/InputField';
 import Button from '@/components/Inputs/Button';
-import useAuth from '@/state/hooks/useAuth';
 import { EntityRoles } from '@/entities/auth';
-import schema, { FormValues } from '../types/schema';
+import useAuth from '@/state/hooks/useAuth';
+import { SubmitHandler } from 'react-hook-form';
 import RegionSelectField from '../../business-units/components/RegionSelectField';
 import SectionSelectField from '../../sections/components/SectionSelectField';
+import schema, { FormValues } from '../types/schema';
 
 interface Props {
   onSubmit: SubmitHandler<FormValues>;
@@ -42,7 +42,7 @@ function EntryPointForm({ onSubmit, isSubmitting, defaultValues }: Props) {
         disabled={!canWrite}
       />
       <Button
-        disabled={!canWrite || isSubmitting}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

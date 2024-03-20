@@ -1,16 +1,16 @@
-import Form, { useZodForm } from '@/components/Form/Form';
-import { Controller, SubmitHandler } from 'react-hook-form';
-import Button from '@/components/Inputs/Button';
 import FieldSet from '@/components/Form/FieldSet';
+import Form, { useZodForm } from '@/components/Form/Form';
+import InputField from '@/components/Form/InputField';
 import SelectField from '@/components/Form/SelectField';
+import Button from '@/components/Inputs/Button';
 import { SelectOption } from '@/components/Inputs/Select';
 import Switch from '@/components/Inputs/Switch';
-import InputField from '@/components/Form/InputField';
 import { EntityRoles } from '@/entities/auth';
 import useAuth from '@/state/hooks/useAuth';
-import schema, { FormValues } from '../types/schema';
+import { Controller, SubmitHandler } from 'react-hook-form';
 import MessageSelectField from '../../messages/components/MessageSelectField';
 import RouteSelectField from '../../routes/components/RouteSelectField';
+import schema, { FormValues } from '../types/schema';
 
 interface Props {
   defaultValues?: FormValues;
@@ -257,7 +257,7 @@ function QueueForm({
         </div>
       </FieldSet>
       <Button
-        disabled={!canWrite || isSubmitting || !form.formState.isDirty}
+        disabled={!form.formState.isDirty || !canWrite || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"

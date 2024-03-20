@@ -30,7 +30,7 @@ function RouteForm({ schema, onSubmit, isSubmitting, defaultValues }: Props) {
         {...form.register('destination_type')}
       />
       <Button
-        disabled={isSubmitting}
+        disabled={!form.formState.isDirty || isSubmitting}
         isLoading={isSubmitting}
         type="submit"
         className="w-full"
